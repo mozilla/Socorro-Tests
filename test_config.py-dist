@@ -1,0 +1,18 @@
+# Hostname you've fired up Selenium on
+selenium_host = 'localhost'
+
+# Port youv'e fired up Selenium on
+selenium_port = 4444
+
+# Browser you want executed
+selenium_browser_start_command = '*firefox'
+
+# The base url for the site under test
+# should be reused in tests as sel.browserUrl
+selenium_browser_url = 'http://aking.khan.mozilla.org/reporter'
+
+# General timeout for Selenium actions in milliseconds
+selenium_timeout = 8000
+
+# Same as selenium_browser_url, but for Secure requests
+secure_browser_url = 'http://aking.khan.mozilla.org/reporter'
