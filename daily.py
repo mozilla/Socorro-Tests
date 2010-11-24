@@ -4,7 +4,7 @@ Acceptance tests for /daily ADU and Crash Count reports
 from selenium import selenium
 import unittest
 
-import test_config as config
+import daily_config as config
 
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 class TestDaily(unittest.TestCase):
