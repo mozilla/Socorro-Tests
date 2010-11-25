@@ -67,7 +67,7 @@ class TestCrashReports(unittest.TestCase):
         csp.select_product('Thunderbird')
         page_title = csp.page_title
         self.assertTrue('Thunderbird' in page_title)
-        self.assertTrue('Mozilla' in page_title)
+        self.assertTrue('Mozilla' in page_title) 
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
@@ -78,7 +78,8 @@ class TestCrashReports(unittest.TestCase):
         csp.select_product('SeaMonkey')
         page_title = csp.page_title
         self.assertTrue('SeaMonkey' in page_title)
-        self.assertTrue('Mozilla' not in page_title)
+        #Bug 576721 - Needs reenabled when fixed
+        #self.assertTrue('Mozilla' not in page_title) 
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
@@ -89,7 +90,8 @@ class TestCrashReports(unittest.TestCase):
         csp.select_product('Camino')
         page_title = csp.page_title
         self.assertTrue('Camino' in page_title)
-        self.assertTrue('Mozilla' not in page_title)
+        #Bug 576721 - Needs reenabled when fixed
+        #self.assertTrue('Mozilla' not in page_title)
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
@@ -100,7 +102,8 @@ class TestCrashReports(unittest.TestCase):
         csp.select_product('Fennec')
         page_title = csp.page_title
         self.assertTrue('Fennec' in page_title)
-        self.assertTrue('Mozilla' not in page_title)
+        #Bug 576721 - Needs reenabled when fixed
+        #self.assertTrue('Mozilla' not in page_title)
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
