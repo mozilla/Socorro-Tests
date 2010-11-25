@@ -54,10 +54,10 @@ class TestCrashReports(unittest.TestCase):
     
     def test_that_reports_form_has_same_product_for_firefox(self):
         csp = CrashStatsHomePage(self.selenium)
-        crash_adu = csp.select_report("Crashes per User")
         page_title = csp.page_title
         self.assertTrue('Firefox' in page_title)
         self.assertTrue('Mozilla' in page_title)
+        crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
         self.assertEqual(details['product'],report_product)
@@ -114,7 +114,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
     
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -122,7 +123,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -130,7 +132,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_camino(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -138,7 +141,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -146,14 +150,16 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self):
         csp = CrashStatsHomePage(self.selenium)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
     
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -161,7 +167,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -169,7 +176,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -177,7 +185,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -185,14 +194,16 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self):
         csp = CrashStatsHomePage(self.selenium)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by Domain')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
     
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -200,7 +211,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by Domain')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -208,7 +220,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by Domain')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -216,7 +229,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by Domain')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -224,7 +238,8 @@ class TestCrashReports(unittest.TestCase):
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by Domain')
         self.assertEqual(details['product'], cstc.product_header)
-        self.assertTrue(cstc.product_version_header in details['versions'])
+        #Bug 611694 - Disabled till bug fixed
+        #self.assertTrue(cstc.product_version_header in details['versions'])
 
 if __name__ == "__main__":
     unittest.main()
