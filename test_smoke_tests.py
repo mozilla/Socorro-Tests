@@ -312,8 +312,11 @@ class TestSmokeTests(unittest.TestCase):
 
     def test_that_simple_querystring_doesnt_return_500(self):
         csp = CrashStatsHomePage(self.selenium)
-        csp.get_url_path('/query/simple')
-        self.assertNotEqual('Framework Error', csp.page_title)
+        try:
+            csp.get_url_path('/query/simple')
+            self.fail('Exception should have been thrown')
+        except Exception, e:
+            self.assertTrue('Response_Code = 404' in str(e))
 
 
 
