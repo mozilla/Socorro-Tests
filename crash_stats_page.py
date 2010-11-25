@@ -69,14 +69,14 @@ class CrashStatsBasePage(Page):
             Select the Mozilla Product you want to report on
         '''
         self.sel.select(self._product_select, application)
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
 
     def select_version(self, version):
         '''
             Select the version of the application you want to report on
         '''
         self.sel.select(self._product_version_select, version)
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
 
     def select_report(self, report_name):
         '''
@@ -84,7 +84,7 @@ class CrashStatsBasePage(Page):
             and wait for the page to reload
         '''
         self.sel.select(self._report_select, report_name)
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         if 'Top Crashers' == report_name:
             return CrashStatsTopCrashers(self.sel)
         elif 'Top Crashers by Domain' == report_name:
@@ -98,7 +98,7 @@ class CrashStatsBasePage(Page):
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         return CrashStatsStatus(self.sel)
 
     def click_advanced_search(self):
@@ -193,7 +193,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
         if not self.sel.get_title() == 'Crash Data for Mozilla Firefox':
             self.sel.select(self.product_select, 'Firefox')
-            self.sel.wait_for_page_to_load('30000')
+            self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         self.sel.window_maximize()
 
     def report_length(self, days):
@@ -201,7 +201,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
             Click on the link with the amount of days you want the report to be
         '''
         self.sel.click('link=' + days + ' days')
-        self.sel.wait_for_page_to_load("30000")
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         self.wait_for_element_present('xpath=//a[text()="'
                                                 + days + ' days" and @class="selected"]')
 
@@ -212,7 +212,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.sel.type(self._find_crash_id_or_signature, crash_id_or_signature)
         self.sel.key_press(self._find_crash_id_or_signature, "\\13")
         #self.sel.submit('//form')
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         return CrashStatsSearchResults(self.sel)
 
     def click_on_top_(self, element):
@@ -271,7 +271,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.wait_for_element_present(self._data_table_first_signature)
         signature = self.sel.get_text(self._data_table_first_signature)
         self.sel.click(self._data_table_first_signature)
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
         return signature
 
     @property
