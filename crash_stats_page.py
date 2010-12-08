@@ -180,7 +180,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        super(CrashStatsHomePage, self).__init__(selenium)
         self.sel = selenium
         self.sel.open('/')
         count = 0
@@ -258,7 +257,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        super(CrashStatsAdvancedSearch, self).__init__(selenium)
         self.sel = selenium
         count = 0
         self.wait_for_element_present(self._product_multiple_select)
@@ -291,7 +289,6 @@ class CrashStatsSearchResults(CrashStatsBasePage):
     _filter_crash_reports_button = 'id=query_submit'
 
     def __init__(self, selenium):
-        super(CrashStatsSearchResults, self).__init__(selenium)
         self.sel = selenium
         self.wait_for_element_present(self._product_select)
 
@@ -304,7 +301,6 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        super(CrashStatsPerActiveDailyUser, self).__init__(selenium)
         self.sel = selenium
 
     @property
@@ -318,7 +314,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     def __init__(self, selenium):
-        super(CrashStatsTopCrashers, self).__init__(selenium)
         self.sel = selenium
 
     @property
@@ -336,7 +331,6 @@ class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
     _product_version_header = 'id=tcburl-version'
 
     def __init__(self, selenium):
-        super(CrashStatsTopCrashersByUrl, self).__init__(selenium)
         self.sel = selenium
 
     @property
@@ -354,7 +348,6 @@ class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
     _product_version_header = 'id=tcburl-version'
 
     def __init__(self, selenium):
-        super(CrashStatsTopCrashersByDomain, self).__init__(selenium)
         self.sel = selenium
 
     @property
@@ -372,7 +365,6 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     _product_version_header = 'id=tcburl-version'
 
     def __init__(self, selenium):
-        super(CrashStatsTopCrashersBySite, self).__init__(selenium)
         self.sel = selenium
 
     @property
@@ -392,7 +384,6 @@ class CrashStatsStatus(CrashStatsBasePage):
     _latest_raw_stats = 'css=div.title:contains("Latest Raw Stats")'
 
     def __init__(self, selenium):
-        super(CrashStatsStatus, self).__init__(selenium)
         self.sel = selenium
         self.wait_for_element_present(self._page_header)
 
