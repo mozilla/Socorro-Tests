@@ -67,20 +67,20 @@ class TestSmokeTests(unittest.TestCase):
             centre = ''
             try:
                 centre = csp.centre_column_heading
+                self.assertEqual(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
                     self.fail(str(e))
-            self.assertEqual(centre, headers[1])
-        
+                    
             #Check the right hand column
             right = ''
             try:
                 right = csp.left_column_heading
+                self.assertEqual(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
                     self.fail(str(e))
-            self.assertEqual(right, headers[2])
-
+            
     def test_that_option_group_matches_visible_columns_for_Thunderbird(self):
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
@@ -305,11 +305,12 @@ class TestSmokeTests(unittest.TestCase):
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self):
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
-        cs_advanced = csp.click_advanced_search()
-        cs_advanced.filter_reports()
-        if not cs_advanced.can_find_text('no data'):
-            signature = cs_advanced.click_first_signature()
-            self.assertTrue(signature in cs_advanced.page_heading)
+        if not csp.can_find_text('no data'):
+            cs_advanced = csp.click_advanced_search()
+            cs_advanced.filter_reports()
+            if not cs_advanced.can_find_text('No Data'): 
+                signature = cs_advanced.click_first_signature()
+                self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self):
         csp = CrashStatsHomePage(self.selenium)
