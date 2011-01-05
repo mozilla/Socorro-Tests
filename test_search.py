@@ -63,7 +63,7 @@ class TestSearchForIdOrSignature(unittest.TestCase):
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
         csp = CrashStatsHomePage(self.selenium)
-        result = csp.search_for_crash(csp.first_signature)
+        result = csp.search_for_crash("UserCallWinProcCheckWow")
         self.assertFalse(result.can_find_text('No results were found.'))
 
     def test_that_advanced_search_for_firefox_can_be_filtered(self):
