@@ -106,7 +106,7 @@ class TestSmokeTests(unittest.TestCase):
             right = ''
             try:
                 right = csp.left_column_heading
-                self.assertEqual(centre, headers[2])
+                self.assertEqual(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
                     self.fail(str(e))
@@ -136,7 +136,7 @@ class TestSmokeTests(unittest.TestCase):
             right = ''
             try:
                 right = csp.left_column_heading
-                self.assertEqual(centre, headers[2])
+                self.assertEqual(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
                     self.fail(str(e))
@@ -166,7 +166,7 @@ class TestSmokeTests(unittest.TestCase):
             right = ''
             try:
                 right = csp.left_column_heading
-                self.assertEqual(centre, headers[2])
+                self.assertEqual(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
                     self.fail(str(e))
