@@ -56,6 +56,7 @@ class CrashStatsBasePage(Page):
 
     @property
     def page_heading(self):
+        self.wait_for_element_present(self._page_heading)
         return self.sel.get_text(self._page_heading)
 
     def get_attribute(self, element, attribute):
@@ -263,7 +264,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def filter_reports(self):
         self.sel.click(self._filter_crash_reports_button)
-        self.wait_for_element_present('css=div.page-heading h2:contains("Query Results")')
+        self.sel.wait_for_page_to_load('30000')
+#        self.wait_for_element_present('css=div.page-heading > h2')
 
     def click_first_signature(self):
         self.wait_for_element_present(self._data_table_first_signature)
