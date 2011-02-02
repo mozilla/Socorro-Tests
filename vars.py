@@ -41,7 +41,7 @@ class ConnectionParameters:
     port = 4444
     browser = "Firefox-default;en-us;MacOSX6"
     #browser = "*iexplore"
-    baseurl = "http://crash-stats.mozilla.com"
+    baseurl = "http://crash-stats.stage.mozilla.com"
     page_load_timeout = 120000
 
 
