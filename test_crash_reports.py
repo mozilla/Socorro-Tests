@@ -35,12 +35,13 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import unittest
+import unittest2 as unittest
 from selenium import selenium
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsSearchResults
 from crash_stats_page import CrashStatsPerActiveDailyUser
 from vars import ConnectionParameters
+
 
 class TestCrashReports(unittest.TestCase):
 

@@ -36,11 +36,12 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import unittest
+import unittest2 as unittest
 from selenium import selenium
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsSearchResults
 from vars import ConnectionParameters
+
 
 class TestSmokeTests(unittest.TestCase):
 
@@ -228,15 +229,15 @@ class TestSmokeTests(unittest.TestCase):
         except Exception, e:
             self.fail(str(e))
 
-    #Bug 612679 - Disabled till bug fixed
-    #def test_that_options_are_sorted_the_same(self):
-    #    csp = CrashStatsHomePage(self.selenium)
-    #    cssearch = csp.click_advanced_search()
-    #    nav_product_list = csp.get_product_list
-    #    search_product_list = cssearch.product_list
-    #    self.assertEqual(len(nav_product_list),len(search_product_list))
-    #    for i, prod_item in enumerate(nav_product_list):
-    #        self.assertEqual(prod_item, search_product_list[i])
+    def test_that_options_are_sorted_the_same(self):
+        self.skipTest(" Bug 612679 - Disabled till bug fixed ")
+        csp = CrashStatsHomePage(self.selenium)
+        cssearch = csp.click_advanced_search()
+        nav_product_list = csp.get_product_list
+        search_product_list = cssearch.product_list
+        self.assertEqual(len(nav_product_list),len(search_product_list))
+        for i, prod_item in enumerate(nav_product_list):
+            self.assertEqual(prod_item, search_product_list[i])
 
     def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self):
         csp = CrashStatsHomePage(self.selenium)
@@ -294,6 +295,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self):
+        self.skipTest("Bug 630948 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
