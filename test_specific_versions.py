@@ -53,7 +53,6 @@ class TestSpecificVersions(unittest.TestCase):
         self.selenium.stop()
 
     def test_that_selecting_exact_version_doesnt_show_other_versions(self):
-        self.skipTest(" bug 630948 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         details = csp.current_details
         if len(details['versions']) > 0:
