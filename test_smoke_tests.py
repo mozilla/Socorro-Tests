@@ -295,6 +295,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self):
+        self.skipTest("Bug 630948 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
