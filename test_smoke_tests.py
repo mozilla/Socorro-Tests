@@ -269,6 +269,7 @@ class TestSmokeTests(unittest.TestCase):
         self.assertEqual('SeaMonkey', cs_advanced.currently_selected_product)
 
     def test_that_advanced_search_view_signature_for_firefox_crash(self):
+        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -277,6 +278,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self):
+        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
@@ -286,6 +288,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self):
+        self.skipTest("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
@@ -295,7 +298,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self):
-        #self.skipTest("Bug 630948 needs fixing")
+        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
@@ -305,6 +308,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self):
+        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
@@ -315,12 +319,9 @@ class TestSmokeTests(unittest.TestCase):
                 self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self):
-        csp = CrashStatsHomePage(self.selenium)
-        try:
-            csp.get_url_path('/query/simple')
-            self.fail('Exception should have been thrown')
-        except Exception, e:
-            self.assertTrue('Response_Code = 404' in str(e))
+        import urllib
+        response = urllib.urlopen( ConnectionParameters.baseurl + "/query/simple")
+        self.assertEqual(404, response.getcode())
 
 
 
