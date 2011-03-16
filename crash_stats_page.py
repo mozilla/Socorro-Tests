@@ -168,6 +168,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _product_version_select = 'id=product_version_select'
     _report_select = 'id=report_select'
     _first_signature_locator = 'css=div.crash > p > a'
+    _second_signature_locator = 'css=.crash:nth(2) > p > a'
     _right_column_locator = 'css=div.product_topcrasher > h4'
     _centre_column_locator = 'css=div.product_topcrasher + div > h4'
     _left_column_locator = 'css=div.product_topcrasher + div + div > h4'
@@ -229,10 +230,11 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     @property
     def first_signature(self):
-        '''
-
-        '''
         return self.sel.get_text(self._first_signature_locator)
+
+    @property
+    def second_signature(self):
+        return self.sel.get_text(self._second_signature_locator)
 
     @property
     def right_column_heading(self):
