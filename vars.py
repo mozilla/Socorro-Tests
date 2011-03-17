@@ -35,15 +35,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 class ConnectionParameters:
     server = "localhost"
     port = 4444
-    #browser = "Firefox-default;en-us;MacOSX6"
+    browser = "Firefox-default;en-us;MacOSX6"
     #browser = "*iexplore"
-    browser = "*firefox"
-    #browser = "safari"
     baseurl = "http://crash-stats.stage.mozilla.com"
     page_load_timeout = 120000
-
-
