@@ -115,7 +115,6 @@ class TestCrashReports(unittest.TestCase):
             self.assertEqual(details['product'],report_product)
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
@@ -125,7 +124,6 @@ class TestCrashReports(unittest.TestCase):
             #self.assertTrue(cstc.product_version_header in details['versions'])
     
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
         if not csp.can_find_text('no data'):
@@ -136,7 +134,6 @@ class TestCrashReports(unittest.TestCase):
             #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self):
-        self.skipTest("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
@@ -147,7 +144,6 @@ class TestCrashReports(unittest.TestCase):
             #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_camino(self):
-        self.skipTest("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
         if not csp.can_find_text('no data'):
@@ -158,7 +154,6 @@ class TestCrashReports(unittest.TestCase):
             #self.assertTrue(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self):
-        self.skipTest("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Fennec')
         if not csp.can_find_text('no data'):

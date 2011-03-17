@@ -269,7 +269,6 @@ class TestSmokeTests(unittest.TestCase):
         self.assertEqual('SeaMonkey', cs_advanced.currently_selected_product)
 
     def test_that_advanced_search_view_signature_for_firefox_crash(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -278,7 +277,6 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
@@ -288,7 +286,6 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self):
-        self.skipTest("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
@@ -298,7 +295,6 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
@@ -308,7 +304,6 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self):
-        self.skipTest("bug 637636 needs fixing")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
