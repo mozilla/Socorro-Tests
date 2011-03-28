@@ -304,6 +304,7 @@ class TestSmokeTests(unittest.TestCase):
             self.assertTrue(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self):
+        self.skipTest(" Bug 645777 - Disabled till bug fixed ")
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
