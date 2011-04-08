@@ -12,11 +12,11 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Crash Tests Selenium Tests.
+# The Original Code is UnittestZero.
 #
 # The Initial Developer of the Original Code is
-# Mozilla.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
+
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
@@ -35,32 +35,30 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
-import pytest
-from unittestzero import Assert
 
-class TestSpecificVersions:
+class Assert:
 
-    def test_that_selecting_exact_version_doesnt_show_other_versions(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    @classmethod
+    def equal(self, first, second, msg=None):
+        assert first == second, msg
 
-        details = csp.current_details
-        if len(details['versions']) > 0:
-            csp.select_version(details['versions'][1])
-        
-        Assert.equal(details['product'] + ' ' + details['versions'][1],csp.right_column_heading)
+    @classmethod
+    def not_equal(self, first, second, msg=None):
+        assert first != second, msg
 
-        try:
-            centre_name = csp.centre_column_heading
-            self.fail(centre_name + ' was shown when it shouldnt be there')
-        except Exception, e:
-            pass
+    @classmethod
+    def true(self, first, msg=None):
+        assert first is True, msg
 
-        try:
-            right_name = csp.right_column_heading
-            self.fail(right_name + ' was shown when it shouldnt be there')
-        except Exception, e:
-            pass
+    @classmethod
+    def false(self, first, msg=None):
+        assert first is False, msg
+
+    @classmethod
+    def none(self, first, msg=None):
+        assert first is None, msg
+
+    @classmethod
+    def not_none(self, first, msg=None):
+        assert first is not None, msg
 
