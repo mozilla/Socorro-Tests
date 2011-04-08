@@ -63,7 +63,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
                     
             #Check the right hand column
             right = ''
@@ -72,7 +72,7 @@ class TestSmokeTests:
                 Assert.equal(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
             
     def test_that_option_group_matches_visible_columns_for_Thunderbird(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -94,7 +94,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
 
             #Check the right hand column
             right = ''
@@ -103,7 +103,7 @@ class TestSmokeTests:
                 Assert.equal(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
 
     def test_that_option_group_matches_visible_columns_for_Camino(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -125,7 +125,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
                 
             #Check the right hand column
             right = ''
@@ -134,7 +134,7 @@ class TestSmokeTests:
                 Assert.equal(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
 
     def test_that_option_group_matches_visible_columns_for_SeaMonkey(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -156,7 +156,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
                 
             #Check the right hand column
             right = ''
@@ -165,7 +165,7 @@ class TestSmokeTests:
                 Assert.equal(right, headers[2])
             except Exception, e:
                 if len(headers) > 2:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
 
     def test_that_option_group_matches_visible_columns_for_Fennec(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -187,7 +187,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[1])
             except Exception, e:
                 if len(headers) > 1:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
                 
             #Check the right hand column
             right = ''
@@ -196,7 +196,7 @@ class TestSmokeTests:
                 Assert.equal(centre, headers[2])
             except Exception, e:
                 if len(headers) > 2:
-                    self.fail(str(e))
+                    Assert.fail(str(e))
 
     def test_that_clicking_on_top_changers_updates(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -204,7 +204,7 @@ class TestSmokeTests:
         try:
             csp.click_on_top_('Changers')
         except Exception,e:
-            self.fail(str(e))
+            Assert.fail(str(e))
         class_attr = csp.get_attribute('link=Top Changers','class')
         Assert.equal("selected", class_attr)
 
@@ -215,17 +215,17 @@ class TestSmokeTests:
         try:
             csstat.at_a_glance()
         except Exception, e:
-            self.fail(str(e))
+            Assert.fail(str(e))
 
         try:
             csstat.graphs()
         except Exception, e:
-            self.fail(str(e))
+            Assert.fail(str(e))
 
         try:
             csstat.latest_raw_stats()
         except Exception, e:
-            self.fail(str(e))
+            Assert.fail(str(e))
 
     def test_that_options_are_sorted_the_same(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium

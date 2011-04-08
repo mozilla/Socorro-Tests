@@ -62,3 +62,6 @@ class Assert:
     def not_none(self, first, msg=None):
         assert first is not None, msg
 
+    @classmethod
+    def fail(self, msg):
+        raise AssertionError(msg)

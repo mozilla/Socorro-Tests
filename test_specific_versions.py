@@ -54,13 +54,13 @@ class TestSpecificVersions:
 
         try:
             centre_name = csp.centre_column_heading
-            self.fail(centre_name + ' was shown when it shouldnt be there')
+            Assert.fail(centre_name + ' was shown when it shouldnt be there')
         except Exception, e:
             pass
 
         try:
             right_name = csp.right_column_heading
-            self.fail(right_name + ' was shown when it shouldnt be there')
+            Assert.fail(right_name + ' was shown when it shouldnt be there')
         except Exception, e:
             pass
 
