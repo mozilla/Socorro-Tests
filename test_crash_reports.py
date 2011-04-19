@@ -110,7 +110,6 @@ class TestCrashReports:
             Assert.equal(details['product'],report_product)
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         details = csp.current_details
@@ -121,7 +120,6 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
     
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
@@ -133,7 +131,6 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
@@ -145,7 +142,6 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_camino(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")    
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
@@ -158,7 +154,6 @@ class TestCrashReports:
 
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        pytest.skip("bug 637636 needs fixing")    
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Fennec')
         if not csp.can_find_text('no data'):
