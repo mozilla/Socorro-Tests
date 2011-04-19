@@ -273,7 +273,6 @@ class TestSmokeTests:
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product)
 
     def test_that_advanced_search_view_signature_for_firefox_crash(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         cs_advanced = csp.click_advanced_search()
@@ -283,7 +282,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Thunderbird')
@@ -294,7 +292,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")    
         
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
@@ -306,7 +303,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Camino')
@@ -317,7 +313,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
@@ -330,7 +325,6 @@ class TestSmokeTests:
                 Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, seleniumsetup):
-        pytest.skip("bug 637636 needs fixing")
         import urllib
         response = urllib.urlopen( ConnectionParameters.baseurl + "/query/simple")
         Assert.equal(404, response.getcode())
