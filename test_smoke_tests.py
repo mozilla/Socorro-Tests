@@ -230,7 +230,6 @@ class TestSmokeTests:
     @xfail(reason="Disabled till Bug 612679 is fixed")
     def test_that_options_are_sorted_the_same(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        #pytest.skip(" Bug 612679 - Disabled till bug fixed ")
         csp = CrashStatsHomePage(self.selenium)
         cssearch = csp.click_advanced_search()
         nav_product_list = csp.get_product_list
