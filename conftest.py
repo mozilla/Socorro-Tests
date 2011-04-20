@@ -6,14 +6,17 @@ def pytest_runtest_setup(item):
     item.host = item.config.option.hub
     item.browser = item.config.option.browser
     item.port = item.config.option.port
-    item.site = item.config.option.site
+    SeleniumSetup.base_url = item.config.option.site
 
-    SeleniumSetup.selenium = selenium(item.host ,item.port,
-        item.browser, item.site)
-    SeleniumSetup.selenium.start()
+    if not 'skip_selenium' in item.keywords:
+        SeleniumSetup.selenium = selenium(item.host, item.port,
+            item.browser, SeleniumSetup.base_url)
+    
+        SeleniumSetup.selenium.start()
 
 def pytest_runtest_teardown(item):
-    SeleniumSetup.selenium.stop()
+    if not 'skip_selenium' in item.keywords:
+        SeleniumSetup.selenium.stop()
 
 def pytest_funcarg__seleniumsetup(request):
     return SeleniumSetup(request)
