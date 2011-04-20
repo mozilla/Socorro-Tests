@@ -40,6 +40,7 @@ from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsSearchResults
 from unittestzero import Assert
 import pytest
+xfail = pytest.mark.xfail
 
 class TestSmokeTests:
 
@@ -226,10 +227,10 @@ class TestSmokeTests:
             csstat.latest_raw_stats()
         except Exception, e:
             Assert.fail(str(e))
-
+    @xfail(reason="Disabled till Bug 612679 is fixed")
     def test_that_options_are_sorted_the_same(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        pytest.skip(" Bug 612679 - Disabled till bug fixed ")
+        #pytest.skip(" Bug 612679 - Disabled till bug fixed ")
         csp = CrashStatsHomePage(self.selenium)
         cssearch = csp.click_advanced_search()
         nav_product_list = csp.get_product_list
