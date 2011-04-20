@@ -292,7 +292,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self, seleniumsetup):
-        
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('Fennec')
@@ -313,7 +312,6 @@ class TestSmokeTests:
             Assert.true(signature in cs_advanced.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self, seleniumsetup):
-        
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         csp.select_product('SeaMonkey')
@@ -326,5 +324,5 @@ class TestSmokeTests:
 
     def test_that_simple_querystring_doesnt_return_500(self, seleniumsetup):
         import urllib
-        response = urllib.urlopen( ConnectionParameters.baseurl + "/query/simple")
+        response = urllib.urlopen( seleniumsetup.base_url + "/query/simple")
         Assert.equal(404, response.getcode())
