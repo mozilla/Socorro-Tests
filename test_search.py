@@ -58,7 +58,6 @@ class TestSearchForIdOrSignature:
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         result = csp.search_for_crash(csp.second_signature)
-        print "actual results: " + str(result)
         Assert.false(result.can_find_text('No results were found.'))
 
     def test_that_advanced_search_for_firefox_can_be_filtered(self, seleniumsetup):
