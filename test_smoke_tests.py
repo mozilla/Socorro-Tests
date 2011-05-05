@@ -21,6 +21,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -174,30 +175,28 @@ class TestSmokeTests:
         csp.select_product('Fennec')
         Assert.true('Fennec' in csp.page_title)
         details = csp.current_details
-        headers = []
+        fennec_list = []
         for i in details['versions']:
-            headers.append(details['product'] + ' ' + i)
+            fennec_list.append(details['product'] + ' ' + i)
 
-        if len(headers) > 0:
-            Assert.equal(headers[0], csp.right_column_heading)
-        
-            #Check the centre column
-            centre = ''
+        if len(fennec_list) > 0:
+            # Check right column
+            Assert.equal(csp.right_column_heading, fennec_list[0])
+            # Check the centre column
             try:
-                centre = csp.centre_column_heading
-                Assert.equal(centre, headers[1])
+                Assert.equal(csp.centre_column_heading, fennec_list[1])
             except Exception, e:
-                if len(headers) > 1:
+                if len(fennec_list) > 1:
                     Assert.fail(str(e))
                 
-            #Check the right hand column
-            right = ''
+            # Check the left hand column
             try:
-                right = csp.left_column_heading
-                Assert.equal(centre, headers[2])
+                Assert.equal(csp.left_column_heading, fennec_list[2])
             except Exception, e:
-                if len(headers) > 2:
+                if len(fennec_list) > 2:
                     Assert.fail(str(e))
+        else:
+            Assert.fail("The product dropdown list for fennec was empty.")
 
     def test_that_clicking_on_top_changers_updates(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
