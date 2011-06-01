@@ -45,168 +45,6 @@ xfail = pytest.mark.xfail
 
 class TestSmokeTests:
 
-    def test_that_option_group_matches_visible_columns_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-
-        Assert.true('Firefox' in csp.page_title)
-        details = csp.current_details
-        headers = []
-        for i in details['versions']:
-            headers.append(details['product'] + ' ' + i)
-
-        if len(headers) > 0:
-            Assert.equal(headers[0], csp.right_column_heading)
-        
-            #Check the centre column
-            centre = ''
-            try:
-                centre = csp.centre_column_heading
-                Assert.equal(centre, headers[1])
-            except Exception, e:
-                if len(headers) > 1:
-                    Assert.fail(str(e))
-                    
-            #Check the right hand column
-            right = ''
-            try:
-                right = csp.left_column_heading
-                Assert.equal(right, headers[2])
-            except Exception, e:
-                if len(headers) > 2:
-                    Assert.fail(str(e))
-            
-    def test_that_option_group_matches_visible_columns_for_Thunderbird(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-        csp.select_product('Thunderbird')
-        Assert.true('Thunderbird' in csp.page_title)
-        details = csp.current_details
-        headers = []
-        for i in details['versions']:
-            headers.append(details['product'] + ' ' + i)
-
-        if len(headers) > 0:
-            Assert.equal(headers[0], csp.right_column_heading)
-    
-            #Check the centre column
-            centre = ''
-            try:
-                centre = csp.centre_column_heading
-                Assert.equal(centre, headers[1])
-            except Exception, e:
-                if len(headers) > 1:
-                    Assert.fail(str(e))
-
-            #Check the right hand column
-            right = ''
-            try:
-                right = csp.left_column_heading
-                Assert.equal(right, headers[2])
-            except Exception, e:
-                if len(headers) > 2:
-                    Assert.fail(str(e))
-
-    def test_that_option_group_matches_visible_columns_for_Camino(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-        csp.select_product('Camino')
-        Assert.true('Camino' in csp.page_title)
-        details = csp.current_details
-        headers = []
-        for i in details['versions']:
-            headers.append(details['product'] + ' ' + i)
-        
-        if len(headers) > 0:
-            Assert.equal(headers[0], csp.right_column_heading)
-        
-            #Check the centre column
-            centre = ''
-            try:
-                centre = csp.centre_column_heading
-                Assert.equal(centre, headers[1])
-            except Exception, e:
-                if len(headers) > 1:
-                    Assert.fail(str(e))
-                
-            #Check the right hand column
-            right = ''
-            try:
-                right = csp.left_column_heading
-                Assert.equal(right, headers[2])
-            except Exception, e:
-                if len(headers) > 2:
-                    Assert.fail(str(e))
-
-    def test_that_option_group_matches_visible_columns_for_SeaMonkey(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-        csp.select_product('SeaMonkey')
-        Assert.true('SeaMonkey' in csp.page_title)
-        details = csp.current_details
-        headers = []
-        for i in details['versions']:
-            headers.append(details['product'] + ' ' + i)
-
-        if len(headers) > 0:
-            Assert.equal(headers[0], csp.right_column_heading)
-    
-            #Check the centre column
-            centre = ''
-            try:
-                centre = csp.centre_column_heading
-                Assert.equal(centre, headers[1])
-            except Exception, e:
-                if len(headers) > 1:
-                    Assert.fail(str(e))
-                
-            #Check the right hand column
-            right = ''
-            try:
-                right = csp.left_column_heading
-                Assert.equal(right, headers[2])
-            except Exception, e:
-                if len(headers) > 2:
-                    Assert.fail(str(e))
-
-    def test_that_option_group_matches_visible_columns_for_Fennec(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-        csp.select_product('Fennec')
-        Assert.true('Fennec' in csp.page_title)
-        details = csp.current_details
-        fennec_list = []
-        for i in details['versions']:
-            fennec_list.append(details['product'] + ' ' + i)
-
-        if len(fennec_list) > 0:
-            # Check right column
-            Assert.equal(csp.right_column_heading, fennec_list[0])
-            # Check the centre column
-            try:
-                Assert.equal(csp.centre_column_heading, fennec_list[1])
-            except Exception, e:
-                if len(fennec_list) > 1:
-                    Assert.fail(str(e))
-                
-            # Check the left hand column
-            try:
-                Assert.equal(csp.left_column_heading, fennec_list[2])
-            except Exception, e:
-                if len(fennec_list) > 2:
-                    Assert.fail(str(e))
-        else:
-            Assert.fail("The product dropdown list for fennec was empty.")
-
-    def test_that_clicking_on_top_changers_updates(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
-        try:
-            csp.click_on_top_('Changers')
-        except Exception,e:
-            Assert.fail(str(e))
-        class_attr = csp.get_attribute('link=Top Changers','class')
-        Assert.equal("selected", class_attr)
 
     def test_that_server_status_page_loads(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -226,6 +64,7 @@ class TestSmokeTests:
             csstat.latest_raw_stats()
         except Exception, e:
             Assert.fail(str(e))
+
     @xfail(reason="Disabled till Bug 612679 is fixed")
     def test_that_options_are_sorted_the_same(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
@@ -271,7 +110,6 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product)
 
-    @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_view_signature_for_firefox_crash(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
