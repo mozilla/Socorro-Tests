@@ -61,6 +61,7 @@ class TestSearchForIdOrSignature:
         result = csp.search_for_crash(csp.second_signature)
         Assert.false(result.can_find_text('No results were found.'))
 
+    @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
