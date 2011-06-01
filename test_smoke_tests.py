@@ -110,6 +110,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product)
 
+    @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_view_signature_for_firefox_crash(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
