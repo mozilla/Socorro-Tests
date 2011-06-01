@@ -50,6 +50,7 @@ class TestSearchForIdOrSignature:
         results = csp.search_for_crash("this won't exist")
         Assert.true(results.can_find_text('No results were found.'))
 
+    @xfail(reason="Needs to be updated for the new UI")
     def test_that_search_for_valid_signature(self, seleniumsetup):
         '''
             This is a test for 
@@ -60,7 +61,6 @@ class TestSearchForIdOrSignature:
         result = csp.search_for_crash(csp.second_signature)
         Assert.false(result.can_find_text('No results were found.'))
 
-    @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
