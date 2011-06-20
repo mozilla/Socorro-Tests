@@ -266,7 +266,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def filter_reports(self):
         self.sel.click(self._filter_crash_reports_button)
-        self.sel.wait_for_page_to_load('30000')
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
 #        self.wait_for_element_present('css=div.page-heading > h2')
 
     def click_first_signature(self):
