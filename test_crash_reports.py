@@ -60,7 +60,6 @@ class TestCrashReports:
         csp.select_product('Thunderbird')
         page_title = csp.page_title
         Assert.true('Thunderbird' in page_title)
-        Assert.true('Mozilla' in page_title)
         if not csp.can_find_text('no data'):
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
@@ -73,8 +72,6 @@ class TestCrashReports:
         csp.select_product('SeaMonkey')
         page_title = csp.page_title
         Assert.true('SeaMonkey' in page_title)
-        #Bug 576721 - Needs reenabled when fixed
-        #Assert.true('Mozilla' not in page_title) 
         if not csp.can_find_text('no data'):
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
@@ -87,8 +84,6 @@ class TestCrashReports:
         csp.select_product('Camino')
         page_title = csp.page_title
         Assert.true('Camino' in page_title)
-        #Bug 576721 - Needs reenabled when fixed
-        #Assert.true('Mozilla' not in page_title)
         if not csp.can_find_text('no data'):
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
@@ -101,8 +96,6 @@ class TestCrashReports:
         csp.select_product('Fennec')
         page_title = csp.page_title
         Assert.true('Fennec' in page_title)
-        #Bug 576721 - Needs reenabled when fixed
-        #Assert.true('Mozilla' not in page_title)
         if not csp.can_find_text('no data'):
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
@@ -118,7 +111,7 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
-    
+
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
@@ -171,7 +164,7 @@ class TestCrashReports:
         Assert.equal(details['product'], cstc.product_header)
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
-    
+
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
@@ -217,7 +210,7 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium 
+        self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -225,7 +218,7 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
-    
+
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
