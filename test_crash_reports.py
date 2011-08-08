@@ -48,7 +48,6 @@ class TestCrashReports:
         csp = CrashStatsHomePage(self.selenium)
         page_title = csp.page_title
         Assert.true('Firefox' in page_title)
-        Assert.true('Mozilla' in page_title)
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
