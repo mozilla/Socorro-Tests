@@ -71,7 +71,8 @@ def pytest_addoption(parser):
         help="specify the browser")
     parser.addoption("--site", action="store", default="https://crash-stats.allizom.org",
         help="specify the AUT")
-    parser.addoption("--timeout", action="store", default=120000)
+    parser.addoption("--timeout", action="store", default=120000,
+        help="specify the timeout")
 
 class TestSetup:
     def __init__(self, request):

@@ -54,11 +54,14 @@ class Page(object):
     Base class for all Pages
     '''
 
-    def __init__(self, selenium):
+    def __init__(self, seleniumsetup):
         '''
         Constructor
         '''
-        self.selenium = selenium
+        self.seleniumsetup = seleniumsetup
+        self.selenium = seleniumsetup.selenium
+        self.base_url = seleniumsetup.base_url
+        self.timeout = seleniumsetup.timeout
 
     @property
     def is_the_current_page(self):

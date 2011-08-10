@@ -46,7 +46,7 @@ class TestSearchForIdOrSignature:
 
     def test_that_when_item_not_available(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         results = csp.search_for_crash("this won't exist")
         Assert.true(results.can_find_text('No results were found.'))
 
@@ -57,21 +57,21 @@ class TestSearchForIdOrSignature:
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         result = csp.search_for_crash(csp.second_signature)
         Assert.false(result.can_find_text('No results were found.'))
 
     @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Firefox'))
 
     def test_that_advanced_search_for_thunderbird_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -79,7 +79,7 @@ class TestSearchForIdOrSignature:
 
     def test_that_advanced_search_for_fennec_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -87,7 +87,7 @@ class TestSearchForIdOrSignature:
 
     def test_that_advanced_search_for_camino_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -95,7 +95,7 @@ class TestSearchForIdOrSignature:
     
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(seleniumsetup)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
