@@ -167,8 +167,10 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
     _report_select = 'id=report_select'
+    _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
+    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a'
     _right_column_locator = 'css=div.product_topcrasher > h4'
     _centre_column_locator = 'css=div.product_topcrasher + div > h4'
     _left_column_locator = 'css=div.product_topcrasher + div + div > h4'
@@ -223,6 +225,13 @@ class CrashStatsHomePage(CrashStatsBasePage):
             self.wait_for_element_visible(self._top_changers_selected)
         else:
             self.wait_for_element_visible(self._top_crashers_selected)
+
+    def click_first_product_top_crashers_link(self):
+        self.sel.click(self._first_product_top_crashers_link_locator)
+        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+
+    def get_signature(self, index):
+        return self.sel.get_text(self._signature_locator % index)
 
     @property
     def get_product_list(self):
