@@ -58,7 +58,7 @@ def pytest_runtest_teardown(item):
     if not 'skip_selenium' in item.keywords:
         TestSetup.selenium.stop()
 
-def pytest_funcarg__seleniumsetup(request):
+def pytest_funcarg__testsetup(request):
     return TestSetup(request)
 
 
