@@ -43,7 +43,6 @@ xfail = pytest.mark.xfail
 
 class TestSpecificVersions:
 
-    @xfail(reason="Needs to be updated for the new UI") 
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, seleniumsetup):
         self.selenium = seleniumsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
