@@ -40,15 +40,15 @@ import re
 import time
 import base64
 from page import Page
-from vars import ConnectionParameters
 
 
 class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        Page.__init__(self, testsetup)
+        self.sel = self.selenium
 
     @property
     def page_title(self):
@@ -70,14 +70,14 @@ class CrashStatsBasePage(Page):
             Select the Mozilla Product you want to report on
         '''
         self.sel.select(self._product_select, application)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
 
     def select_version(self, version):
         '''
             Select the version of the application you want to report on
         '''
         self.sel.select(self._product_version_select, version)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
 
     def select_report(self, report_name):
         '''
@@ -85,26 +85,26 @@ class CrashStatsBasePage(Page):
             and wait for the page to reload
         '''
         self.sel.select(self._report_select, report_name)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
         if 'Top Crashers' == report_name:
-            return CrashStatsTopCrashers(self.sel)
+            return CrashStatsTopCrashers(self.testsetup)
         elif 'Top Crashers by Domain' == report_name:
-            return CrashStatsTopCrashersByDomain(self.sel)
+            return CrashStatsTopCrashersByDomain(self.testsetup)
         elif 'Top Crashers by URL' == report_name:
-            return CrashStatsTopCrashersByUrl(self.sel)
+            return CrashStatsTopCrashersByUrl(self.testsetup)
         elif 'Top Crashers by TopSite' == report_name:
-            return CrashStatsTopCrashersBySite(self.sel)
+            return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
-            return CrashStatsPerActiveDailyUser(self.sel)
+            return CrashStatsPerActiveDailyUser(self.testsetup)
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
-        return CrashStatsStatus(self.sel)
+        self.sel.wait_for_page_to_load(self.timeout)
+        return CrashStatsStatus(self.testsetup)
 
     def click_advanced_search(self):
         self.sel.click('link=Advanced Search')
-        return CrashStatsAdvancedSearch(self.sel)
+        return CrashStatsAdvancedSearch(self.testsetup)
 
     def can_find_text(self, text_to_search):
         '''
@@ -180,11 +180,11 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_changers_selected = _top_changers + '.selected'
 
 
-    def __init__(self, selenium):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        self.sel = selenium
+        CrashStatsBasePage.__init__(self, testsetup)
         self.sel.open('/')
         count = 0
         while not re.search(r'http?\w://.*/products/.*', self.sel.get_location(), re.U):
@@ -196,7 +196,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
         if not self.sel.get_title() == 'Crash Data for Firefox':
             self.sel.select(self.product_select, 'Firefox')
-            self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+            self.sel.wait_for_page_to_load(self.timeout)
         self.sel.window_maximize()
 
     def report_length(self, days):
@@ -204,7 +204,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
             Click on the link with the amount of days you want the report to be
         '''
         self.sel.click('link=' + days + ' days')
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
         self.wait_for_element_present('xpath=//a[text()="'
                                                 + days + ' days" and @class="selected"]')
 
@@ -215,8 +215,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.sel.type(self._find_crash_id_or_signature, crash_id_or_signature)
         self.sel.key_press(self._find_crash_id_or_signature, "\\13")
         #self.sel.submit('//form')
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
-        return CrashStatsSearchResults(self.sel)
+        self.sel.wait_for_page_to_load(self.timeout)
+        return CrashStatsSearchResults(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
@@ -265,24 +265,24 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table = 'id=signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
 
-    def __init__(self, selenium):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        self.sel = selenium
+        CrashStatsBasePage.__init__(self, testsetup)
         count = 0
         self.wait_for_element_present(self._product_multiple_select)
 
     def filter_reports(self):
         self.sel.click(self._filter_crash_reports_button)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
 #        self.wait_for_element_present('css=div.page-heading > h2')
 
     def click_first_signature(self):
         self.wait_for_element_present(self._data_table_first_signature)
         signature = self.sel.get_text(self._data_table_first_signature)
         self.sel.click(self._data_table_first_signature)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
         return signature
 
     @property
@@ -301,8 +301,8 @@ class CrashStatsSearchResults(CrashStatsBasePage):
     _os_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
         self.wait_for_element_present(self._product_select)
 
 
@@ -310,11 +310,11 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     _product_select = 'id=daily_search_version_form_products'
 
-    def __init__(self, selenium):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        self.sel = selenium
+        self.sel = testsetup.selenium
 
     @property
     def product_select(self):
@@ -326,8 +326,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_header = 'css=h2 > span.current-product'
     _product_version_header = 'css=h2 > span.current-version'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -343,8 +343,8 @@ class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -360,8 +360,8 @@ class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -377,8 +377,8 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -396,8 +396,8 @@ class CrashStatsStatus(CrashStatsBasePage):
     _graphs_locator = 'css=div.title:contains("Graphs")'
     _latest_raw_stats = 'css=div.title:contains("Latest Raw Stats")'
 
-    def __init__(self, selenium):
-        self.sel = selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
         self.wait_for_element_present(self._page_header)
 
     def at_a_glance(self):
