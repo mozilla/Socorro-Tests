@@ -43,9 +43,9 @@ import pytest
 
 class TestCrashReports:
 
-    def test_that_reports_form_has_same_product_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_reports_form_has_same_product_for_firefox(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         page_title = csp.page_title
         Assert.true('Firefox' in page_title)
         crash_adu = csp.select_report("Crashes per User")
@@ -53,9 +53,9 @@ class TestCrashReports:
         report_product = crash_adu.product_select
         Assert.equal(details['product'],report_product)
 
-    def test_that_reports_form_has_same_product_for_thunderbird(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_reports_form_has_same_product_for_thunderbird(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Thunderbird')
         page_title = csp.page_title
         Assert.true('Thunderbird' in page_title)
@@ -65,9 +65,9 @@ class TestCrashReports:
             report_product = crash_adu.product_select
             Assert.equal(details['product'],report_product)
 
-    def test_that_reports_form_has_same_product_for_seamonkey(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_reports_form_has_same_product_for_seamonkey(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('SeaMonkey')
         page_title = csp.page_title
         Assert.true('SeaMonkey' in page_title)
@@ -77,9 +77,9 @@ class TestCrashReports:
             report_product = crash_adu.product_select
             Assert.equal(details['product'],report_product)
 
-    def test_that_reports_form_has_same_product_for_camino(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_reports_form_has_same_product_for_camino(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Camino')
         page_title = csp.page_title
         Assert.true('Camino' in page_title)
@@ -89,9 +89,9 @@ class TestCrashReports:
             report_product = crash_adu.product_select
             Assert.equal(details['product'],report_product)
 
-    def test_that_reports_form_has_same_product_for_fennec(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_reports_form_has_same_product_for_fennec(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Fennec')
         page_title = csp.page_title
         Assert.true('Fennec' in page_title)
@@ -101,9 +101,9 @@ class TestCrashReports:
             report_product = crash_adu.product_select
             Assert.equal(details['product'],report_product)
 
-    def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         if not csp.can_find_text('no data'):
@@ -111,9 +111,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Thunderbird')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -122,9 +122,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -133,9 +133,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_header_for_camino(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_header_for_camino(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Camino')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -144,9 +144,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Fennec')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -155,18 +155,18 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
         Assert.equal(details['product'], cstc.product_header)
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Thunderbird')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -175,9 +175,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -186,9 +186,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Camino')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -197,9 +197,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Fennec')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -208,9 +208,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         if not csp.can_find_text('no data'):
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
@@ -218,9 +218,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Thunderbird')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -229,9 +229,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('SeaMonkey')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -240,9 +240,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Camino')
         if not csp.can_find_text('no data'):
             details = csp.current_details
@@ -251,9 +251,9 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+    def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, testsetup):
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
         csp.select_product('Fennec')
         if not csp.can_find_text('no data'):
             details = csp.current_details
