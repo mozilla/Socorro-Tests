@@ -228,7 +228,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def click_first_product_top_crashers_link(self):
         self.sel.click(self._first_product_top_crashers_link_locator)
-        self.sel.wait_for_page_to_load(ConnectionParameters.page_load_timeout)
+        self.sel.wait_for_page_to_load(self.timeout)
 
     def get_signature(self, index):
         return self.sel.get_text(self._signature_locator % index)
