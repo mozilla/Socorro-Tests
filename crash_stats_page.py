@@ -46,8 +46,8 @@ class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
 
-    def __init__(self, seleniumsetup):
-        Page.__init__(self, seleniumsetup)
+    def __init__(self, testsetup):
+        Page.__init__(self, testsetup)
         self.sel = self.selenium
 
     @property
@@ -87,24 +87,24 @@ class CrashStatsBasePage(Page):
         self.sel.select(self._report_select, report_name)
         self.sel.wait_for_page_to_load(self.timeout)
         if 'Top Crashers' == report_name:
-            return CrashStatsTopCrashers(self.seleniumsetup)
+            return CrashStatsTopCrashers(self.testsetup)
         elif 'Top Crashers by Domain' == report_name:
-            return CrashStatsTopCrashersByDomain(self.seleniumsetup)
+            return CrashStatsTopCrashersByDomain(self.testsetup)
         elif 'Top Crashers by URL' == report_name:
-            return CrashStatsTopCrashersByUrl(self.seleniumsetup)
+            return CrashStatsTopCrashersByUrl(self.testsetup)
         elif 'Top Crashers by TopSite' == report_name:
-            return CrashStatsTopCrashersBySite(self.seleniumsetup)
+            return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
-            return CrashStatsPerActiveDailyUser(self.seleniumsetup)
+            return CrashStatsPerActiveDailyUser(self.testsetup)
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
         self.sel.wait_for_page_to_load(self.timeout)
-        return CrashStatsStatus(self.seleniumsetup)
+        return CrashStatsStatus(self.testsetup)
 
     def click_advanced_search(self):
         self.sel.click('link=Advanced Search')
-        return CrashStatsAdvancedSearch(self.seleniumsetup)
+        return CrashStatsAdvancedSearch(self.testsetup)
 
     def can_find_text(self, text_to_search):
         '''
@@ -178,11 +178,11 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_changers_selected = _top_changers + '.selected'
 
 
-    def __init__(self, seleniumsetup):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        CrashStatsBasePage.__init__(self, seleniumsetup)
+        CrashStatsBasePage.__init__(self, testsetup)
         self.sel.open('/')
         count = 0
         while not re.search(r'http?\w://.*/products/.*', self.sel.get_location(), re.U):
@@ -214,7 +214,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.sel.key_press(self._find_crash_id_or_signature, "\\13")
         #self.sel.submit('//form')
         self.sel.wait_for_page_to_load(self.timeout)
-        return CrashStatsSearchResults(self.seleniumsetup)
+        return CrashStatsSearchResults(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
@@ -256,11 +256,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table = 'id=signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
 
-    def __init__(self, seleniumsetup):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        CrashStatsBasePage.__init__(self, seleniumsetup)
+        CrashStatsBasePage.__init__(self, testsetup)
         count = 0
         self.wait_for_element_present(self._product_multiple_select)
 
@@ -292,8 +292,8 @@ class CrashStatsSearchResults(CrashStatsBasePage):
     _os_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
         self.wait_for_element_present(self._product_select)
 
 
@@ -301,11 +301,11 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     _product_select = 'id=daily_search_version_form_products'
 
-    def __init__(self, seleniumsetup):
+    def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        self.sel = seleniumsetup.selenium
+        self.sel = testsetup.selenium
 
     @property
     def product_select(self):
@@ -317,8 +317,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_header = 'css=h2 > span.current-product'
     _product_version_header = 'css=h2 > span.current-version'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -334,8 +334,8 @@ class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -351,8 +351,8 @@ class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -368,8 +368,8 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
 
     @property
     def product_header(self):
@@ -387,8 +387,8 @@ class CrashStatsStatus(CrashStatsBasePage):
     _graphs_locator = 'css=div.title:contains("Graphs")'
     _latest_raw_stats = 'css=div.title:contains("Latest Raw Stats")'
 
-    def __init__(self, seleniumsetup):
-        self.sel = seleniumsetup.selenium
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
         self.wait_for_element_present(self._page_header)
 
     def at_a_glance(self):
