@@ -43,14 +43,14 @@ xfail = pytest.mark.xfail
 
 class TestSpecificVersions:
 
-    def test_that_selecting_exact_version_doesnt_show_other_versions(self, seleniumsetup):
-        self.selenium = seleniumsetup.selenium
+    def test_that_selecting_exact_version_doesnt_show_other_versions(self, testsetup):
+        self.selenium = testsetup.selenium
         csp = CrashStatsHomePage(self.selenium)
 
         details = csp.current_details
         if len(details['versions']) > 0:
             csp.select_version(details['versions'][1])
-        
+
         Assert.equal(details['product'] + ' ' + details['versions'][1],csp.right_column_heading)
 
         try:
