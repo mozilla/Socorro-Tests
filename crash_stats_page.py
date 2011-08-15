@@ -167,6 +167,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
     _report_select = 'id=report_select'
+    _reports_locator = 'css=#signatureList tbody tr'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
@@ -233,11 +234,16 @@ class CrashStatsHomePage(CrashStatsBasePage):
         return CrashReport(self.testsetup, index)
 
     @property
-    def first_non_null_signature(self):
-        count = 1
-        while self.get_report(count).has_empty_signature:
-            count += 1
-        return self.get_report(count).signature
+    def reports_count(self):
+        return self.sel.get_css_count(self._reports_locator)
+
+    @property
+    def reports(self):
+        return [self.get_report(count) for count in range(self.reports_count)]
+
+    @property
+    def first_report_with_valid_signature(self):
+        return [report for report in self.reports if report.has_valid_signature][0]
 
     @property
     def get_product_list(self):
@@ -266,7 +272,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 class CrashReport(CrashStatsBasePage):
 
-    _signature_locator = " a.signature"
+    _signature_locator = " .signature"
     index = 0
 
     def __init__(self, testsetup, index):
@@ -278,17 +284,17 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def root_locator(self):
-        return "css=#signatureList tbody tr:nth-of-type(%s)" % self.index
+        return "css=#signatureList tbody tr:nth-of-type(%s)" % (self.index + 1)
 
     @property
     def signature(self):
         return self.sel.get_text(self.absolute_locator(self._signature_locator))
 
     @property
-    def has_empty_signature(self):
+    def has_valid_signature(self):
         if self.signature == "(empty signature)":
-            return True
-        return False
+            return False
+        return True
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):
