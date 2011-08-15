@@ -170,7 +170,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
-    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a'
+    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a.signature'
     _right_column_locator = 'css=div.product_topcrasher > h4'
     _centre_column_locator = 'css=div.product_topcrasher + div > h4'
     _left_column_locator = 'css=div.product_topcrasher + div + div > h4'
@@ -232,6 +232,13 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def get_signature(self, index):
         return self.sel.get_text(self._signature_locator % index)
+
+    @property
+    def first_non_null_signature(self):
+        count = 1
+        while self.get_signature(count) == "(empty signature)":
+            count += 1
+        return self.get_signature(count)
 
     @property
     def get_product_list(self):

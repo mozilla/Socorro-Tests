@@ -58,8 +58,8 @@ class TestSearchForIdOrSignature:
         self.selenium = testsetup.selenium
         csp = CrashStatsHomePage(testsetup)
         csp.click_first_product_top_crashers_link()
-        second_signature = csp.get_signature(2)
-        result = csp.search_for_crash(second_signature)
+        first_valid_signature = csp.first_non_null_signature
+        result = csp.search_for_crash(first_valid_signature)
         Assert.false(result.can_find_text('No results were found.'))
 
     @xfail(reason="Disabled till Bug 652880 is fixed")
