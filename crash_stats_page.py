@@ -266,21 +266,27 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 class CrashReport(CrashStatsBasePage):
 
-    _crash_report_locator = "css=#signatureList tbody tr:nth-of-type(%s)"
-    _signature_locator =  _crash_report_locator + " td:nth-of-type(5) a.signature"
-    _index = 0
+    _signature_locator = " a.signature"
+    index = 0
 
     def __init__(self, testsetup, index):
         CrashStatsBasePage.__init__(self, testsetup)
-        self._index = index
+        self.index = index
+
+    def absolute_locator(self, relative_locator):
+        return self.root_locator + relative_locator
+
+    @property
+    def root_locator(self):
+        return "css=#signatureList tbody tr:nth-of-type(%s)" % self.index
 
     @property
     def signature(self):
-        return self.sel.get_text(self._signature_locator % self._index)
+        return self.sel.get_text(self.absolute_locator(self._signature_locator))
 
     @property
     def has_empty_signature(self):
-        if(self.signature == "empty signature"):
+        if self.signature == "(empty signature)":
             return True
         return False
 
