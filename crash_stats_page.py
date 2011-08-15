@@ -239,7 +239,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     @property
     def reports(self):
-        return [self.get_report(count) for count in range(self.reports_count)]
+        return [self.get_report(count) for count in range(1, self.reports_count)]
 
     @property
     def first_report_with_valid_signature(self):
@@ -273,7 +273,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
 class CrashReport(CrashStatsBasePage):
 
     _signature_locator = " .signature"
-    index = 0
 
     def __init__(self, testsetup, index):
         CrashStatsBasePage.__init__(self, testsetup)
@@ -284,7 +283,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def root_locator(self):
-        return "css=#signatureList tbody tr:nth-of-type(%s)" % (self.index + 1)
+        return "css=#signatureList tbody tr:nth-of-type(%s)" % (self.index)
 
     @property
     def signature(self):
