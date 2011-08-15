@@ -230,14 +230,14 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.sel.wait_for_page_to_load(self.timeout)
 
     def get_report(self, index):
-        return CrashReport(self.testsetup, count)
+        return CrashReport(self.testsetup, index)
 
     @property
     def first_non_null_signature(self):
         count = 1
-        while CrashReport(self.testsetup, count).has_empty_signature:
+        while self.get_report(count).has_empty_signature:
             count += 1
-        return CrashReport(self.testsetup, count).signature
+        return self.get_report(count).signature
 
     @property
     def get_product_list(self):
