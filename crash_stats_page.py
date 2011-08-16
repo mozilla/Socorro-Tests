@@ -167,13 +167,13 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
     _report_select = 'id=report_select'
+    _report_list_item_locator = 'css=#reportsList tbody tr'
+    _product_cell_locator = _report_list_item_locator + ':nth-of-type(%s) td:nth-of-type(3)'
+    _version_cell_locator = _report_list_item_locator + ':nth-of-type(%s) td:nth-of-type(4)'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
-    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a.signature'
-    _right_column_locator = 'css=div.product_topcrasher > h4'
-    _centre_column_locator = 'css=div.product_topcrasher + div > h4'
-    _left_column_locator = 'css=div.product_topcrasher + div + div > h4'
+    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a'
     _top_crashers = 'css=a:contains("Top Crashers")'
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
@@ -233,6 +233,10 @@ class CrashStatsHomePage(CrashStatsBasePage):
     def get_signature(self, index):
         return self.sel.get_text(self._signature_locator % index)
 
+    def click_signature(self, index):
+        self.sel.click(self._signature_locator % index)
+        self.sel.wait_for_page_to_load(self.timeout)
+
     @property
     def first_non_null_signature(self):
         count = 1
@@ -245,24 +249,22 @@ class CrashStatsHomePage(CrashStatsBasePage):
         return self.sel.get_select_options(self._product_select)
 
     @property
+    def report_list_length(self):
+        return self.sel.get_css_count(self._report_list_item_locator)
+
+    def product_from_list(self, index):
+        return self.sel.get_text(self._product_cell_locator % index)
+
+    def version_from_list(self, index):
+        return self.sel.get_text(self._version_cell_locator % index)
+
+    @property
     def first_signature(self):
         return self.sel.get_text(self._first_signature_locator)
 
     @property
     def second_signature(self):
         return self.sel.get_text(self._second_signature_locator)
-
-    @property
-    def right_column_heading(self):
-        return self.sel.get_text(self._right_column_locator)[:-9]
-
-    @property
-    def centre_column_heading(self):
-        return self.sel.get_text(self._centre_column_locator)[:-9]
-
-    @property
-    def left_column_heading(self):
-        return self.sel.get_text(self._left_column_locator)[:-9]
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):

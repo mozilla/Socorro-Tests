@@ -43,26 +43,22 @@ xfail = pytest.mark.xfail
 
 class TestSpecificVersions:
 
-    @xfail(reason="Needs to be updated for the new UI") 
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, testsetup):
         self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(self.selenium)
+        csp = CrashStatsHomePage(testsetup)
 
         details = csp.current_details
         if len(details['versions']) > 0:
             csp.select_version(details['versions'][1])
 
-        Assert.equal(details['product'] + ' ' + details['versions'][1],csp.right_column_heading)
+        csp.click_first_product_top_crashers_link()
+        csp.click_signature(2)
 
-        try:
-            centre_name = csp.centre_column_heading
-            Assert.fail(centre_name + ' was shown when it shouldnt be there')
-        except Exception, e:
-            pass
-
-        try:
-            right_name = csp.right_column_heading
-            Assert.fail(right_name + ' was shown when it shouldnt be there')
-        except Exception, e:
-            pass
+        count = 0
+        while count < csp.report_list_length:
+             count += 1
+             product = csp.product_from_list(count)
+             version = csp.version_from_list(count)
+             Assert.equal(product, details['product'])
+             Assert.equal(version, details['versions'][1])
 
