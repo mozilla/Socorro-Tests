@@ -238,7 +238,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 class CrashReportList(CrashStatsBasePage):
 
-    _reports_locator = 'css=#signatureList tbody tr'
+    _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = "css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a"
 
     def get_report(self, index):
@@ -259,7 +259,7 @@ class CrashReportList(CrashStatsBasePage):
 
     @property
     def reports_count(self):
-        return self.sel.get_css_count(self._reports_locator)
+        return self.sel.get_css_count(self._reports_list_locator)
 
     @property
     def first_report_with_valid_signature(self):
