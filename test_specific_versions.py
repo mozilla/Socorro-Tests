@@ -51,14 +51,15 @@ class TestSpecificVersions:
         if len(details['versions']) > 0:
             csp.select_version(details['versions'][1])
 
-        csp.click_first_product_top_crashers_link()
-        csp.click_signature(2)
+        reportList = csp.click_first_product_top_crashers_link()
+        reportList.click_first_valid_signature()
 
         count = 0
-        while count < csp.report_list_length:
+        while count < reportList.reports_count:
              count += 1
-             product = csp.product_from_list(count)
-             version = csp.version_from_list(count)
+             report = reportList.get_report(count)
+             product = report.signature
+             version = report.version
              Assert.equal(product, details['product'])
              Assert.equal(version, details['versions'][1])
 

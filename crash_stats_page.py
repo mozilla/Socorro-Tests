@@ -167,13 +167,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
     _report_select = 'id=report_select'
-    _report_list_item_locator = 'css=#reportsList tbody tr'
-    _product_cell_locator = _report_list_item_locator + ':nth-of-type(%s) td:nth-of-type(3)'
-    _version_cell_locator = _report_list_item_locator + ':nth-of-type(%s) td:nth-of-type(4)'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
-    _signature_locator = 'css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a'
     _top_crashers = 'css=a:contains("Top Crashers")'
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
@@ -229,35 +225,85 @@ class CrashStatsHomePage(CrashStatsBasePage):
     def click_first_product_top_crashers_link(self):
         self.sel.click(self._first_product_top_crashers_link_locator)
         self.sel.wait_for_page_to_load(self.timeout)
-
-    def get_signature(self, index):
-        return self.sel.get_text(self._signature_locator % index)
-
-    def click_signature(self, index):
-        self.sel.click(self._signature_locator % index)
-        self.sel.wait_for_page_to_load(self.timeout)
+        return CrashReportList(self.testsetup)
 
     @property
-    def get_product_list(self):
+    def product_list(self):
         return self.sel.get_select_options(self._product_select)
-
-    @property
-    def report_list_length(self):
-        return self.sel.get_css_count(self._report_list_item_locator)
-
-    def product_from_list(self, index):
-        return self.sel.get_text(self._product_cell_locator % index)
-
-    def version_from_list(self, index):
-        return self.sel.get_text(self._version_cell_locator % index)
 
     @property
     def first_signature(self):
         return self.sel.get_text(self._first_signature_locator)
 
+
+class CrashReportList(CrashStatsBasePage):
+
+    _reports_list_locator = 'css=#signatureList tbody tr'
+    _signature_locator = "css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a"
+
+    def get_report(self, index):
+        return CrashReport(self.testsetup, index)
+
+    def click_signature(self, index):
+        report = self.reports[index]
+        self.sel.click(self._signature_locator % index)
+        self.sel.wait_for_page_to_load(self.timeout)
+        return report
+
+    def click_first_valid_signature(self):
+        self.click_signature(self.first_report_with_valid_signature.row_index)
+
     @property
-    def second_signature(self):
-        return self.sel.get_text(self._second_signature_locator)
+    def reports(self):
+        return [self.get_report(count) for count in range(1, self.reports_count)]
+
+    @property
+    def reports_count(self):
+        return self.sel.get_css_count(self._reports_list_locator)
+
+    @property
+    def first_report_with_valid_signature(self):
+        return [report for report in self.reports if report.has_valid_signature][0]
+
+
+class CrashReport(CrashStatsBasePage):
+
+    _signature_locator = " .signature"
+    _product_locator = "td:nth-of-type(3)"
+    _version_locator = "td:nth-of-type(4)"
+
+    def __init__(self, testsetup, index):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self.index = index
+
+    def absolute_locator(self, relative_locator):
+        return self.root_locator + relative_locator
+
+    @property
+    def root_locator(self):
+        return "css=#signatureList tbody tr:nth-of-type(%s)" % (self.index)
+
+    @property
+    def row_index(self):
+        return self.index
+
+    @property
+    def signature(self):
+        return self.sel.get_text(self.absolute_locator(self._signature_locator))
+
+    @property
+    def product(self):
+        return self.sel.get_text(self.absolute_locator(self._product_locator))
+
+    @property
+    def version(self):
+        return self.sel.get_text(self.absolute_locator(self._version_locator))
+
+    @property
+    def has_valid_signature(self):
+        if self.signature == "(empty signature)":
+            return False
+        return True
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):
