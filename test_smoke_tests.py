@@ -70,7 +70,7 @@ class TestSmokeTests:
         self.selenium = testsetup.selenium
         csp = CrashStatsHomePage(testsetup)
         cssearch = csp.click_advanced_search()
-        nav_product_list = csp.get_product_list
+        nav_product_list = csp.product_list
         search_product_list = cssearch.product_list
         Assert.equal(len(nav_product_list),len(search_product_list))
         for i, prod_item in enumerate(nav_product_list):

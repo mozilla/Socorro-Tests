@@ -228,7 +228,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         return CrashReportList(self.testsetup)
 
     @property
-    def get_product_list(self):
+    def product_list(self):
         return self.sel.get_select_options(self._product_select)
 
     @property
