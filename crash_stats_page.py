@@ -170,7 +170,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
-    _reports_locator = 'css=#signatureList tbody tr'
     _top_crashers = 'css=a:contains("Top Crashers")'
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
