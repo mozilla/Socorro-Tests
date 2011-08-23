@@ -280,7 +280,6 @@ class CrashReportList(CrashStatsBasePage):
 
 class CrashReport(CrashStatsBasePage):
 
-    _signature_locator = " .signature"
     _product_locator = " td:nth-of-type(3)"
     _version_locator = " td:nth-of-type(4)"
     _row_locator = "css=#reportsList tbody tr"
