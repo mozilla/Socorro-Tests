@@ -38,13 +38,12 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
 from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
 
-class TestSmokeTests:
 
+class TestSmokeTests:
 
     def test_that_server_status_page_loads(self, testsetup):
         self.selenium = testsetup.selenium
@@ -72,7 +71,7 @@ class TestSmokeTests:
         cssearch = csp.click_advanced_search()
         nav_product_list = csp.product_list
         search_product_list = cssearch.product_list
-        Assert.equal(len(nav_product_list),len(search_product_list))
+        Assert.equal(len(nav_product_list), len(search_product_list))
         for i, prod_item in enumerate(nav_product_list):
             Assert.equal(prod_item, search_product_list[i])
 
@@ -117,8 +116,9 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         if not cs_advanced.can_find_text('no data'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self, testsetup):
         self.selenium = testsetup.selenium
@@ -127,8 +127,9 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         if not cs_advanced.can_find_text('no data'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self, testsetup):
         self.selenium = testsetup.selenium
@@ -137,8 +138,9 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         if not cs_advanced.can_find_text('no data'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self, testsetup):
         self.selenium = testsetup.selenium
@@ -147,21 +149,22 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         if not cs_advanced.can_find_text('no data'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self, testsetup):
         self.selenium = testsetup.selenium
         csp = CrashStatsHomePage(testsetup)
         csp.select_product('SeaMonkey')
+        cs_advanced = csp.click_advanced_search()
+        cs_advanced.filter_reports()
         if not csp.can_find_text('no data'):
-            cs_advanced = csp.click_advanced_search()
-            cs_advanced.filter_reports()
-            if not cs_advanced.can_find_text('No Data'): 
-                signature = cs_advanced.click_first_signature()
-                Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, testsetup):
         import urllib
-        response = urllib.urlopen( testsetup.base_url + "/query/simple")
+        response = urllib.urlopen(testsetup.base_url + "/query/simple")
         Assert.equal(404, response.getcode())

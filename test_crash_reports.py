@@ -36,7 +36,7 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
+from crash_stats_page import CrashStatsAdvancedSearch
 from crash_stats_page import CrashStatsPerActiveDailyUser
 from unittestzero import Assert
 import pytest
@@ -51,7 +51,7 @@ class TestCrashReports:
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
-        Assert.equal(details['product'],report_product)
+        Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, testsetup):
         self.selenium = testsetup.selenium
@@ -63,7 +63,7 @@ class TestCrashReports:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
-            Assert.equal(details['product'],report_product)
+            Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_seamonkey(self, testsetup):
         self.selenium = testsetup.selenium
@@ -75,7 +75,7 @@ class TestCrashReports:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
-            Assert.equal(details['product'],report_product)
+            Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_camino(self, testsetup):
         self.selenium = testsetup.selenium
@@ -87,7 +87,7 @@ class TestCrashReports:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
-            Assert.equal(details['product'],report_product)
+            Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_fennec(self, testsetup):
         self.selenium = testsetup.selenium
@@ -99,7 +99,7 @@ class TestCrashReports:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
-            Assert.equal(details['product'],report_product)
+            Assert.equal(details['product'], report_product)
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, testsetup):
         self.selenium = testsetup.selenium
@@ -261,4 +261,17 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
+            
+    def test_that_top_crasher_filters_return_results(self, testsetup):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = testsetup.selenium
+        csp = CrashStatsHomePage(testsetup)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if not csp.can_find_text('no data'):
+            Assert.equal(details['product'], cstc.product_header)
+            
+        cstc.click_filter_all()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
 
