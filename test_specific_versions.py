@@ -61,5 +61,5 @@ class TestSpecificVersions:
              product = report.product
              version = report.version
              Assert.equal(product, details['product'])
-             Assert.equal(version, details['versions'][1].replace("(beta)",""))
+             Assert.contains(version, details['versions'][1])
 
