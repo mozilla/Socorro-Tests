@@ -112,25 +112,6 @@ class CrashStatsBasePage(Page):
         '''
         return self.sel.is_text_present(text_to_search)
 
-    def wait_for_element_present(self, element):
-        count = 0
-        while not self.sel.is_element_present(element):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                self.record_error()
-                raise Exception(element + ' has not loaded')
-
-    def wait_for_element_visible(self, element):
-        self.wait_for_element_present(element)
-        count = 0
-        while not self.sel.is_visible(element):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                self.record_error()
-                raise Exception(element + " is still visible")
-
     @property
     def current_details(self):
         details = {}
@@ -141,22 +122,6 @@ class CrashStatsBasePage(Page):
         except:
             details['versions'] = []
         return details
-
-    def record_error(self):
-        '''
-
-        '''
-        print '-------------------'
-        print 'Error at ' + self.sel.get_location()
-        print 'Page title ' + self.sel.get_title()
-        print '-------------------'
-        filename = 'socorro_' + str(time.time()).split('.')[0] + '.png'
-
-        print 'Screenshot of error in file ' + filename
-        f = open(filename, 'wb')
-        f.write(base64.decodestring(
-            self.sel.capture_entire_page_screenshot_to_string('')))
-        f.close()
 
 
 class CrashStatsHomePage(CrashStatsBasePage):
@@ -175,7 +140,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
 
-
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
@@ -187,7 +151,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
             time.sleep(1)
             count += 1
             if count == 20:
-                self.record_error()
                 raise Exception("Home Page has not loaded")
 
         if not self.sel.get_title() == 'Crash Data for Firefox':
@@ -210,7 +173,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         '''
         self.sel.type(self._find_crash_id_or_signature, crash_id_or_signature)
         self.sel.key_press(self._find_crash_id_or_signature, "\\13")
-        #self.sel.submit('//form')
         self.sel.wait_for_page_to_load(self.timeout)
         return CrashStatsSearchResults(self.testsetup)
 
@@ -318,13 +280,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
             Creates a new instance of the class and gets the page ready for testing
         '''
         CrashStatsBasePage.__init__(self, testsetup)
-        count = 0
         self.wait_for_element_present(self._product_multiple_select)
 
     def filter_reports(self):
         self.sel.click(self._filter_crash_reports_button)
         self.sel.wait_for_page_to_load(self.timeout)
-#        self.wait_for_element_present('css=div.page-heading > h2')
 
     def click_first_signature(self):
         self.wait_for_element_present(self._data_table_first_signature)
@@ -350,6 +310,7 @@ class CrashStatsSearchResults(CrashStatsBasePage):
     _filter_crash_reports_button = 'id=query_submit'
 
     def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
         self.sel = testsetup.selenium
         self.wait_for_element_present(self._product_select)
 
@@ -445,6 +406,7 @@ class CrashStatsStatus(CrashStatsBasePage):
     _latest_raw_stats = 'css=div.title:contains("Latest Raw Stats")'
 
     def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
         self.sel = testsetup.selenium
         self.wait_for_element_present(self._page_header)
 
