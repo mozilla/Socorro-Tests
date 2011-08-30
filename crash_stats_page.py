@@ -242,8 +242,12 @@ class CrashReportList(CrashStatsBasePage):
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
 
+    def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self._reports = [self.set_report(count) for count in range(1, self.reports_count)]
+
     def get_report(self, index):
-        return CrashReport(self.testsetup, index)
+        return self.reports[index]
 
     def set_report(self, index):
         signature = self.get_signature(index)
@@ -267,7 +271,7 @@ class CrashReportList(CrashStatsBasePage):
 
     @property
     def reports(self):
-        return [self.get_report(count) for count in range(1, self.reports_count)]
+        return self._reports
 
     @property
     def reports_count(self):
@@ -294,7 +298,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def root_locator(self):
-        return self._row_locator + ":nth-of-type(%s)" % (self.index)
+        return self._row_locator + ":nth-of-type(%s)" % (self._current_row_index)
 
     @property
     def row_index(self):
@@ -303,6 +307,10 @@ class CrashReport(CrashStatsBasePage):
     @property
     def row_count(self):
         return self.sel.get_css_count(self._row_locator)
+
+    def get_row(self, index):
+        self._current_row_index = index
+        return self
 
     @property
     def signature(self):

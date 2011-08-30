@@ -57,7 +57,7 @@ class TestSpecificVersions:
         count = 0
         while count < report.row_count:
              count += 1
-             report = report_list.get_report(count)
+             report = report.get_row(count)
              product = report.product
              version = report.version
              Assert.equal(product, details['product'])
