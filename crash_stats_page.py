@@ -239,10 +239,18 @@ class CrashStatsHomePage(CrashStatsBasePage):
 class CrashReportList(CrashStatsBasePage):
 
     _reports_list_locator = 'css=#signatureList tbody tr'
-    _signature_locator = "css=#signatureList tbody tr:nth-of-type(%s) td:nth-of-type(5) a"
+    _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
+    _signature_text_locator = _signature_locator + " span"
 
     def get_report(self, index):
         return CrashReport(self.testsetup, index)
+
+    def set_report(self, index):
+        signature = self.get_signature(index)
+        return CrashReport(self.testsetup, index, signature)
+
+    def get_signature(self, index):
+        return self.sel.get_text(self._signature_text_locator % index)
 
     def click_signature(self, index):
         report = self.reports[index]
@@ -251,7 +259,11 @@ class CrashReportList(CrashStatsBasePage):
         return report
 
     def click_first_valid_signature(self):
-        self.click_signature(self.first_report_with_valid_signature.row_index)
+        return self.click_signature(self.first_report_with_valid_signature.row_index)
+
+    @property
+    def first_valid_signature(self):
+        return self.get_signature(self.first_report_with_valid_signature.row_index)
 
     @property
     def reports(self):
@@ -268,28 +280,33 @@ class CrashReportList(CrashStatsBasePage):
 
 class CrashReport(CrashStatsBasePage):
 
-    _signature_locator = " .signature"
-    _product_locator = "td:nth-of-type(3)"
-    _version_locator = "td:nth-of-type(4)"
+    _product_locator = " td:nth-of-type(3)"
+    _version_locator = " td:nth-of-type(4)"
+    _row_locator = "css=#reportsList tbody tr"
 
-    def __init__(self, testsetup, index):
+    def __init__(self, testsetup, index, signature=None):
         CrashStatsBasePage.__init__(self, testsetup)
         self.index = index
+        self._signature = signature
 
     def absolute_locator(self, relative_locator):
         return self.root_locator + relative_locator
 
     @property
     def root_locator(self):
-        return "css=#signatureList tbody tr:nth-of-type(%s)" % (self.index)
+        return self._row_locator + ":nth-of-type(%s)" % (self.index)
 
     @property
     def row_index(self):
         return self.index
 
     @property
+    def row_count(self):
+        return self.sel.get_css_count(self._row_locator)
+
+    @property
     def signature(self):
-        return self.sel.get_text(self.absolute_locator(self._signature_locator))
+        return self._signature
 
     @property
     def product(self):

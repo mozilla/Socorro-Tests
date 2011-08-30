@@ -58,7 +58,7 @@ class TestSearchForIdOrSignature:
         self.selenium = testsetup.selenium
         csp = CrashStatsHomePage(testsetup)
         reportlist = csp.click_first_product_top_crashers_link()
-        signature = reportlist.first_report_with_valid_signature.signature
+        signature = reportlist.first_valid_signature
         result = csp.search_for_crash(signature)
         Assert.false(result.can_find_text('No results were found.'))
 
