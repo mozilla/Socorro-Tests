@@ -43,59 +43,59 @@ xfail = pytest.mark.xfail
 
 class TestSearchForIdOrSignature:
 
-    def test_that_when_item_not_available(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_when_item_not_available(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         results = csp.search_for_crash("this won't exist")
         Assert.true(results.can_find_text('No results were found.'))
 
-    def test_that_search_for_valid_signature(self, testsetup):
+    def test_that_search_for_valid_signature(self, mozwebqa):
         '''
             This is a test for 
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         reportlist = csp.click_first_product_top_crashers_link()
         signature = reportlist.first_report_with_valid_signature.signature
         result = csp.search_for_crash(signature)
         Assert.false(result.can_find_text('No results were found.'))
 
     @xfail(reason="Disabled till Bug 652880 is fixed")
-    def test_that_advanced_search_for_firefox_can_be_filtered(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Firefox'))
 
-    def test_that_advanced_search_for_thunderbird_can_be_filtered(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Thunderbird'))
 
-    def test_that_advanced_search_for_fennec_can_be_filtered(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Fennec'))
 
-    def test_that_advanced_search_for_camino_can_be_filtered(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Camino'))
     
-    def test_that_advanced_search_for_seamonkey_can_be_filtered(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()

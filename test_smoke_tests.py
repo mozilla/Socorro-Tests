@@ -45,9 +45,9 @@ xfail = pytest.mark.xfail
 
 class TestSmokeTests:
 
-    def test_that_server_status_page_loads(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_server_status_page_loads(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csstat = csp.click_server_status()
         try:
             csstat.at_a_glance()
@@ -65,9 +65,9 @@ class TestSmokeTests:
             Assert.fail(str(e))
 
     @xfail(reason="Disabled till Bug 612679 is fixed")
-    def test_that_options_are_sorted_the_same(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_options_are_sorted_the_same(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         cssearch = csp.click_advanced_search()
         nav_product_list = csp.product_list
         search_product_list = cssearch.product_list
@@ -75,44 +75,44 @@ class TestSmokeTests:
         for i, prod_item in enumerate(nav_product_list):
             Assert.equal(prod_item, search_product_list[i])
 
-    def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Firefox', cs_advanced.currently_selected_product)
 
-    def test_that_advanced_search_has_thunderbird_highlighted_in_multiselect(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_has_thunderbird_highlighted_in_multiselect(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Thunderbird', cs_advanced.currently_selected_product)
     
-    def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Fennec', cs_advanced.currently_selected_product)
     
-    def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Camino', cs_advanced.currently_selected_product)
 
-    def test_that_advanced_search_has_seamonkey_highlighted_in_multiselect(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_has_seamonkey_highlighted_in_multiselect(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product)
 
     @xfail(reason="Disabled till Bug 652880 is fixed")
-    def test_that_advanced_search_view_signature_for_firefox_crash(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_view_signature_for_firefox_crash(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         if not cs_advanced.can_find_text('no data'):
@@ -120,9 +120,9 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
-    def test_that_advanced_search_view_signature_for_thunderbird_crash(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_view_signature_for_thunderbird_crash(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -131,9 +131,9 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
-    def test_that_advanced_search_view_signature_for_fennec_crash(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_view_signature_for_fennec_crash(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -142,9 +142,9 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
-    def test_that_advanced_search_view_signature_for_camino_crash(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_view_signature_for_camino_crash(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -153,9 +153,9 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
-    def test_that_advanced_search_view_signature_for_seamonkey_crash(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_advanced_search_view_signature_for_seamonkey_crash(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
@@ -164,7 +164,7 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
-    def test_that_simple_querystring_doesnt_return_500(self, testsetup):
+    def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         import urllib
-        response = urllib.urlopen(testsetup.base_url + "/query/simple")
+        response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
         Assert.equal(404, response.getcode())
