@@ -101,10 +101,10 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of SeaMonkey'))  
 
-    def test_that_advanced_search_drilldown_results_are_correct(self, testsetup):
+    def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         
         cs_advanced.adv_select_product("Firefox")

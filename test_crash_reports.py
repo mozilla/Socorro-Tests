@@ -263,10 +263,10 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
             
-    def test_that_top_crasher_filters_return_results(self, testsetup):
+    def test_that_top_crasher_filters_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         if not csp.can_find_text('no data'):
