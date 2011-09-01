@@ -43,9 +43,9 @@ xfail = pytest.mark.xfail
 
 class TestSpecificVersions:
 
-    def test_that_selecting_exact_version_doesnt_show_other_versions(self, testsetup):
-        self.selenium = testsetup.selenium
-        csp = CrashStatsHomePage(testsetup)
+    def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
 
         details = csp.current_details
         if len(details['versions']) > 0:
