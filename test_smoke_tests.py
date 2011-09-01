@@ -116,7 +116,7 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        if not cs_advanced.can_find_text('no data'):
+        if not cs_advanced.can_find_text('No results were found'):
             signature = cs_advanced.click_first_signature()
             Assert.true(signature in cs_advanced.page_heading)
 
@@ -126,7 +126,7 @@ class TestSmokeTests:
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        if not cs_advanced.can_find_text('no data'):
+        if not cs_advanced.can_find_text('No results were found'):
             signature = cs_advanced.click_first_signature()
             Assert.true(signature in cs_advanced.page_heading)
 
@@ -136,7 +136,7 @@ class TestSmokeTests:
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        if not cs_advanced.can_find_text('no data'):
+        if not cs_advanced.can_find_text('No results were found'):
             signature = cs_advanced.click_first_signature()
             Assert.true(signature in cs_advanced.page_heading)
 
@@ -146,7 +146,7 @@ class TestSmokeTests:
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        if not cs_advanced.can_find_text('no data'):
+        if not cs_advanced.can_find_text('No results were found'):
             signature = cs_advanced.click_first_signature()
             Assert.true(signature in cs_advanced.page_heading)
 
@@ -154,10 +154,10 @@ class TestSmokeTests:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
-        if not csp.can_find_text('no data'):
+        if not csp.can_find_text('No results were found'):
             cs_advanced = csp.click_advanced_search()
             cs_advanced.filter_reports()
-            if not cs_advanced.can_find_text('No Data'): 
+            if not cs_advanced.can_find_text('No results were found'): 
                 signature = cs_advanced.click_first_signature()
                 Assert.true(signature in cs_advanced.page_heading)
 
