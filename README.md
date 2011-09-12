@@ -31,11 +31,11 @@ If you are running on Ubuntu/Debian you will need to do following first
 to install the required Python libraries.
 
 ### Selenium
-Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-2.0b3.jar'
+Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-2.5.0.jar'
 
 To start the Selenium server run the following command:
 
-    java -jar ~/Downloads/selenium-server-standalone-2.0b3.jar
+    java -jar ~/Downloads/selenium-server-standalone-2.5.0.jar
 
 Change the path/name to the downloaded Selenium server file.
 
@@ -43,9 +43,13 @@ Change the path/name to the downloaded Selenium server file.
 
 ### Running tests locally
 
-To run tests locally its a simple case of calling the command below from this directory
+To run tests locally it's a simple case of calling py.test from the Socorro-tests directory
+<br />You should specify the following  argument for the selenium rc: --api=rc
+<br />The base URL should be a valid instance of crash-stats-dev: --baseurl=http://crash-stats-dev.allizom.org
 
-    py.test . 
+    py.test --api=rc --baseurl=http://example.com
+
+For other instructions type py.test --help .
 
 
 Writing Tests
