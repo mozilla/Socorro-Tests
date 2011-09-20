@@ -131,6 +131,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _find_crash_id_or_signature = 'id=q'
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
+    _current_version_locator = "css=#product_version_select>optgroup:nth(1)"
+    _other_versions_locator = "css=#product_version_select>optgroup:nth(2)"
     _report_select = 'id=report_select'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
@@ -192,6 +194,18 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def product_list(self):
         return self.sel.get_select_options(self._product_select)
+
+    @property
+    def versions_list(self):
+        return self.sel.get_select_options(self._product_version_select)
+
+    @property
+    def current_version_list(self):
+        return self.sel.get_text(self._current_version_locator)
+
+    @property
+    def other_version_list(self):
+        return self.sel.get_text(self._other_versions_locator)
 
     @property
     def first_signature(self):
