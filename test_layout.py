@@ -46,18 +46,15 @@ class TestLayout:
     def test_that_product_versions_are_orderd_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        current_list = csp.current_version_list.split()
-        current_list_mod = csp.current_version_list.replace('(beta)', 'b1').split()
 
-        for i in range(len(current_list_mod) - 1):
-                Assert.greater(Version(current_list_mod[i]),
-                               Version(current_list_mod[i + 1]),
-                               "Original values are: %s and %s" % (current_list[i], current_list[i + 1]))
 
-        other_list = csp.other_version_list.split()
-        other_list_mod = csp.other_version_list.replace('(beta)', 'b1').split()
+        current_list = csp.current_version_list.replace('(beta)', 'b1').split()
+        current_versions = [Version(curent) for curent in current_list]
 
-        for i in range(len(other_list_mod) - 1):
-                Assert.greater(Version(other_list_mod[i]),
-                               Version(other_list_mod[i + 1]),
-                               "Original values are: %s and %s" % (other_list[i], other_list[i + 1]))
+        Assert.is_sorted_descending(current_versions)
+
+        other_list = csp.other_version_list.replace('(beta)', 'b1').split()
+        other_versions = [Version(curent) for curent in other_list]
+
+        Assert.is_sorted_descending(other_versions)
+
