@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,6 +41,7 @@ from crash_stats_page import CrashStatsSearchResults
 from crash_stats_page import CrashStatsPerActiveDailyUser
 from unittestzero import Assert
 import pytest
+xfail = pytest.mark.xfail
 
 
 class TestCrashReports:
@@ -263,3 +265,13 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
+    @xfail(reason = "Disabled until Bug 603561 is fixed")
+    def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
+        """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        for version in csp.current_details['versions']:
+            if not csp.can_find_text('no data'):
+                csp.select_version(version)
+                cstc = csp.select_report('Top Changers')
+                Assert.true(cstc.is_top_changers_highlighted)
