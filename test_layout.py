@@ -38,15 +38,14 @@
 from crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 
-from distutils.version import LooseVersion as Version
-
+from distutils.version import LooseVersion
+import re
+from types import StringType, IntType
 
 class TestLayout:
 
     def test_that_product_versions_are_orderd_correctly(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-
-
+        csp = CrashStatsHomePage(mozwebqa, True)
 
         current_list = csp.current_version_list.replace('(beta)', 'b1').split()
         current_versions = [Version(curent) for curent in current_list]
@@ -54,7 +53,52 @@ class TestLayout:
         Assert.is_sorted_descending(current_versions)
 
         other_list = csp.other_version_list.replace('(beta)', 'b1').split()
+        print other_list
         other_versions = [Version(curent) for curent in other_list]
+#        other_versions.sort(reverse=True)
+
+        for ver in other_versions:
+            print ver
 
         Assert.is_sorted_descending(other_versions)
 
+
+class Version(LooseVersion):
+
+    def parse (self, vstring):
+        self.vstring = vstring
+        components = filter(lambda x: x and x != '.', self.component_re.split(vstring))
+        for i in range(len(components)):
+            try:
+                components[i] = int(components[i])
+            except ValueError:
+                components[i] = components[i]
+
+        self.version = components
+
+    def __cmp__ (self, other):
+        if isinstance(other, StringType):
+            other = LooseVersion(other)
+
+        a = self.version
+        b = other.version
+        while len(a) < len(b): a.append(0)
+        while len(b) < len(a): b.append(0)
+
+        for i in range(len(a)):
+
+            if not isinstance(a[i], IntType) and isinstance(b[i], IntType):
+                return -1
+
+            if not isinstance(b[i], IntType) and isinstance(a[i], IntType):
+                return 1
+
+        #If the element from list A is greater than B,
+        #versionA is greater than versionB and visa versa.
+        #If they are equal, go to the next element.
+            if a[i] > b[i]:
+                return 1
+            elif b[i] > a[i]:
+                return -1
+        #If we reach this point, the versions are equal
+        return 0
