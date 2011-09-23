@@ -42,6 +42,15 @@ xfail = pytest.mark.xfail
 
 
 class TestLayout:
+
+    def test_that_products_are_sorted_correctly(self, mozwebqa):
+
+        csp = CrashStatsHomePage(mozwebqa)
+
+        product_list = ["Firefox", "Thunderbird", "Camino", "SeaMonkey", "Fennec"]
+        products = csp.product_list
+        Assert.equal(product_list, products)
+
     @xfail(reason="Disabled till Bug 687841 is fixed")
     def test_that_product_versions_are_orderd_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa, True)
