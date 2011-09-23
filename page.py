@@ -145,7 +145,7 @@ class Page(object):
 
     class Version(LooseVersion):
 
-    #Overrides the LooseVersion class to better use our version numers
+    #Overrides the LooseVersion class to better use our version numbers
 
         def parse(self, vstring):
             self.vstring = vstring
