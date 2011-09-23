@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -96,6 +97,8 @@ class CrashStatsBasePage(Page):
             return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
             return CrashStatsPerActiveDailyUser(self.testsetup)
+        elif 'Top Changers' == report_name:
+            return CrashStatsTopChangers(self.testsetup)
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
@@ -250,7 +253,7 @@ class CrashReport(CrashStatsBasePage):
     _version_locator = " td:nth-of-type(4)"
     _row_locator = "css=#reportsList tbody tr"
 
-    def __init__(self, testsetup, index, signature=None):
+    def __init__(self, testsetup, index, signature = None):
         CrashStatsBasePage.__init__(self, testsetup)
         self.index = index
         self._signature = signature
@@ -446,3 +449,17 @@ class CrashStatsStatus(CrashStatsBasePage):
     def latest_raw_stats(self):
         if not self.sel.is_element_present(self._graphs_locator):
             raise Exception(self._latest_raw_stats + ' is not available')
+
+
+class CrashStatsTopChangers(CrashStatsBasePage):
+
+    _report_locator = 'id=report_select'
+
+    def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self.sel = testsetup.selenium
+
+    @property
+    def is_top_changers_highlighted(self):
+        selected_report = self.sel.get_selected_label(self._report_locator)
+        return (selected_report == 'Top Changers')
