@@ -88,14 +88,14 @@ class TestSmokeTests:
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Thunderbird', cs_advanced.currently_selected_product)
-    
+
     def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Fennec', cs_advanced.currently_selected_product)
-    
+
     def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
@@ -157,7 +157,7 @@ class TestSmokeTests:
         if not csp.can_find_text('No results were found'):
             cs_advanced = csp.click_advanced_search()
             cs_advanced.filter_reports()
-            if not cs_advanced.can_find_text('No results were found'): 
+            if not cs_advanced.can_find_text('No results were found'):
                 signature = cs_advanced.click_first_signature()
                 Assert.true(signature in cs_advanced.page_heading)
 

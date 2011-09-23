@@ -41,6 +41,7 @@ import pytest
 from unittestzero import Assert
 xfail = pytest.mark.xfail
 
+
 class TestSpecificVersions:
 
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
@@ -56,10 +57,9 @@ class TestSpecificVersions:
 
         count = 0
         while count < report.row_count:
-             count += 1
-             report = report.get_row(count)
-             product = report.product
-             version = report.version
-             Assert.equal(product, details['product'])
-             Assert.contains(version, details['versions'][1])
-
+            count += 1
+            report = report.get_row(count)
+            product = report.product
+            version = report.version
+            Assert.equal(product, details['product'])
+            Assert.contains(version, details['versions'][1])

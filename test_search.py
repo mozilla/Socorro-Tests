@@ -52,7 +52,7 @@ class TestSearchForIdOrSignature:
 
     def test_that_search_for_valid_signature(self, mozwebqa):
         '''
-            This is a test for 
+            This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
         self.selenium = mozwebqa.selenium
@@ -93,11 +93,11 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Camino'))
-    
+
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.true(cs_advanced.can_find_text('product is one of SeaMonkey'))  
+        Assert.true(cs_advanced.can_find_text('product is one of SeaMonkey'))

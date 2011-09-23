@@ -262,4 +262,3 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
-
