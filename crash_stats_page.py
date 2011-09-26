@@ -40,6 +40,7 @@ import re
 import time
 import base64
 from page import Page
+from mozwebqa.mozwebqa import TestSetup
 
 
 class CrashStatsBasePage(Page):
@@ -140,23 +141,24 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
 
-    def __init__(self, testsetup):
+    def __init__(self, testsetup, product=None):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
         CrashStatsBasePage.__init__(self, testsetup)
-        self.sel.open('/')
-        count = 0
-        while not re.search(r'http?\w://.*/products/.*', self.sel.get_location(), re.U):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Home Page has not loaded")
+        if product is None:
+            self.sel.open('/')
+            count = 0
+            while not re.search(r'http?\w://.*/products/.*', self.sel.get_location(), re.U):
+                time.sleep(1)
+                count += 1
+                if count == 20:
+                    raise Exception("Home Page has not loaded")
 
-        if not self.sel.get_title() == 'Crash Data for Firefox':
-            self.sel.select(self.product_select, 'Firefox')
-            self.sel.wait_for_page_to_load(self.timeout)
-        self.sel.window_maximize()
+            if not self.sel.get_title() == 'Crash Data for Firefox':
+                self.sel.select(self.product_select, 'Firefox')
+                self.sel.wait_for_page_to_load(self.timeout)
+            self.sel.window_maximize()
 
     def report_length(self, days):
         '''
@@ -446,3 +448,24 @@ class CrashStatsStatus(CrashStatsBasePage):
     def latest_raw_stats(self):
         if not self.sel.is_element_present(self._graphs_locator):
             raise Exception(self._latest_raw_stats + ' is not available')
+
+
+class ProductsLinksPage(CrashStatsBasePage):
+
+    _root_locator = "css=.body li"
+    _name_page_locator = 'css=h2:contains("Mozilla Products in Crash Reporter")'
+
+    def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self.sel.open('/products/')
+        self.sel.wait_for_page_to_load(self.timeout)
+        self.sel.window_maximize()
+
+    @property
+    def get_products_page_name(self):
+        return self.sel.get_text(self._name_page_locator)
+
+    def click_product(self, product):
+        self.sel.click('%s:contains(%s) a' % (self._root_locator, product))
+        self.sel.wait_for_page_to_load(self.timeout)
+        return CrashStatsHomePage(self.testsetup, product)

@@ -38,8 +38,10 @@
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsSearchResults
 from crash_stats_page import CrashStatsPerActiveDailyUser
+from crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
 import pytest
+import mozwebqa
 
 
 class TestCrashReports:
@@ -263,3 +265,14 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
+    def test_that_products_page_links_work(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        products_page = ProductsLinksPage(mozwebqa)
+        #An extra check that products page is loaded
+        Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+
+        for product in products:
+            csp = products_page.click_product(product)
+            Assert.contains(product, csp.get_url_current_page())
+            products_page = ProductsLinksPage(mozwebqa)
