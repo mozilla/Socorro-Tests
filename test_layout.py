@@ -19,7 +19,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,9 +38,11 @@
 # ***** END LICENSE BLOCK *****
 
 import pytest
+import pprint
 from crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 xfail = pytest.mark.xfail
+from version import FirefoxVersion
 
 
 class TestLayout:
@@ -51,22 +55,14 @@ class TestLayout:
         products = csp.product_list
         Assert.equal(product_list, products)
 
-    @xfail(reason="Disabled till Bug 687841 is fixed")
-    def test_that_product_versions_are_orderd_correctly(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa, True)
+    #@xfail(reason="Bug 687841 - Versions in Navigation Bar appear in wrong order")
+    def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
+        home_pg = CrashStatsHomePage(mozwebqa)
+        Assert.is_sorted_descending(home_pg.current_versions)
 
-        current_list = csp.current_version_list.replace('(beta)', 'b1').split()
-        current_versions = [csp.Version(curent) for curent in current_list]
-        for version in current_versions:
-            print version
-
-        Assert.is_sorted_descending(current_versions)
-
-        other_list = csp.other_version_list.replace('(beta)', 'b1').split()
-        print other_list
-        other_versions = [csp.Version(curent) for curent in other_list]
-
-        for version in other_versions:
-            print version
-
+        other_versions = home_pg.other_versions
+        print('Actual:')
+        pprint.pprint(other_versions)
+        print('Expected:')
+        pprint.pprint(sorted(other_versions, reverse=True))
         Assert.is_sorted_descending(other_versions)

@@ -45,8 +45,6 @@ Created on Jun 21, 2010
 import re
 import time
 import base64
-from distutils.version import LooseVersion
-from types import StringType, IntType
 
 http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
 
@@ -142,47 +140,3 @@ class Page(object):
             count += 1
             if count == self.timeout / 1000:
                 raise Exception("Sites Page has not loaded")
-
-    class Version(LooseVersion):
-
-    #Overrides the LooseVersion class to better use our version numbers
-
-        def parse(self, vstring):
-            self.vstring = vstring
-            components = filter(lambda x: x and x != '.', self.component_re.split(vstring))
-            for i in range(len(components)):
-                try:
-                    components[i] = int(components[i])
-                except ValueError:
-                    components[i] = components[i]
-
-            self.version = components
-
-        def __cmp__(self, other):
-            if isinstance(other, StringType):
-                other = LooseVersion(other)
-
-            a = self.version
-            b = other.version
-            while len(a) < len(b):
-                a.append(0)
-            while len(b) < len(a):
-                b.append(0)
-
-            for i in range(len(a)):
-
-                if not isinstance(a[i], IntType) and isinstance(b[i], IntType):
-                    return -1
-
-                if not isinstance(b[i], IntType) and isinstance(a[i], IntType):
-                    return 1
-
-            #If the element from list A is greater than B,
-            #versionA is greater than versionB and visa versa.
-            #If they are equal, go to the next element.
-                if a[i] > b[i]:
-                    return 1
-                elif b[i] > a[i]:
-                    return -1
-            #If we reach this point, the versions are equal
-            return 0
