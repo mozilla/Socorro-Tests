@@ -37,7 +37,7 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
+from crash_stats_page import CrashStatsAdvancedSearch
 from crash_stats_page import CrashStatsPerActiveDailyUser
 from unittestzero import Assert
 import pytest
@@ -264,6 +264,19 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
+            
+    def test_that_top_crasher_filters_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if not csp.can_find_text('no data'):
+            Assert.equal(details['product'], cstc.product_header)
+            
+        cstc.click_filter_all()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
 
     @xfail(reason = "Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
