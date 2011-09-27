@@ -208,7 +208,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         for i in range(self.selenium.get_css_count(self._current_versions_locator)):
             current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
         return current_versions
- 
+
     @property
     def other_versions(self):
         other_versions = []
@@ -273,7 +273,7 @@ class CrashReport(CrashStatsBasePage):
     _version_locator = " td:nth-of-type(4)"
     _row_locator = "css=#reportsList tbody tr"
 
-    def __init__(self, testsetup, index, signature = None):
+    def __init__(self, testsetup, index, signature=None):
         CrashStatsBasePage.__init__(self, testsetup)
         self.index = index
         self._signature = signature

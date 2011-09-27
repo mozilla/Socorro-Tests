@@ -57,8 +57,5 @@ class TestLayout:
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        current_versions = csp.current_versions
-        Assert.is_sorted_descending(current_versions)
-
-        other_versions = csp.other_versions
-        Assert.is_sorted_descending(other_versions)
+        Assert.is_sorted_descending(csp.current_versions)
+        Assert.is_sorted_descending(csp.other_versions)
