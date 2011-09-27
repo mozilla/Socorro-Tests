@@ -38,11 +38,9 @@
 # ***** END LICENSE BLOCK *****
 
 import pytest
-import pprint
 from crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 xfail = pytest.mark.xfail
-from version import FirefoxVersion
 
 
 class TestLayout:
@@ -55,14 +53,12 @@ class TestLayout:
         products = csp.product_list
         Assert.equal(product_list, products)
 
-    #@xfail(reason="Bug 687841 - Versions in Navigation Bar appear in wrong order")
+    @xfail(reason="Bug 687841 - Versions in Navigation Bar appear in wrong order")
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
-        home_pg = CrashStatsHomePage(mozwebqa)
-        Assert.is_sorted_descending(home_pg.current_versions)
+        csp = CrashStatsHomePage(mozwebqa)
 
-        other_versions = home_pg.other_versions
-        print('Actual:')
-        pprint.pprint(other_versions)
-        print('Expected:')
-        pprint.pprint(sorted(other_versions, reverse=True))
+        current_versions = csp.current_versions
+        Assert.is_sorted_descending(current_versions)
+
+        other_versions = csp.other_versions
         Assert.is_sorted_descending(other_versions)
