@@ -96,6 +96,8 @@ class CrashStatsBasePage(Page):
             return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
             return CrashStatsPerActiveDailyUser(self.testsetup)
+        elif 'Nightly Builds' == report_name:
+            return CrashStatsNightlyBuilds(self.testsetup)
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
@@ -422,6 +424,21 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
 
+
+class CrashStatsNightlyBuilds(CrashStatsBasePage):
+
+    _page_header = "css=h2"
+    _builds_link_locator = ".builds a"
+
+    def __init__(self, testsetup):
+        self.sel = testsetup.selenium
+
+    @property
+    def product_header(self):
+        return self.sel.get_text(self._page_header)
+
+    def click_on_a_build_link(self, lookup):
+        self.sel.click(self._builds_link_locator +)
 
 class CrashStatsStatus(CrashStatsBasePage):
 
