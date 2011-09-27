@@ -428,17 +428,21 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     _page_header = "css=h2"
-    _builds_link_locator = ".builds a"
+    _builds_link_locator = "css=.builds"
 
     def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
         self.sel = testsetup.selenium
 
     @property
     def product_header(self):
         return self.sel.get_text(self._page_header)
 
-    def click_on_a_build_link(self, lookup):
-        self.sel.click(self._builds_link_locator +)
+    def click_on_build_link(self, lookup):
+        self.sel.click('%s:nth(%s) a' % (self._builds_link_locator, lookup))
+        self.sel.wait_for_page_to_load(self.timeout)
+        return CrashStatsSearchResults(self.testsetup)
+
 
 class CrashStatsStatus(CrashStatsBasePage):
 

@@ -38,6 +38,7 @@
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsSearchResults
 from crash_stats_page import CrashStatsPerActiveDailyUser
+from crash_stats_page import CrashStatsNightlyBuilds
 from unittestzero import Assert
 import pytest
 import mozwebqa
@@ -268,3 +269,5 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.select_report('Nightly Builds')
+        Assert.equal(cstc.product_header, 'Nightly Builds for Firefox')
+        cstc.click_on_build_link(0)
