@@ -428,7 +428,7 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     _page_header = "css=h2"
-    _builds_link_locator = "css=.builds"
+    _link_to_ftp_locator = 'css=.notitle p a'
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
@@ -438,10 +438,13 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
     def product_header(self):
         return self.sel.get_text(self._page_header)
 
-    def click_on_build_link(self, lookup):
-        self.sel.click('%s:nth(%s) a' % (self._builds_link_locator, lookup))
-        self.sel.wait_for_page_to_load(self.timeout)
-        return CrashStatsSearchResults(self.testsetup)
+    @property
+    def link_to_ftp(self):
+        return self.selenium.get_attribute("%s@href" % self._link_to_ftp_locator)
+
+    def click_link_to_ftp(self):
+        self.selenium.click(self._link_to_ftp_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
 
 class CrashStatsStatus(CrashStatsBasePage):
