@@ -20,6 +20,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Alin Trif <alin.trif@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -97,6 +99,8 @@ class CrashStatsBasePage(Page):
             return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
             return CrashStatsPerActiveDailyUser(self.testsetup)
+        elif 'Top Changers' == report_name:
+            return CrashStatsTopChangers(self.testsetup)
 
     def click_server_status(self):
         self.sel.click('link=Server Status')
@@ -128,6 +132,7 @@ class CrashStatsBasePage(Page):
 class CrashStatsHomePage(CrashStatsBasePage):
     '''
         Page Object for Socorro
+        https://crash-stats.allizom.org/
     '''
     _find_crash_id_or_signature = 'id=q'
     _product_select = 'id=products_select'
@@ -176,7 +181,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.sel.type(self._find_crash_id_or_signature, crash_id_or_signature)
         self.sel.key_press(self._find_crash_id_or_signature, "\\13")
         self.sel.wait_for_page_to_load(self.timeout)
-        return CrashStatsSearchResults(self.testsetup)
+        return CrashStatsAdvancedSearch(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
@@ -201,6 +206,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 
 class CrashReportList(CrashStatsBasePage):
+    # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
 
     _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
@@ -296,11 +302,16 @@ class CrashReport(CrashStatsBasePage):
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):
+    #https://crash-stats.allizom.org/query/query
+    # This po covers both initial adv search page and also results
 
     _product_multiple_select = 'id=product'
+    _version_multiple_select = 'id=version'
+    _os_multiple_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
     _data_table = 'id=signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
+    _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
 
     def __init__(self, testsetup):
         '''
@@ -309,16 +320,32 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         CrashStatsBasePage.__init__(self, testsetup)
         self.wait_for_element_present(self._product_multiple_select)
 
+    def adv_select_product(self, product):
+        self.sel.select(self._product_multiple_select, product)
+
+    def adv_select_version(self, version):
+        self.sel.select(self._version_multiple_select, version)
+
+    def adv_select_os(self, os):
+        self.sel.select(self._os_multiple_select, os)
+
     def filter_reports(self):
         self.sel.click(self._filter_crash_reports_button)
         self.sel.wait_for_page_to_load(self.timeout)
 
     def click_first_signature(self):
         self.wait_for_element_present(self._data_table_first_signature)
-        signature = self.sel.get_text(self._data_table_first_signature)
         self.sel.click(self._data_table_first_signature)
         self.sel.wait_for_page_to_load(self.timeout)
-        return signature
+        return CrashStatsSignatureReport(self.testsetup)
+
+    @property
+    def first_signature_name(self):
+        return self.sel.get_text(self._data_table_first_signature)
+
+    @property
+    def first_signature_number_of_results(self):
+        return self.sel.get_text(self._data_table_first_signature_results)
 
     @property
     def currently_selected_product(self):
@@ -329,17 +356,20 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return self.sel.get_select_options(self._product_multiple_select)
 
 
-class CrashStatsSearchResults(CrashStatsBasePage):
+class CrashStatsSignatureReport(CrashStatsBasePage):
 
-    _product_select = 'id=product'
-    _version_select = 'id=version'
-    _os_select = 'id=platform'
-    _filter_crash_reports_button = 'id=query_submit'
+    # https://crash-stats.allizom.org/report/list?
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
         self.sel = testsetup.selenium
-        self.wait_for_element_present(self._product_select)
+        CrashStatsBasePage.__init__(self, testsetup)
+
+    _total_items = "css=span.totalItems"
+
+    @property
+    def total_items_label(self):
+        return self.sel.get_text(self._total_items).replace(",", "")
 
 
 class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
@@ -362,8 +392,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_header = 'css=h2 > span.current-product'
     _product_version_header = 'css=h2 > span.current-version'
 
+    _filter_all = "link=All"
+
+    _result_rows = "css=table#signatureList > tbody > tr"
+
     def __init__(self, testsetup):
         self.sel = testsetup.selenium
+        CrashStatsBasePage.__init__(self, testsetup)
 
     @property
     def product_header(self):
@@ -372,6 +407,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
+
+    @property
+    def count_results(self):
+        return self.sel.get_css_count(self._result_rows)
+
+    def click_filter_all(self):
+        self.click(self._filter_all, True)
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
@@ -469,3 +511,17 @@ class ProductsLinksPage(CrashStatsBasePage):
         self.sel.click('%s:contains(%s) a' % (self._root_locator, product))
         self.sel.wait_for_page_to_load(self.timeout)
         return CrashStatsHomePage(self.testsetup, product)
+
+
+class CrashStatsTopChangers(CrashStatsBasePage):
+
+    _report_locator = 'id=report_select'
+
+    def __init__(self, testsetup):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self.sel = testsetup.selenium
+
+    @property
+    def is_top_changers_highlighted(self):
+        selected_report = self.sel.get_selected_label(self._report_locator)
+        return (selected_report == 'Top Changers')
