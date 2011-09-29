@@ -36,7 +36,6 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
 from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
@@ -52,7 +51,7 @@ class TestSearchForIdOrSignature:
 
     def test_that_search_for_valid_signature(self, mozwebqa):
         '''
-            This is a test for 
+            This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
         self.selenium = mozwebqa.selenium
@@ -62,7 +61,7 @@ class TestSearchForIdOrSignature:
         result = csp.search_for_crash(signature)
         Assert.false(result.can_find_text('No results were found.'))
 
-    @xfail(reason="Disabled till Bug 652880 is fixed")
+    @xfail(reason="Disabled till bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
@@ -93,11 +92,26 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.true(cs_advanced.can_find_text('product is one of Camino'))
-    
+
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.true(cs_advanced.can_find_text('product is one of SeaMonkey'))  
+        Assert.true(cs_advanced.can_find_text('product is one of SeaMonkey'))
+
+    @xfail(reason="Disabled until bug 688256 is fixed")
+    def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_advanced = csp.click_advanced_search()
+
+        cs_advanced.adv_select_product("Firefox")
+        cs_advanced.adv_select_version("All")
+        cs_advanced.filter_reports()
+
+        results_page_count = cs_advanced.first_signature_number_of_results
+        cssr = cs_advanced.click_first_signature()
+        Assert.equal(results_page_count, cssr.total_items_label)

@@ -19,7 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,30 +36,15 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsAdvancedSearch
-import pytest
 from unittestzero import Assert
-xfail = pytest.mark.xfail
 
-class TestSpecificVersions:
 
-    def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
+class TestLayout:
+
+    def test_that_products_are_sorted_correctly(self, mozwebqa):
+
         csp = CrashStatsHomePage(mozwebqa)
 
-        details = csp.current_details
-        if len(details['versions']) > 0:
-            csp.select_version(details['versions'][1])
-
-        report_list = csp.click_first_product_top_crashers_link()
-        report = report_list.click_first_valid_signature()
-
-        count = 0
-        while count < report.row_count:
-             count += 1
-             report = report.get_row(count)
-             product = report.product
-             version = report.version
-             Assert.equal(product, details['product'])
-             Assert.contains(version, details['versions'][1])
-
+        product_list = ["Firefox", "Thunderbird", "Camino", "SeaMonkey", "Fennec"]
+        products = csp.product_list
+        Assert.equal(product_list, products)

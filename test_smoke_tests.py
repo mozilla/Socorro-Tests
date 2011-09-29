@@ -38,7 +38,6 @@
 # ***** END LICENSE BLOCK *****
 
 from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsSearchResults
 from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
@@ -88,14 +87,14 @@ class TestSmokeTests:
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Thunderbird', cs_advanced.currently_selected_product)
-    
+
     def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         Assert.equal('Fennec', cs_advanced.currently_selected_product)
-    
+
     def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
@@ -116,9 +115,11 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
+
         if not cs_advanced.can_find_text('No results were found'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self, mozwebqa):
         self.selenium = mozwebqa.selenium
@@ -126,9 +127,11 @@ class TestSmokeTests:
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
+
         if not cs_advanced.can_find_text('No results were found'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self, mozwebqa):
         self.selenium = mozwebqa.selenium
@@ -136,9 +139,11 @@ class TestSmokeTests:
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
+
         if not cs_advanced.can_find_text('No results were found'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self, mozwebqa):
         self.selenium = mozwebqa.selenium
@@ -146,20 +151,25 @@ class TestSmokeTests:
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
+
         if not cs_advanced.can_find_text('No results were found'):
-            signature = cs_advanced.click_first_signature()
-            Assert.true(signature in cs_advanced.page_heading)
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
+
         if not csp.can_find_text('No results were found'):
             cs_advanced = csp.click_advanced_search()
             cs_advanced.filter_reports()
-            if not cs_advanced.can_find_text('No results were found'): 
-                signature = cs_advanced.click_first_signature()
-                Assert.true(signature in cs_advanced.page_heading)
+
+            if not cs_advanced.can_find_text('No results were found'):
+                signature = cs_advanced.first_signature_name
+                cssr = cs_advanced.click_first_signature()
+                Assert.contains(signature, cssr.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         import urllib
