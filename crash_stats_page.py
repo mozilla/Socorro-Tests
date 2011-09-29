@@ -469,7 +469,6 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
-    _page_header = "css=h2"
     _link_to_ftp_locator = 'css=.notitle p a'
 
     def __init__(self, testsetup):
@@ -478,7 +477,7 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     @property
     def product_header(self):
-        return self.sel.get_text(self._page_header)
+        return self.sel.get_text(self._page_heading)
 
     @property
     def link_to_ftp(self):
