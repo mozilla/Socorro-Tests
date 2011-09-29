@@ -292,7 +292,8 @@ class TestCrashReports:
 
         for product in products:
             csp = products_page.click_product(product)
-            Assert.contains(product, csp.get_url_current_page())
+            Assert.true(csp.get_url_current_page().endswith(product))
+            Assert.contains(product, csp.get_page_name)
             products_page = ProductsLinksPage(mozwebqa)
 
     @xfail(reason="Disabled until Bug 603561 is fixed")

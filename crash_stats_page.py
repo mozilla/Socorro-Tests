@@ -145,6 +145,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
+    _heading_locator = "css=.page-heading h2"
 
     def __init__(self, testsetup, product=None):
         '''
@@ -203,6 +204,10 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def first_signature(self):
         return self.sel.get_text(self._first_signature_locator)
+
+    @property
+    def get_page_name(self):
+        return self.sel.get_text(self._heading_locator)
 
 
 class CrashReportList(CrashStatsBasePage):
