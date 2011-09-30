@@ -500,7 +500,7 @@ class CrashStatsStatus(CrashStatsBasePage):
 class ProductsLinksPage(CrashStatsBasePage):
 
     _root_locator = "css=.body li"
-    _name_page_locator = 'css=h2:contains("Mozilla Products in Crash Reporter")'
+    _name_page_locator = 'css=#mainbody h2'
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
