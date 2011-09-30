@@ -49,6 +49,7 @@ class TestSearchForIdOrSignature:
         results = csp.search_for_crash("this won't exist")
         Assert.true(results.can_find_text('No results were found.'))
 
+    @xfail(reason="Temporarily xfailing until https://www.pivotaltracker.com/story/show/19070579 is written, to cover 2 weeks' worth of data")
     def test_that_search_for_valid_signature(self, mozwebqa):
         '''
             This is a test for
