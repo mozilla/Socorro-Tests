@@ -204,7 +204,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
-    
+
     _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
@@ -354,7 +354,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
-    
+
     # https://crash-stats.allizom.org/report/list?
 
     def __init__(self, testsetup):
@@ -372,16 +372,31 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     _product_select = 'id=daily_search_version_form_products'
+    _date_start_locator = 'css=.daily_search_body .date[name="date_start"]'
+    _generate_button_locator = "id=daily_search_version_form_submit"
+    _table_locator = "id=crash_data"
 
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
         self.sel = testsetup.selenium
+        CrashStatsBasePage.__init__(self, testsetup)
 
     @property
     def product_select(self):
         return self.sel.get_selected_value(self._product_select)
+
+    def input_date_start(self, gigi):
+        return self.sel.type(self._date_start_locator, gigi)
+
+    def click_generate_button(self):
+        self.sel.click(self._generate_button_locator)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_table_visible(self):
+        return self.sel.is_visible(self._table_locator)
 
 
 class CrashStatsTopCrashers(CrashStatsBasePage):
@@ -390,7 +405,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     _filter_all = "link=All"
-    
+
     _result_rows = "css=table#signatureList > tbody > tr"
 
     def __init__(self, testsetup):
@@ -404,11 +419,11 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
-        
+
     @property
     def count_results(self):
         return self.sel.get_css_count(self._result_rows)
-    
+
     def click_filter_all(self):
         self.click(self._filter_all, True)
 

@@ -264,7 +264,7 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
-            
+
     def test_that_top_crasher_filters_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
@@ -273,12 +273,12 @@ class TestCrashReports:
         cstc = csp.select_report('Top Crashers')
         if not csp.can_find_text('no data'):
             Assert.equal(details['product'], cstc.product_header)
-            
+
         cstc.click_filter_all()
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
-    @xfail(reason = "Disabled until Bug 603561 is fixed")
+    @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         self.selenium = mozwebqa.selenium
@@ -288,3 +288,14 @@ class TestCrashReports:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted)
+
+    def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17141439
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        crash_per_user = csp.select_report('Crashes per User')
+        crash_per_user.input_date_start('1998-01-01')
+        crash_per_user.click_generate_button()
+        Assert.true(crash_per_user.is_table_visible)
