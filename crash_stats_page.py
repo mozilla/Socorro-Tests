@@ -387,8 +387,8 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     def product_select(self):
         return self.sel.get_selected_value(self._product_select)
 
-    def input_date_start(self, gigi):
-        return self.sel.type(self._date_start_locator, gigi)
+    def input_date_start(self, date_var):
+        return self.sel.type(self._date_start_locator, date_var)
 
     def click_generate_button(self):
         self.sel.click(self._generate_button_locator)

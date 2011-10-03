@@ -296,6 +296,6 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         crash_per_user = csp.select_report('Crashes per User')
-        crash_per_user.input_date_start('1998-01-01')
+        crash_per_user.input_date_start('1990-01-01')
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
