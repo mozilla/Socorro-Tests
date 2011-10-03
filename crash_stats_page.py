@@ -469,7 +469,7 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
-    _link_to_ftp_locator = 'css=.notitle p a'
+    _link_to_ftp_locator = 'css=.notitle > p > a'
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
