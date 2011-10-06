@@ -37,6 +37,7 @@
 # ***** END LICENSE BLOCK *****
 
 from selenium import selenium
+from selenium.common.exceptions import NoSuchElementException
 import re
 import time
 import base64
@@ -143,6 +144,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
+    _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
     def __init__(self, testsetup):
         '''
@@ -212,6 +214,12 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def top_crasher(self):
         return self.CrashReportsRegion(self.testsetup)
+
+    def results_found(self):
+        try:
+            return self.sel.get_css_count(self._results_table_rows) > 0
+        except NoSuchElementException:
+            return False
 
     class CrashReportsRegion(CrashStatsBasePage):
 
