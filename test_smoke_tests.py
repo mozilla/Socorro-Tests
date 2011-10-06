@@ -116,7 +116,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -128,7 +128,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -140,7 +140,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -152,7 +152,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -162,11 +162,11 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
 
-        if not csp.can_find_text('No results were found'):
+        if not csp.can_find_text('No results were found'): #TODO Remove when refactoring "No results were found" will never be present
             cs_advanced = csp.click_advanced_search()
             cs_advanced.filter_reports()
 
-            if not cs_advanced.can_find_text('No results were found'):
+            if cs_advanced.results_found:
                 signature = cs_advanced.first_signature_name
                 cssr = cs_advanced.click_first_signature()
                 Assert.contains(signature, cssr.page_heading)
