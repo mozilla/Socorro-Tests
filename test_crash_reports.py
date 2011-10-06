@@ -264,7 +264,7 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
-            
+
     def test_that_top_crasher_filters_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
@@ -278,7 +278,7 @@ class TestCrashReports:
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
-    @xfail(reason = "Disabled until Bug 603561 is fixed")
+    @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         self.selenium = mozwebqa.selenium
@@ -288,3 +288,17 @@ class TestCrashReports:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted)
+
+    def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17086667
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        top_crashers = csp.top_crashers
+
+        for top_crasher in top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            CrashStatsHomePage(mozwebqa)

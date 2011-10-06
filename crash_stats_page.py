@@ -204,15 +204,54 @@ class CrashStatsHomePage(CrashStatsBasePage):
         return self.sel.get_text(self._first_signature_locator)
 
     @property
+    def top_crashers_count(self):
+        return self.sel.get_css_count(self._top_crashers)
+
+    @property
+    def top_crashers(self):
+        return [self.CrashReportsRegion(self.testsetup, i) for i in range(self.top_crashers_count)]
+
+    @property
+    def top_crasher(self):
+        return self.CrashReportsRegion(self.testsetup)
+
     def results_found(self):
         try:
             return self.sel.get_css_count(self._results_table_rows) > 0
         except NoSuchElementException:
             return False
 
+    class CrashReportsRegion(CrashStatsBasePage):
+
+        _top_crashers = 'css=a:contains("Top Crashers")'
+        _header_release_channel_locator = "css=.release_channel h4"
+
+        def __init__(self, testsetup, lookup):
+            CrashStatsBasePage.__init__(self, testsetup)
+            self.lookup = lookup
+
+        def absolute_locator(self, relative_locator):
+            return self._root_locator
+
+        @property
+        def _root_locator(self):
+            if type(self.lookup) == int:
+                # lookup by index
+                return "%s:nth(%s) " % (self._top_crashers, self.lookup)
+
+        @property
+        def version_name(self):
+            return self.sel.get_text("%s:nth(%s)" % (self._header_release_channel_locator, self.lookup))
+
+        def click_top_crasher(self):
+            self.selenium.click(self.absolute_locator(self._top_crashers))
+            self.selenium.wait_for_page_to_load(self.timeout)
+            return CrashStatsTopCrashers(self.testsetup)
+
+
 class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
-    
+
     _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
@@ -362,7 +401,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
-    
+
     # https://crash-stats.allizom.org/report/list?
 
     def __init__(self, testsetup):
@@ -398,7 +437,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     _filter_all = "link=All"
-    
+
     _result_rows = "css=table#signatureList > tbody > tr"
 
     def __init__(self, testsetup):
@@ -412,11 +451,11 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
-        
+
     @property
     def count_results(self):
         return self.sel.get_css_count(self._result_rows)
-    
+
     def click_filter_all(self):
         self.click(self._filter_all, True)
 
