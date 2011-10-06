@@ -212,7 +212,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
 class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
-    
+
     _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
@@ -314,9 +314,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _version_multiple_select = 'id=version'
     _os_multiple_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
-    _data_table = 'id=signatureList'
+    _data_table = 'css=#signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
+
+    _query_results_text = "css=.body.notitle>p:nth(0)"
 
     def __init__(self, testsetup):
         '''
@@ -360,9 +362,19 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def product_list(self):
         return self.sel.get_select_options(self._product_multiple_select)
 
+    @property
+    def results_found(self):
+        try:
+            return self.sel.get_css_count("%s > tbody > tr" % self._data_table) > 0
+        except NoSuchElementException:
+            return False
+
+    @property
+    def query_results_text(self):
+        return self.sel.get_text(self._query_results_text)
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
-    
+
     # https://crash-stats.allizom.org/report/list?
 
     def __init__(self, testsetup):
@@ -398,7 +410,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     _filter_all = "link=All"
-    
+
     _result_rows = "css=table#signatureList > tbody > tr"
 
     def __init__(self, testsetup):
@@ -412,11 +424,11 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
-        
+
     @property
     def count_results(self):
         return self.sel.get_css_count(self._result_rows)
-    
+
     def click_filter_all(self):
         self.click(self._filter_all, True)
 
