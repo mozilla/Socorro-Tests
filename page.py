@@ -13,7 +13,7 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Firefox Input 
+# The Original Code is Firefox Input
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
@@ -78,32 +78,32 @@ class Page(object):
         self.selenium.click("link=%s" % link)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(self.timeout)
-        
-    def click(self,locator, wait_flag=False):
+
+    def click(self, locator, wait_flag=False):
         self.selenium.click(locator)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(self.timeout)
-            
-    def type(self,locator, str):
+
+    def type(self, locator, str):
         self.selenium.type(locator, str)
-        
-    def click_button(self,button, wait_flag=False):
+
+    def click_button(self, button, wait_flag=False):
         self.selenium.click(button)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(self.timeout)
 
     def get_url_current_page(self):
         return(self.selenium.get_location())
-    
+
     def is_element_present(self, locator):
         return self.selenium.is_element_present(locator)
 
     def is_element_visible(self, locator):
         return self.selenium.is_visible(locator)
-    
+
     def is_text_present(self, text):
         return self.selenium.is_text_present(text)
-    
+
     def refresh(self):
         self.selenium.refresh()
         self.selenium.wait_for_page_to_load(self.timeout)
@@ -113,7 +113,7 @@ class Page(object):
         while not self.is_element_present(element):
             time.sleep(1)
             count += 1
-            if count == self.timeout/1000:
+            if count == self.timeout / 1000:
                 raise Exception(element + ' has not loaded')
 
     def wait_for_element_visible(self, element):
@@ -122,7 +122,7 @@ class Page(object):
         while not self.is_element_visible(element):
             time.sleep(1)
             count += 1
-            if count == self.timeout/1000:
+            if count == self.timeout / 1000:
                 raise Exception(element + " is not visible")
 
     def wait_for_element_not_visible(self, element):
@@ -130,7 +130,7 @@ class Page(object):
         while self.is_element_visible(element):
             time.sleep(1)
             count += 1
-            if count == self.timout/1000:
+            if count == self.timout / 1000:
                 raise Exception(element + " is still visible")
 
     def wait_for_page(self, url_regex):
@@ -138,5 +138,5 @@ class Page(object):
         while (re.search(url_regex, self.selenium.get_location(), re.IGNORECASE)) is None:
             time.sleep(1)
             count += 1
-            if count == self.timeout/1000:
+            if count == self.timeout / 1000:
                 raise Exception("Sites Page has not loaded")

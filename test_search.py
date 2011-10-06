@@ -116,3 +116,4 @@ class TestSearchForIdOrSignature:
         results_page_count = cs_advanced.first_signature_number_of_results
         cssr = cs_advanced.click_first_signature()
         Assert.equal(results_page_count, cssr.total_items_label)
+

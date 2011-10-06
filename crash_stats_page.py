@@ -19,8 +19,11 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
-#                 Teodosia Pop <teodosia.pop@softvision.ro>
+# Contributor(s):
+#   David Burns
+#   Teodosia Pop <teodosia.pop@softvision.ro>
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,6 +45,7 @@ import re
 import time
 import base64
 from page import Page
+from version import FirefoxVersion
 
 
 class CrashStatsBasePage(Page):
@@ -136,6 +140,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _find_crash_id_or_signature = 'id=q'
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
+    _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
+    _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
     _report_select = 'id=report_select'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
@@ -198,6 +204,20 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def product_list(self):
         return self.sel.get_select_options(self._product_select)
+
+    @property
+    def current_versions(self):
+        current_versions = []
+        for i in range(self.selenium.get_css_count(self._current_versions_locator)):
+            current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
+        return current_versions
+
+    @property
+    def other_versions(self):
+        other_versions = []
+        for i in range(self.selenium.get_css_count(self._other_versions_locator)):
+            other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
+        return other_versions
 
     @property
     def first_signature(self):
