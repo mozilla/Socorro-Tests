@@ -318,7 +318,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
 
-    _query_results_text = "css=.body.notitle>p:nth(0)"
+    _query_results_text = "css=.body.notitle > p:nth(0)"
 
     def __init__(self, testsetup):
         '''
