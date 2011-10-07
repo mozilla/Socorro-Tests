@@ -302,3 +302,19 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             CrashStatsHomePage(mozwebqa)
+
+    def test_that_top_crashers_reports_links_work_for_seamonkey(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17086667
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product("SeaMonkey")
+        top_crashers = csp.top_crashers
+
+        for top_crasher in top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            csp = CrashStatsHomePage(mozwebqa)
+            csp.select_product("SeaMonkey")
