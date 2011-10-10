@@ -265,7 +265,7 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_top_crasher_filters_return_results(self, mozwebqa):
+    def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
@@ -275,6 +275,32 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
 
         cstc.click_filter_all()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_browser()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_plugin()
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 

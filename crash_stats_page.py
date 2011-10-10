@@ -469,6 +469,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     _filter_all = "link=All"
+    _filter_browser = "link=Browser"
+    _filter_plugin = "link=Plugin"
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
@@ -489,8 +491,16 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.sel.get_css_count(self._result_rows)
 
     def click_filter_all(self):
-        self.click(self._filter_all, True)
+        self.sel.click(self._filter_all);
+        self.sel.wait_for_page_to_load(self.timeout)
 
+    def click_filter_browser(self):
+        self.sel.click(self._filter_browser)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    def click_filter_plugin(self):
+        self.sel.click(self._filter_plugin)
+        self.sel.wait_for_page_to_load(self.timeout)
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
 
