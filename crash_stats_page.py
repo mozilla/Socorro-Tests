@@ -373,9 +373,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _version_multiple_select = 'id=version'
     _os_multiple_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
-    _data_table = 'id=signatureList'
+    _data_table = 'css=#signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
+
+    _query_results_text = "css=.body.notitle > p:nth(0)"
 
     def __init__(self, testsetup):
         '''
@@ -419,6 +421,16 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def product_list(self):
         return self.sel.get_select_options(self._product_multiple_select)
 
+    @property
+    def results_found(self):
+        try:
+            return self.sel.get_css_count("%s > tbody > tr" % self._data_table) > 0
+        except NoSuchElementException:
+            return False
+
+    @property
+    def query_results_text(self):
+        return self.sel.get_text(self._query_results_text)
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 
