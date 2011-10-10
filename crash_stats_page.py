@@ -166,7 +166,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
                 raise Exception("Home Page has not loaded")
 
         if not self.sel.get_title() == 'Crash Data for Firefox':
-            self.sel.select(self.product_select, 'Firefox')
+            self.sel.select(self._product_select, 'Firefox')
             self.sel.wait_for_page_to_load(self.timeout)
         self.sel.window_maximize()
 
