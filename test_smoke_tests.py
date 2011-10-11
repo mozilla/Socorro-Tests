@@ -165,7 +165,6 @@ class TestSmokeTests:
         if not csp.can_find_text('No results were found'):
             cs_advanced = csp.click_advanced_search()
             cs_advanced.filter_reports()
-
             if not cs_advanced.can_find_text('No results were found'):
                 signature = cs_advanced.first_signature_name
                 cssr = cs_advanced.click_first_signature()
