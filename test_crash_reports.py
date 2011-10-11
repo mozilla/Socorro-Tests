@@ -265,7 +265,7 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_top_crasher_filters_return_results(self, mozwebqa):
+    def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
@@ -275,6 +275,32 @@ class TestCrashReports:
             Assert.equal(details['product'], cstc.product_header)
 
         cstc.click_filter_all()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_browser()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_plugin()
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
@@ -303,10 +329,23 @@ class TestCrashReports:
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             CrashStatsHomePage(mozwebqa)
 
-    def test_that_top_crashers_reports_links_work_for_camino(self, mozwebqa):
+    def test_that_top_crashers_reports_links_work_for_thunderbird(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product("Thunderbird")
+        top_crashers = csp.top_crashers
+
+        for top_crasher in top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            csp = CrashStatsHomePage(mozwebqa)
+            csp.select_product("Thunderbird")
+
+    def test_that_top_crashers_reports_links_work_for_camino(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product("Camino")
