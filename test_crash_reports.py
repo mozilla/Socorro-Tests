@@ -66,7 +66,7 @@ class TestCrashReports:
         csp.select_product('Thunderbird')
         page_title = csp.page_title
         Assert.true('Thunderbird' in page_title)
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
@@ -78,7 +78,7 @@ class TestCrashReports:
         csp.select_product('SeaMonkey')
         page_title = csp.page_title
         Assert.true('SeaMonkey' in page_title)
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
@@ -90,7 +90,7 @@ class TestCrashReports:
         csp.select_product('Camino')
         page_title = csp.page_title
         Assert.true('Camino' in page_title)
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
@@ -102,7 +102,7 @@ class TestCrashReports:
         csp.select_product('Fennec')
         page_title = csp.page_title
         Assert.true('Fennec' in page_title)
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
@@ -113,7 +113,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
@@ -122,7 +122,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers')
             Assert.equal(details['product'], cstc.product_header)
@@ -133,7 +133,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers')
             Assert.equal(details['product'], cstc.product_header)
@@ -144,7 +144,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers')
             Assert.equal(details['product'], cstc.product_header)
@@ -155,7 +155,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers')
             Assert.equal(details['product'], cstc.product_header)
@@ -175,7 +175,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
@@ -186,7 +186,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
@@ -197,7 +197,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
@@ -208,7 +208,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
@@ -218,7 +218,7 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
@@ -229,7 +229,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
@@ -240,7 +240,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
@@ -251,7 +251,7 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
@@ -262,20 +262,20 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def test_that_top_crasher_filters_return_results(self, mozwebqa):
+    def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
-        if not csp.can_find_text('no data'):
+        if csp.results_found:
             Assert.equal(details['product'], cstc.product_header)
 
         cstc.click_filter_all()
@@ -290,11 +290,37 @@ class TestCrashReports:
 
         website_link = cstc.link_to_ftp
         #check that the link is valid
-        Assert.true(website_link != '')
+        Assert.not_equal(website_link, '', 'link is empty!')
 
         #test external link works
         cstc.click_link_to_ftp()
         Assert.equal(website_link, cstc.get_url_current_page())
+
+    def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_browser()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        details = csp.current_details
+        cstc = csp.select_report('Top Crashers')
+        if csp.results_found:
+            Assert.equal(details['product'], cstc.product_header)
+
+        cstc.click_filter_plugin()
+        results = cstc.count_results
+        Assert.true(results > 0, "%s results found, expected >0" % results)
 
     @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
@@ -302,7 +328,37 @@ class TestCrashReports:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.current_details['versions']:
-            if not csp.can_find_text('no data'):
+            if csp.results_found:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted)
+
+    def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17086667
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        top_crashers = csp.top_crashers
+
+        for top_crasher in top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            CrashStatsHomePage(mozwebqa)
+
+    def test_that_top_crashers_reports_links_work_for_thunderbird(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17086667
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product("Thunderbird")
+        top_crashers = csp.top_crashers
+
+        for top_crasher in top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            csp = CrashStatsHomePage(mozwebqa)
+            csp.select_product("Thunderbird")
