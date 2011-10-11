@@ -432,6 +432,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def query_results_text(self):
         return self.sel.get_text(self._query_results_text)
 
+
 class CrashStatsSignatureReport(CrashStatsBasePage):
 
     # https://crash-stats.allizom.org/report/list?
@@ -491,7 +492,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.sel.get_css_count(self._result_rows)
 
     def click_filter_all(self):
-        self.sel.click(self._filter_all);
+        self.sel.click(self._filter_all)
         self.sel.wait_for_page_to_load(self.timeout)
 
     def click_filter_browser(self):
@@ -501,6 +502,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     def click_filter_plugin(self):
         self.sel.click(self._filter_plugin)
         self.sel.wait_for_page_to_load(self.timeout)
+
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
 
