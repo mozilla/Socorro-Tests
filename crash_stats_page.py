@@ -379,6 +379,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _query_results_text = "css=.body.notitle > p:nth(0)"
 
+    _build_id_field = "css=#build_id"
+
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
@@ -404,6 +406,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.sel.click(self._data_table_first_signature)
         self.sel.wait_for_page_to_load(self.timeout)
         return CrashStatsSignatureReport(self.testsetup)
+
+    def build_id_field_input(self, var):
+        return self.sel.type(self._build_id_field, var)
 
     @property
     def first_signature_name(self):
@@ -431,6 +436,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     @property
     def query_results_text(self):
         return self.sel.get_text(self._query_results_text)
+
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 
@@ -491,7 +497,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.sel.get_css_count(self._result_rows)
 
     def click_filter_all(self):
-        self.sel.click(self._filter_all);
+        self.sel.click(self._filter_all)
         self.sel.wait_for_page_to_load(self.timeout)
 
     def click_filter_browser(self):
@@ -501,6 +507,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     def click_filter_plugin(self):
         self.sel.click(self._filter_plugin)
         self.sel.wait_for_page_to_load(self.timeout)
+
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
 

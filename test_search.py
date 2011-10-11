@@ -117,3 +117,16 @@ class TestSearchForIdOrSignature:
         cssr = cs_advanced.click_first_signature()
         Assert.equal(results_page_count, cssr.total_items_label)
 
+    def test_that_search_for_a_given_build_id_works(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17368401
+        """
+        self.selenium = mozwebqa.selenium
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_advanced = csp.click_advanced_search()
+
+        cs_advanced.adv_select_product("Firefox")
+        cs_advanced.adv_select_version("All")
+        cs_advanced.build_id_field_input('20110928134238')
+        cs_advanced.filter_reports()
+        Assert.not_none(cs_advanced.query_results_text)
