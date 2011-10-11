@@ -19,9 +19,12 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
-#                 Teodosia Pop <teodosia.pop@softvision.ro>
-#                 Alin Trif <alin.trif@softvision.ro>
+# Contributor(s):
+#   David Burns
+#   Teodosia Pop <teodosia.pop@softvision.ro>
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
+#   Alin Trif <alin.trif@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,11 +41,14 @@
 # ***** END LICENSE BLOCK *****
 
 from selenium import selenium
+from selenium.common.exceptions import NoSuchElementException
 import re
 import time
 import base64
 from page import Page
+
 from mozwebqa.mozwebqa import TestSetup
+from version import FirefoxVersion
 
 
 class CrashStatsBasePage(Page):
@@ -137,6 +143,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _find_crash_id_or_signature = 'id=q'
     _product_select = 'id=products_select'
     _product_version_select = 'id=product_version_select'
+    _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
+    _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
     _report_select = 'id=report_select'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
@@ -146,12 +154,15 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
     _heading_locator = "css=.page-heading h2"
+    _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
+
 
     def __init__(self, testsetup, product=None):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
         CrashStatsBasePage.__init__(self, testsetup)
+
         if product is None:
             self.sel.open('/')
             count = 0
@@ -162,9 +173,10 @@ class CrashStatsHomePage(CrashStatsBasePage):
                     raise Exception("Home Page has not loaded")
 
             if not self.sel.get_title() == 'Crash Data for Firefox':
-                self.sel.select(self.product_select, 'Firefox')
+                self.sel.select(self._product_select, 'Firefox')
                 self.sel.wait_for_page_to_load(self.timeout)
             self.sel.window_maximize()
+
 
     def report_length(self, days):
         '''
@@ -202,12 +214,70 @@ class CrashStatsHomePage(CrashStatsBasePage):
         return self.sel.get_select_options(self._product_select)
 
     @property
+    def current_versions(self):
+        current_versions = []
+        for i in range(self.selenium.get_css_count(self._current_versions_locator)):
+            current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
+        return current_versions
+
+    @property
+    def other_versions(self):
+        other_versions = []
+        for i in range(self.selenium.get_css_count(self._other_versions_locator)):
+            other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
+        return other_versions
+
+    @property
     def first_signature(self):
         return self.sel.get_text(self._first_signature_locator)
 
     @property
     def get_page_name(self):
         return self.sel.get_text(self._heading_locator)
+
+    def top_crashers_count(self):
+        return self.sel.get_css_count(self._top_crashers)
+
+    @property
+    def top_crashers(self):
+        return [self.CrashReportsRegion(self.testsetup, i) for i in range(self.top_crashers_count)]
+
+    @property
+    def top_crasher(self):
+        return self.CrashReportsRegion(self.testsetup)
+
+    def results_found(self):
+        try:
+            return self.sel.get_css_count(self._results_table_rows) > 0
+        except NoSuchElementException:
+            return False
+
+    class CrashReportsRegion(CrashStatsBasePage):
+
+        _top_crashers = 'css=a:contains("Top Crashers")'
+        _header_release_channel_locator = "css=.release_channel h4"
+
+        def __init__(self, testsetup, lookup):
+            CrashStatsBasePage.__init__(self, testsetup)
+            self.lookup = lookup
+
+        def absolute_locator(self, relative_locator):
+            return self._root_locator
+
+        @property
+        def _root_locator(self):
+            if type(self.lookup) == int:
+                # lookup by index
+                return "%s:nth(%s) " % (self._top_crashers, self.lookup)
+
+        @property
+        def version_name(self):
+            return self.sel.get_text("%s:nth(%s)" % (self._header_release_channel_locator, self.lookup))
+
+        def click_top_crasher(self):
+            self.selenium.click(self.absolute_locator(self._top_crashers))
+            self.selenium.wait_for_page_to_load(self.timeout)
+            return CrashStatsTopCrashers(self.testsetup)
 
 
 class CrashReportList(CrashStatsBasePage):
@@ -314,9 +384,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _version_multiple_select = 'id=version'
     _os_multiple_select = 'id=platform'
     _filter_crash_reports_button = 'id=query_submit'
-    _data_table = 'id=signatureList'
+    _data_table = 'css=#signatureList'
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
+
+    _query_results_text = "css=.body.notitle > p:nth(0)"
 
     def __init__(self, testsetup):
         '''
@@ -360,6 +432,17 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def product_list(self):
         return self.sel.get_select_options(self._product_multiple_select)
 
+    @property
+    def results_found(self):
+        try:
+            return self.sel.get_css_count("%s > tbody > tr" % self._data_table) > 0
+        except NoSuchElementException:
+            return False
+
+    @property
+    def query_results_text(self):
+        return self.sel.get_text(self._query_results_text)
+
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 
@@ -398,6 +481,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_version_header = 'css=h2 > span.current-version'
 
     _filter_all = "link=All"
+    _filter_browser = "link=Browser"
+    _filter_plugin = "link=Plugin"
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
@@ -418,7 +503,16 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.sel.get_css_count(self._result_rows)
 
     def click_filter_all(self):
-        self.click(self._filter_all, True)
+        self.sel.click(self._filter_all)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    def click_filter_browser(self):
+        self.sel.click(self._filter_browser)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    def click_filter_plugin(self):
+        self.sel.click(self._filter_plugin)
+        self.sel.wait_for_page_to_load(self.timeout)
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
