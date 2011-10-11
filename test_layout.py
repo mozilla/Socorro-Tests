@@ -19,7 +19,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,8 +37,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
+import pytest
 from crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
+xfail = pytest.mark.xfail
 
 
 class TestLayout:
@@ -48,3 +52,10 @@ class TestLayout:
         product_list = ["Firefox", "Thunderbird", "Camino", "SeaMonkey", "Fennec"]
         products = csp.product_list
         Assert.equal(product_list, products)
+
+    @xfail(reason="Bug 687841 - Versions in Navigation Bar appear in wrong order")
+    def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+
+        Assert.is_sorted_descending(csp.current_versions)
+        Assert.is_sorted_descending(csp.other_versions)

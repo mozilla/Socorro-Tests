@@ -168,7 +168,6 @@ class TestSmokeTests:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
-
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         import urllib
         response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
