@@ -562,10 +562,6 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     _link_to_ftp_locator = 'css=.notitle > p > a'
 
-    def __init__(self, testsetup):
-        CrashStatsBasePage.__init__(self, testsetup)
-        self.sel = testsetup.selenium
-
     @property
     def product_header(self):
         return self.sel.get_text(self._page_heading)

@@ -43,7 +43,7 @@ from crash_stats_page import CrashStatsPerActiveDailyUser
 from crash_stats_page import CrashStatsNightlyBuilds
 from unittestzero import Assert
 import pytest
-import mozwebqa
+import re
 
 xfail = pytest.mark.xfail
 
@@ -283,18 +283,17 @@ class TestCrashReports:
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
-        cstc = csp.select_report('Nightly Builds')
-        Assert.equal(cstc.product_header, 'Nightly Builds for Firefox')
+        cstnb = csp.select_report('Nightly Builds')
+        Assert.equal(cstnb.product_header, 'Nightly Builds for Firefox')
 
-        website_link = cstc.link_to_ftp
+        website_link = cstnb.link_to_ftp
         #check that the link is valid
-        Assert.not_equal(website_link, '', 'link is empty!')
+        Assert.not_none(re.match('(\w+\W+)', website_link))
 
         #test external link works
-        cstc.click_link_to_ftp()
-        Assert.equal(website_link, cstc.get_url_current_page())
+        cstnb.click_link_to_ftp()
+        Assert.equal(website_link, cstnb.get_url_current_page())
 
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
