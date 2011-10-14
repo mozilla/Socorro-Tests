@@ -284,16 +284,16 @@ class TestCrashReports:
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        cstnb = csp.select_report('Nightly Builds')
-        Assert.equal(cstnb.product_header, 'Nightly Builds for Firefox')
+        nightly_builds_page = csp.select_report('Nightly Builds')
+        Assert.equal(nightly_builds_page.product_header, 'Nightly Builds for Firefox')
 
-        website_link = cstnb.link_to_ftp
+        website_link = nightly_builds_page.link_to_ftp
         #check that the link is valid
         Assert.not_none(re.match('(\w+\W+)', website_link))
 
         #test external link works
-        cstnb.click_link_to_ftp()
-        Assert.equal(website_link, cstnb.get_url_current_page())
+        nightly_builds_page.click_link_to_ftp()
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
 
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
