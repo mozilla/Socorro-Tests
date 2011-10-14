@@ -351,6 +351,18 @@ class TestCrashReports:
                 cstc = csp.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted)
 
+    def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17141439
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        crash_per_user = csp.select_report('Crashes per User')
+        crash_per_user.type_start_date('1995-01-01')
+        crash_per_user.click_generate_button()
+        Assert.true(crash_per_user.is_table_visible)
+        crash_per_user.table_row_count
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
+
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667

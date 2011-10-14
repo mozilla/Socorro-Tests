@@ -464,16 +464,40 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     _product_select = 'id=daily_search_version_form_products'
+    _date_start_locator = 'css=.daily_search_body .date[name="date_start"]'
+    _generate_button_locator = "id=daily_search_version_form_submit"
+    _table_locator = "id=crash_data"
+    _row_table_locator = "css=#crash_data > tbody > tr"
 
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
         self.sel = testsetup.selenium
+        CrashStatsBasePage.__init__(self, testsetup)
 
     @property
     def product_select(self):
         return self.sel.get_selected_value(self._product_select)
+
+    def type_start_date(self, date):
+        self.sel.type(self._date_start_locator, date)
+
+    def click_generate_button(self):
+        self.sel.click(self._generate_button_locator)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_table_visible(self):
+        return self.sel.is_visible(self._table_locator)
+
+    @property
+    def table_row_count(self):
+        return self.sel.get_css_count(self._row_table_locator)
+
+    @property
+    def last_row_date_value(self):
+        return self.selenium.get_text('css=#crash_data > tbody > tr:nth(%s) > td:nth(0)' % (int(self.table_row_count) - 2))
 
 
 class CrashStatsTopCrashers(CrashStatsBasePage):
