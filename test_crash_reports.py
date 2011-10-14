@@ -40,6 +40,11 @@
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsAdvancedSearch
 from crash_stats_page import CrashStatsPerActiveDailyUser
+from crash_stats_page import CrashStatsNightlyBuilds
+from unittestzero import Assert
+import pytest
+import re
+
 from crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
 import pytest
@@ -282,6 +287,19 @@ class TestCrashReports:
         cstc.click_filter_all()
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        nightly_builds_page = csp.select_report('Nightly Builds')
+        Assert.equal(nightly_builds_page.product_header, 'Nightly Builds for Firefox')
+
+        website_link = nightly_builds_page.link_to_ftp
+        #check that the link is valid
+        Assert.not_none(re.match('(\w+\W+)', website_link))
+
+        #test external link works
+        nightly_builds_page.click_link_to_ftp()
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
 
     def test_that_products_page_links_work(self, mozwebqa):
         self.selenium = mozwebqa.selenium

@@ -105,6 +105,8 @@ class CrashStatsBasePage(Page):
             return CrashStatsTopCrashersBySite(self.testsetup)
         elif 'Crashes per User' == report_name:
             return CrashStatsPerActiveDailyUser(self.testsetup)
+        elif 'Nightly Builds' == report_name:
+            return CrashStatsNightlyBuilds(self.testsetup)
         elif 'Top Changers' == report_name:
             return CrashStatsTopChangers(self.testsetup)
 
@@ -156,7 +158,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _heading_locator = "css=.page-heading h2"
     _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
-
     def __init__(self, testsetup, product=None):
         '''
             Creates a new instance of the class and gets the page ready for testing
@@ -176,7 +177,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
                 self.sel.select(self._product_select, 'Firefox')
                 self.sel.wait_for_page_to_load(self.timeout)
             self.sel.window_maximize()
-
 
     def report_length(self, days):
         '''
@@ -565,6 +565,23 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     @property
     def product_version_header(self):
         return self.sel.get_text(self._product_version_header)
+
+
+class CrashStatsNightlyBuilds(CrashStatsBasePage):
+
+    _link_to_ftp_locator = 'css=.notitle > p > a'
+
+    @property
+    def product_header(self):
+        return self.sel.get_text(self._page_heading)
+
+    @property
+    def link_to_ftp(self):
+        return self.selenium.get_attribute("%s@href" % self._link_to_ftp_locator)
+
+    def click_link_to_ftp(self):
+        self.selenium.click(self._link_to_ftp_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
 
 class CrashStatsStatus(CrashStatsBasePage):
