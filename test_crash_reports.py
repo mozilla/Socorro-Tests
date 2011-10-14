@@ -45,6 +45,12 @@ from unittestzero import Assert
 import pytest
 import re
 
+from crash_stats_page import ProductsLinksPage
+from unittestzero import Assert
+import pytest
+import mozwebqa
+
+
 xfail = pytest.mark.xfail
 
 
@@ -294,6 +300,19 @@ class TestCrashReports:
         #test external link works
         nightly_builds_page.click_link_to_ftp()
         Assert.equal(website_link, nightly_builds_page.get_url_current_page())
+
+    def test_that_products_page_links_work(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        products_page = ProductsLinksPage(mozwebqa)
+        #An extra check that products page is loaded
+        Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+
+        for product in products:
+            csp = products_page.click_product(product)
+            Assert.true(csp.get_url_current_page().endswith(product))
+            Assert.contains(product, csp.get_page_name)
+            products_page = ProductsLinksPage(mozwebqa)
 
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
