@@ -235,6 +235,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     def get_page_name(self):
         return self.sel.get_text(self._heading_locator)
 
+    @property
     def top_crashers_count(self):
         return self.sel.get_css_count(self._top_crashers)
 
