@@ -21,6 +21,7 @@
 #
 # Contributor(s): David Burns
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Alin Trif <alin.trif@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,8 +40,12 @@
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsAdvancedSearch
 from crash_stats_page import CrashStatsPerActiveDailyUser
+from crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
 import pytest
+import mozwebqa
+
+
 xfail = pytest.mark.xfail
 
 
@@ -277,6 +282,19 @@ class TestCrashReports:
         cstc.click_filter_all()
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
+
+    def test_that_products_page_links_work(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        products_page = ProductsLinksPage(mozwebqa)
+        #An extra check that products page is loaded
+        Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+
+        for product in products:
+            csp = products_page.click_product(product)
+            Assert.true(csp.get_url_current_page().endswith(product))
+            Assert.contains(product, csp.get_page_name)
+            products_page = ProductsLinksPage(mozwebqa)
 
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
