@@ -158,7 +158,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _heading_locator = "css=.page-heading h2"
     _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
-
     def __init__(self, testsetup, product=None):
         '''
             Creates a new instance of the class and gets the page ready for testing
@@ -178,7 +177,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
                 self.sel.select(self._product_select, 'Firefox')
                 self.sel.wait_for_page_to_load(self.timeout)
             self.sel.window_maximize()
-
 
     def report_length(self, days):
         '''
