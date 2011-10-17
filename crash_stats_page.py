@@ -391,7 +391,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _query_results_text = "css=.body.notitle > p:nth(0)"
 
-    _build_id_field = "css=#build_id"
+    _build_id_locator = "css=#build_id"
 
     def __init__(self, testsetup):
         '''
@@ -419,8 +419,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.sel.wait_for_page_to_load(self.timeout)
         return CrashStatsSignatureReport(self.testsetup)
 
-    def build_id_field_input(self, var):
-        return self.sel.type(self._build_id_field, var)
+    def build_id_field_input(self, value):
+        self.sel.type(self._build_id_locator, value)
 
     @property
     def first_signature_name(self):
