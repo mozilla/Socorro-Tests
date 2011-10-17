@@ -116,7 +116,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -128,7 +128,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -140,7 +140,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -152,7 +152,7 @@ class TestSmokeTests:
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
 
-        if not cs_advanced.can_find_text('No results were found'):
+        if cs_advanced.results_found:
             signature = cs_advanced.first_signature_name
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -161,15 +161,13 @@ class TestSmokeTests:
         self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
+        cs_advanced = csp.click_advanced_search()
+        cs_advanced.filter_reports()
 
-        if not csp.can_find_text('No results were found'):
-            cs_advanced = csp.click_advanced_search()
-            cs_advanced.filter_reports()
-            if not cs_advanced.can_find_text('No results were found'):
-                signature = cs_advanced.first_signature_name
-                cssr = cs_advanced.click_first_signature()
-                Assert.contains(signature, cssr.page_heading)
-
+        if cs_advanced.results_found:
+            signature = cs_advanced.first_signature_name
+            cssr = cs_advanced.click_first_signature()
+            Assert.contains(signature, cssr.page_heading)
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         import urllib
         response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
