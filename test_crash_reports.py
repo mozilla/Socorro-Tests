@@ -21,6 +21,7 @@
 #
 # Contributor(s): David Burns
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Alin Trif <alin.trif@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,8 +40,17 @@
 from crash_stats_page import CrashStatsHomePage
 from crash_stats_page import CrashStatsAdvancedSearch
 from crash_stats_page import CrashStatsPerActiveDailyUser
+from crash_stats_page import CrashStatsNightlyBuilds
 from unittestzero import Assert
 import pytest
+import re
+
+from crash_stats_page import ProductsLinksPage
+from unittestzero import Assert
+import pytest
+import mozwebqa
+
+
 xfail = pytest.mark.xfail
 
 
@@ -278,6 +288,32 @@ class TestCrashReports:
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
+    def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        nightly_builds_page = csp.select_report('Nightly Builds')
+        Assert.equal(nightly_builds_page.product_header, 'Nightly Builds for Firefox')
+
+        website_link = nightly_builds_page.link_to_ftp
+        #check that the link is valid
+        Assert.not_none(re.match('(\w+\W+)', website_link))
+
+        #test external link works
+        nightly_builds_page.click_link_to_ftp()
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
+
+    def test_that_products_page_links_work(self, mozwebqa):
+        self.selenium = mozwebqa.selenium
+        products_page = ProductsLinksPage(mozwebqa)
+        #An extra check that products page is loaded
+        Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+
+        for product in products:
+            csp = products_page.click_product(product)
+            Assert.true(csp.get_url_current_page().endswith(product))
+            Assert.contains(product, csp.get_page_name)
+            products_page = ProductsLinksPage(mozwebqa)
+
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         self.selenium = mozwebqa.selenium
@@ -314,6 +350,18 @@ class TestCrashReports:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted)
+
+    def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17141439
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        crash_per_user = csp.select_report('Crashes per User')
+        crash_per_user.type_start_date('1995-01-01')
+        crash_per_user.click_generate_button()
+        Assert.true(crash_per_user.is_table_visible)
+        crash_per_user.table_row_count
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
 
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
         """
