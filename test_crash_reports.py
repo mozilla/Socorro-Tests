@@ -392,3 +392,14 @@ class TestCrashReports:
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             csp = CrashStatsHomePage(mozwebqa)
             csp.select_product("Thunderbird")
+
+    def test_that_top_crashers_reports_links_work_for_camino(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product('Camino')
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            csp = CrashStatsHomePage(mozwebqa)
+            csp.select_product('Camino')
