@@ -44,7 +44,6 @@ xfail = pytest.mark.xfail
 class TestSearchForIdOrSignature:
 
     def test_that_when_item_not_available(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         results = csp.search_for_crash("this won't exist")
         Assert.false(results.results_found)
@@ -55,7 +54,6 @@ class TestSearchForIdOrSignature:
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         '''
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         reportlist = csp.click_first_product_top_crashers_link()
         signature = reportlist.first_valid_signature
@@ -64,14 +62,12 @@ class TestSearchForIdOrSignature:
 
     @xfail(reason="Disabled till bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.contains('product is one of Firefox', cs_advanced.query_results_text)
 
     def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
@@ -79,7 +75,6 @@ class TestSearchForIdOrSignature:
         Assert.contains('product is one of Thunderbird', cs_advanced.query_results_text)
 
     def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
@@ -87,7 +82,6 @@ class TestSearchForIdOrSignature:
         Assert.contains('product is one of Fennec', cs_advanced.query_results_text)
 
     def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
@@ -95,7 +89,6 @@ class TestSearchForIdOrSignature:
         Assert.contains('product is one of Camino', cs_advanced.query_results_text)
 
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
@@ -105,7 +98,6 @@ class TestSearchForIdOrSignature:
     @xfail(reason="Disabled until bug 688256 is fixed")
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
-        self.selenium = mozwebqa.selenium
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
 
