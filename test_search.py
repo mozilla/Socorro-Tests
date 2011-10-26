@@ -118,7 +118,7 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.build_id_field_input('20110928134238')
+        cs_advanced.build_id_field_input(cs_advanced.get_build_id)
         cs_advanced.filter_reports()
         if cs_advanced.results_found:
             Assert.true(cs_advanced.first_signature_number_of_results > 0)
