@@ -65,35 +65,35 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.contains('product is one of Firefox', cs_advanced.query_results_text)
+        Assert.contains('product is one of Firefox', cs_advanced.query_results_text(0))
 
     def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.contains('product is one of Thunderbird', cs_advanced.query_results_text)
+        Assert.contains('product is one of Thunderbird', cs_advanced.query_results_text(0))
 
     def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.contains('product is one of Fennec', cs_advanced.query_results_text)
+        Assert.contains('product is one of Fennec', cs_advanced.query_results_text(0))
 
     def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.contains('product is one of Camino', cs_advanced.query_results_text)
+        Assert.contains('product is one of Camino', cs_advanced.query_results_text(0))
 
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
         cs_advanced.filter_reports()
-        Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text)
+        Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
 
     @xfail(reason="Disabled until bug 688256 is fixed")
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
@@ -118,6 +118,9 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.build_id_field_input('20110928134238')
+        cs_advanced.build_id_field_input('201109281342381')
         cs_advanced.filter_reports()
-        Assert.not_none(cs_advanced.query_results_text)
+        if cs_advanced.results_found:
+            Assert.true(cs_advanced.first_signature_number_of_results > 0)
+        else:
+            Assert.equal(cs_advanced.query_results_text(1), "No results were found.")

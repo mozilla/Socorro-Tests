@@ -389,7 +389,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
 
-    _query_results_text = "css=.body.notitle > p:nth(0)"
+    _query_results_text = "css=.body.notitle "
 
     _build_id_locator = "css=#build_id"
 
@@ -445,9 +445,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         except NoSuchElementException:
             return False
 
-    @property
-    def query_results_text(self):
-        return self.sel.get_text(self._query_results_text)
+    def query_results_text(self, lookup):
+        return self.sel.get_text(self._query_results_text + ":nth(%s)" % lookup)
 
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
