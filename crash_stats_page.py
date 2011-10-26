@@ -423,7 +423,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.sel.type(self._build_id_locator, value)
 
     @property
-    def get_build_id(self):
+    def build_id(self):
         return self.sel.get_eval("navigator.buildID")
 
     @property
