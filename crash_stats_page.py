@@ -393,6 +393,15 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _build_id_locator = "css=#build_id"
 
+    _radio_items_locator = 'css=.radio-item > label > input'
+
+    _data_table_signature_coloumn_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
+    _data_table_signature_browser_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.browser'
+    _data_table_signature_plugin_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.plugin'
+    _next_locator = 'css=.pagination>a:contains("Next") '
+
+    _query_results_text = "css=.body.notitle > p:nth(0)"
+
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing
@@ -451,6 +460,29 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def query_results_text(self, lookup):
         return self.sel.get_text(self._query_results_text + ":nth(%s)" % lookup)
+
+    def select_radion_button(self, lookup):
+        self.sel.check(self._radio_items_locator + ":nth(%s)" % lookup)
+
+    @property
+    def is_plugin_icon_visibile(self):
+        return self.sel.is_visible(self._data_table_signature_plugin_icon_locator)
+
+    @property
+    def is_plugin_icon_present(self):
+        return self.sel.is_element_present(self._data_table_signature_plugin_icon_locator)
+
+    @property
+    def is_browser_icon_visibile(self):
+        return self.sel.is_visible(self._data_table_signature_browser_icon_locator)
+
+    @property
+    def is_browser_icon_present(self):
+        return self.sel.is_element_present(self._data_table_signature_browser_icon_locator)
+
+    def click_next(self):
+        self.sel.click(self._next_locator)
+        self.wait_for_element_present(self._data_table)
 
 
 class CrashStatsSignatureReport(CrashStatsBasePage):

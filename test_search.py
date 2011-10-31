@@ -124,3 +124,26 @@ class TestSearchForIdOrSignature:
             Assert.true(cs_advanced.first_signature_number_of_results > 0)
         else:
             Assert.equal(cs_advanced.query_results_text(1), "No results were found.")
+
+    def test_that_filter_for_browser_or_plugin_filters_results(self, mozwebqa):
+        #https://www.pivotaltracker.com/story/show/17769047
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_advanced = csp.click_advanced_search()
+        cs_advanced.adv_select_product('Firefox')
+        cs_advanced.adv_select_version('Firefox 9.0a2')
+        cs_advanced.adv_select_os('Windows')
+        cs_advanced.select_radion_button(1)
+        cs_advanced.filter_reports()
+
+        while not cs_advanced.is_browser_icon_present:
+            cs_advanced.click_next()
+
+        Assert.true(cs_advanced.is_browser_icon_visibile)
+
+        cs_advanced.select_radion_button(2)
+        cs_advanced.filter_reports()
+
+        while not cs_advanced.is_plugin_icon_present:
+            cs_advanced.click_next()
+
+        Assert.true(cs_advanced.is_plugin_icon_visibile)
