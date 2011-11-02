@@ -39,6 +39,7 @@ from crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
+prod = pytest.mark.prod
 
 
 class TestSearchForIdOrSignature:
@@ -109,6 +110,7 @@ class TestSearchForIdOrSignature:
         cssr = cs_advanced.click_first_signature()
         Assert.equal(results_page_count, cssr.total_items_label)
 
+    @prod
     def test_that_filter_for_browser_or_plugin_filters_results(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
