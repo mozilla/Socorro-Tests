@@ -406,3 +406,62 @@ class TestCrashReports:
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             csp = CrashStatsHomePage(mozwebqa)
             csp.select_product('Fennec')
+
+    def test_the_firefox_releases_return_results(self, mozwebqa):
+        """
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.true(top_crasher_page.table_results_found)
+            CrashStatsHomePage(mozwebqa)
+
+    def test_the_thunderbird_releases_return_results(self, mozwebqa):
+        """
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product('Thunderbird')
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.true(top_crasher_page.table_results_found)
+            CrashStatsHomePage(mozwebqa)
+            csp.select_product('Thunderbird')
+
+    @prod
+    def test_the_camino_releases_return_results(self, mozwebqa):
+        """
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product('Camino')
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.true(top_crasher_page.table_results_found)
+            CrashStatsHomePage(mozwebqa)
+            csp.select_product('Camino')
+
+    def test_the_seamonkey_releases_return_results(self, mozwebqa):
+        """
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product('SeaMonkey')
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.true(top_crasher_page.table_results_found)
+            CrashStatsHomePage(mozwebqa)
+            csp.select_product('SeaMonkey')
+
+    def test_the_fennec_releases_return_results(self, mozwebqa):
+        """
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product('Fennec')
+
+        for top_crasher in csp.top_crashers:
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.true(top_crasher_page.table_results_found)
+            CrashStatsHomePage(mozwebqa)
+            csp.select_product('Fennec')
