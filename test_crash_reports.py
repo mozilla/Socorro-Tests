@@ -409,6 +409,7 @@ class TestCrashReports:
 
     def test_the_firefox_releases_return_results(self, mozwebqa):
         """
+        https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
 
@@ -419,6 +420,7 @@ class TestCrashReports:
 
     def test_the_thunderbird_releases_return_results(self, mozwebqa):
         """
+        https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
@@ -432,6 +434,7 @@ class TestCrashReports:
     @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
         """
+        https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
@@ -444,6 +447,7 @@ class TestCrashReports:
 
     def test_the_seamonkey_releases_return_results(self, mozwebqa):
         """
+        https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
@@ -456,6 +460,7 @@ class TestCrashReports:
 
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
+        https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
