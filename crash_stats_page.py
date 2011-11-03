@@ -400,8 +400,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_signature_plugin_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.plugin'
     _next_locator = 'css=.pagination>a:contains("Next") '
 
-    _query_results_text = "css=.body.notitle > p:nth(0)"
-
     def __init__(self, testsetup):
         '''
             Creates a new instance of the class and gets the page ready for testing

@@ -52,6 +52,7 @@ import mozwebqa
 
 
 xfail = pytest.mark.xfail
+prod = pytest.mark.prod
 
 
 class TestCrashReports:
@@ -304,6 +305,7 @@ class TestCrashReports:
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
+    @prod
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
