@@ -22,6 +22,7 @@
 # Contributor(s): David Burns
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alin Trif <alin.trif@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -424,12 +425,7 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('Thunderbird')
+        self._verifiy_results_are_returned(csp, mozwebqa, 'Thunderbird')
 
     @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
@@ -438,12 +434,7 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('Camino')
+        self._verifiy_results_are_returned(csp, mozwebqa, 'Camino')
 
     def test_the_seamonkey_releases_return_results(self, mozwebqa):
         """
@@ -451,12 +442,7 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('SeaMonkey')
+        self._verifiy_results_are_returned(csp, mozwebqa, 'SeaMonkey')
 
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
@@ -464,9 +450,12 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
+        self._verifiy_results_are_returned(csp, mozwebqa, 'Fennec')
 
+
+    def _verifiy_results_are_returned(self, csp, mozwebqa, product_name):
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-            csp.select_product('Fennec')
+            csp.select_product(product_name)
