@@ -22,6 +22,7 @@
 # Contributor(s): David Burns
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alin Trif <alin.trif@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -67,48 +68,16 @@ class TestCrashReports:
         Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        page_title = csp.page_title
-        Assert.true('Thunderbird' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
 
     def test_that_reports_form_has_same_product_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        page_title = csp.page_title
-        Assert.true('SeaMonkey' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'SeaMonkey')
 
     def test_that_reports_form_has_same_product_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        page_title = csp.page_title
-        Assert.true('Camino' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Camino')
 
     def test_that_reports_form_has_same_product_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        page_title = csp.page_title
-        Assert.true('Fennec' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Fennec')
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -120,44 +89,16 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Thunderbird')
 
     def test_that_current_version_selected_in_top_crashers_header_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_version_selected_in_top_crashers_header(mozwebqa, 'SeaMonkey')
 
     def test_that_current_version_selected_in_top_crashers_header_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Camino')
 
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Fennec')
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -168,44 +109,16 @@ class TestCrashReports:
         #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Thunderbird')
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'SeaMonkey')
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Camino')
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Fennec')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -217,44 +130,16 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Thunderbird')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'SeaMonkey')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Camino')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Fennec')
 
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
@@ -357,62 +242,29 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product("Thunderbird")
-        top_crashers = csp.top_crashers
-
-        for top_crasher in top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
-            csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product("Thunderbird")
+        self._verify_top_crashers_links_work(mozwebqa, 'Thunderbird')
 
     def test_that_top_crashers_reports_links_work_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
-            csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product('Camino')
+        self._verify_top_crashers_links_work(mozwebqa, 'Camino')
 
     def test_that_top_crashers_reports_links_work_for_seamonkey(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
-            csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product('SeaMonkey')
+        self._verify_top_crashers_links_work(mozwebqa, 'SeaMonkey')
 
     def test_that_top_crashers_reports_links_work_for_fennec(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
-            csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product('Fennec')
+        self._verify_top_crashers_links_work(mozwebqa, 'Fennec')
 
     def test_the_firefox_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
-
+        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
@@ -422,51 +274,85 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('Thunderbird')
+        self._verify_results_are_returned(mozwebqa, 'Thunderbird')
 
     @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('Camino')
+        self._verify_results_are_returned(mozwebqa, 'Camino')
 
     def test_the_seamonkey_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
-            CrashStatsHomePage(mozwebqa)
-            csp.select_product('SeaMonkey')
+        self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
+        self._verify_results_are_returned(mozwebqa, 'Fennec')
 
+    def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        page_title = csp.page_title
+        Assert.true(product_name in page_title)
+        if csp.results_found:
+            crash_adu = csp.select_report("Crashes per User")
+            details = csp.current_details
+            report_product = crash_adu.product_select
+            Assert.equal(details['product'], report_product)
+
+    def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        if csp.results_found:
+            details = csp.current_details
+            cstc = csp.select_report('Top Crashers')
+            Assert.equal(details['product'], cstc.product_header)
+            #Bug 611694 - Disabled till bug fixed
+            #Assert.true(cstc.product_version_header in details['versions'])
+
+    def _verify_top_crashers_links_work(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        top_crashers = csp.top_crashers
+        for top_crasher in csp.top_crashers:
+            top_crasher_name = top_crasher.version_name
+            top_crasher_page = top_crasher.click_top_crasher()
+            Assert.contains(top_crasher_name, top_crasher_page.page_heading)
+            csp = CrashStatsHomePage(mozwebqa)
+            csp.select_product(product_name)
+
+    def _verify_current_version_selected_in_top_crashers_by_url_header(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        if csp.results_found:
+            details = csp.current_details
+            cstc = csp.select_report('Top Crashers by URL')
+            Assert.equal(details['product'], cstc.product_header)
+            #Bug 611694 - Disabled till bug fixed
+            #Assert.true(cstc.product_version_header in details['versions'])
+
+    def _verify_current_version_selected_in_top_crashers_by_domain_header(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        if csp.results_found:
+            details = csp.current_details
+            cstc = csp.select_report('Top Crashers by Domain')
+            Assert.equal(details['product'], cstc.product_header)
+            #Bug 611694 - Disabled till bug fixed
+            #Assert.true(cstc.product_version_header in details['versions'])
+
+    def _verify_results_are_returned(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-            csp.select_product('Fennec')
+            csp.select_product(product_name)
