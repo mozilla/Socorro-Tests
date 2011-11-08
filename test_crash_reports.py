@@ -130,44 +130,16 @@ class TestCrashReports:
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Thunderbird')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'SeaMonkey')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Camino')
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        if csp.results_found:
-            details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+        self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Fennec')
 
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
@@ -361,6 +333,16 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
+            Assert.equal(details['product'], cstc.product_header)
+            #Bug 611694 - Disabled till bug fixed
+            #Assert.true(cstc.product_version_header in details['versions'])
+
+    def _verify_current_version_selected_in_top_crashers_by_domain_header(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        if csp.results_found:
+            details = csp.current_details
+            cstc = csp.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
