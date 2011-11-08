@@ -68,48 +68,16 @@ class TestCrashReports:
         Assert.equal(details['product'], report_product)
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        page_title = csp.page_title
-        Assert.true('Thunderbird' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
 
     def test_that_reports_form_has_same_product_for_seamonkey(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        page_title = csp.page_title
-        Assert.true('SeaMonkey' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'SeaMonkey')
 
     def test_that_reports_form_has_same_product_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        page_title = csp.page_title
-        Assert.true('Camino' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Camino')
 
     def test_that_reports_form_has_same_product_for_fennec(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        page_title = csp.page_title
-        Assert.true('Fennec' in page_title)
-        if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+        self._verify_reports_form_have_same_product(mozwebqa, 'Fennec')
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -428,6 +396,17 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         self._verifiy_results_are_returned(csp, mozwebqa, 'Fennec')
+
+    def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        page_title = csp.page_title
+        Assert.true(product_name in page_title)
+        if csp.results_found:
+            crash_adu = csp.select_report("Crashes per User")
+            details = csp.current_details
+            report_product = crash_adu.product_select
+            Assert.equal(details['product'], report_product)
 
     def _verify_top_crashers_links_work(self, csp, mozwebqa, product_name):
         for top_crasher in csp.top_crashers:
