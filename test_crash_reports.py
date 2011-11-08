@@ -326,39 +326,29 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product("Thunderbird")
-        top_crashers = csp.top_crashers
-        self._verify_top_crashers_links_work(csp, mozwebqa, 'Thunderbird')
+        self._verify_top_crashers_links_work(mozwebqa, 'Thunderbird')
 
     def test_that_top_crashers_reports_links_work_for_camino(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        self._verify_top_crashers_links_work(csp, mozwebqa, 'Camino')
+        self._verify_top_crashers_links_work(mozwebqa, 'Camino')
 
     def test_that_top_crashers_reports_links_work_for_seamonkey(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        self._verify_top_crashers_links_work(csp, mozwebqa, 'SeaMonkey')
+        self._verify_top_crashers_links_work(mozwebqa, 'SeaMonkey')
 
     def test_that_top_crashers_reports_links_work_for_fennec(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-
-        self._verify_top_crashers_links_work(csp, mozwebqa, 'Fennec')
+        self._verify_top_crashers_links_work(mozwebqa, 'Fennec')
 
     def test_the_firefox_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
-
+        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
@@ -368,34 +358,26 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Thunderbird')
-        self._verifiy_results_are_returned(csp, mozwebqa, 'Thunderbird')
+        self._verifiy_results_are_returned(mozwebqa, 'Thunderbird')
 
     @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Camino')
-        self._verifiy_results_are_returned(csp, mozwebqa, 'Camino')
+        self._verifiy_results_are_returned(mozwebqa, 'Camino')
 
     def test_the_seamonkey_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('SeaMonkey')
-        self._verifiy_results_are_returned(csp, mozwebqa, 'SeaMonkey')
+        self._verifiy_results_are_returned(mozwebqa, 'SeaMonkey')
 
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product('Fennec')
-        self._verifiy_results_are_returned(csp, mozwebqa, 'Fennec')
+        self._verifiy_results_are_returned(mozwebqa, 'Fennec')
 
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -408,7 +390,10 @@ class TestCrashReports:
             report_product = crash_adu.product_select
             Assert.equal(details['product'], report_product)
 
-    def _verify_top_crashers_links_work(self, csp, mozwebqa, product_name):
+    def _verify_top_crashers_links_work(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_name = top_crasher.version_name
             top_crasher_page = top_crasher.click_top_crasher()
@@ -416,7 +401,10 @@ class TestCrashReports:
             csp = CrashStatsHomePage(mozwebqa)
             csp.select_product(product_name)
 
-    def _verifiy_results_are_returned(self, csp, mozwebqa, product_name):
+    def _verifiy_results_are_returned(self, mozwebqa, product_name):
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.select_product(product_name)
+        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
