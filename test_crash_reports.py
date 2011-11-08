@@ -274,26 +274,26 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        self._verifiy_results_are_returned(mozwebqa, 'Thunderbird')
+        self._verify_results_are_returned(mozwebqa, 'Thunderbird')
 
     @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        self._verifiy_results_are_returned(mozwebqa, 'Camino')
+        self._verify_results_are_returned(mozwebqa, 'Camino')
 
     def test_the_seamonkey_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        self._verifiy_results_are_returned(mozwebqa, 'SeaMonkey')
+        self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        self._verifiy_results_are_returned(mozwebqa, 'Fennec')
+        self._verify_results_are_returned(mozwebqa, 'Fennec')
 
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -347,7 +347,7 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    def _verifiy_results_are_returned(self, mozwebqa, product_name):
+    def _verify_results_are_returned(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product(product_name)
         top_crashers = csp.top_crashers
