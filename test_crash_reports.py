@@ -190,7 +190,7 @@ class TestCrashReports:
         results = cstc.count_results
         Assert.true(results > 0, "%s results found, expected >0" % results)
 
-    @prod
+    @xfail(reason='Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
