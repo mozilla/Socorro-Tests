@@ -110,6 +110,7 @@ class TestSearchForIdOrSignature:
         cssr = cs_advanced.click_first_signature()
         Assert.equal(results_page_count, cssr.total_items_label)
 
+    @prod
     def test_that_search_for_a_given_build_id_works(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17368401
