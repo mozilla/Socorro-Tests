@@ -288,6 +288,14 @@ class CrashReportList(CrashStatsBasePage):
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
 
+    _default_filter_type_locator = "css=div[id='duration-nav']:nth(1) ul li a.bold"
+    _plugin_filter_locator = "css=div[id='duration-nav']:nth(1) ul li a:contains('Plugin')"
+
+    _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
+    _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
+    _data_table_plugin_icon_locator = _data_table_signature_locator + ' > div > img.plugin'
+
+
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
         self._reports = [self.set_report(count) for count in range(1, self.reports_count)]
@@ -326,6 +334,14 @@ class CrashReportList(CrashStatsBasePage):
     @property
     def first_report_with_valid_signature(self):
         return [report for report in self.reports if report.has_valid_signature][0]
+
+    @property
+    def get_default_filter_text(self):
+        return self.selenium.get_text(self._default_filter_type_locator)
+
+    def click_plugin_filter(self):
+        self.selenium.click(self._plugin_filter_locator)
+        self.wait_for_element_present(self._data_table)
 
 
 class CrashReport(CrashStatsBasePage):
