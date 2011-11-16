@@ -350,13 +350,6 @@ class CrashReportList(CrashStatsBasePage):
     def signature_list_items(self):
         return [self.TableRegion(self.testsetup, i) for i in range(self.signature_list_count)]
 
-    @property
-    def table_results_found(self):
-        try:
-            return self.sel.get_css_count(self._signature_table_locator) > 0
-        except NoSuchElementException:
-            return False
-
     class TableRegion(Page):
         _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(5)'
         _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
@@ -631,6 +624,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     def click_filter_plugin(self):
         self.sel.click(self._filter_plugin)
         self.sel.wait_for_page_to_load(self.timeout)
+
+    @property
+    def table_results_found(self):
+        try:
+            return self.sel.get_css_count(self._result_rows) > 0
+        except NoSuchElementException:
+            return False
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
