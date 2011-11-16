@@ -291,10 +291,9 @@ class CrashReportList(CrashStatsBasePage):
     _default_filter_type_locator = "css=div[id='duration-nav']:nth(1) ul li a.bold"
     _plugin_filter_locator = "css=div[id='duration-nav']:nth(1) ul li a:contains('Plugin')"
 
-    _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
-    _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
-    _data_table_plugin_icon_locator = _data_table_signature_locator + ' > div > img.plugin'
-
+    _signature_table_locator = "css=#signatureList .signature"
+    _first_signature_table_locator = "css=#signatureList .signature:nth(0)"
+    _data_table = 'css=#signatureList'
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
@@ -341,7 +340,47 @@ class CrashReportList(CrashStatsBasePage):
 
     def click_plugin_filter(self):
         self.selenium.click(self._plugin_filter_locator)
-        self.wait_for_element_present(self._data_table)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def signature_list_count(self):
+        return self.selenium.get_css_count(self._signature_table_locator)
+
+    @property
+    def signature_list_items(self):
+        return [self.TableRegion(self.testsetup, i) for i in range(self.signature_list_count)]
+
+    @property
+    def table_results_found(self):
+        try:
+            return self.sel.get_css_count(self._signature_table_locator) > 0
+        except NoSuchElementException:
+            return False
+
+    class TableRegion(Page):
+        _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(5)'
+        _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
+        _data_table_plugin_icon_locator = _data_table_signature_locator + ' > div > img.plugin'
+
+        def __init__(self, testsetup, lookup):
+                Page.__init__(self, testsetup)
+                self.lookup = lookup
+
+        @property
+        def is_plugin_icon_visibile(self):
+            return self.selenium.is_visible(self._data_table_plugin_icon_locator)
+
+        @property
+        def is_plugin_icon_present(self):
+            return self.selenium.is_element_present(self._data_table_plugin_icon_locator)
+
+        @property
+        def is_browser_icon_visibile(self):
+            return self.selenium.is_visible(self._data_table_browser_icon_locator)
+
+        @property
+        def is_browser_icon_present(self):
+            return self.selenium.is_element_present(self._data_table_browser_icon_locator)
 
 
 class CrashReport(CrashStatsBasePage):
