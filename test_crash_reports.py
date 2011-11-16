@@ -357,3 +357,13 @@ class TestCrashReports:
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
             csp.select_product(product_name)
+
+    def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17088605
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        top_crashers = csp.top_crashers
+        tc_page = top_crashers[3].click_top_crasher()
+
+        Assert.equal(tc_page.default_filter_day, '7')

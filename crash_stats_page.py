@@ -270,6 +270,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
             if type(self.lookup) == int:
                 # lookup by index
                 return "%s:nth(%s) " % (self._top_crashers, self.lookup)
+            else:
+                # lookup by name
+                return "%s:contains(%s) " % (self._top_crashers, self.lookup)
 
         @property
         def version_name(self):
@@ -549,6 +552,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
+    _default_days_locator = "css=div[id='duration-nav']:nth(0) ul li a.bold"
+
     def __init__(self, testsetup):
         self.sel = testsetup.selenium
         CrashStatsBasePage.__init__(self, testsetup)
@@ -583,6 +588,10 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
             return self.sel.get_css_count(self._result_rows) > 0
         except NoSuchElementException:
             return False
+
+    @property
+    def default_filter_day(self):
+        return self.selenium.get_text(self._default_days_locator)
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
