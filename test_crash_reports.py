@@ -368,12 +368,12 @@ class TestCrashReports:
 
         signature_list_items = reports_page.signature_list_items
 
-        for i in signature_list_items:
-            Assert.true(i.is_browser_icon_visibile)
-            Assert.false(i.is_plugin_icon_present)
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_browser_icon_visibile)
+            Assert.false(signature_item.is_plugin_icon_present)
 
         reports_page.click_plugin_filter()
 
-        for i in signature_list_items:
-            Assert.true(i.is_plugin_icon_visibile)
-            Assert.false(i.is_browser_icon_present)
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_plugin_icon_visibile)
+            Assert.false(signature_item.is_browser_icon_present)

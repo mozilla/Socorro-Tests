@@ -632,13 +632,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         self.sel.click(self._filter_plugin)
         self.sel.wait_for_page_to_load(self.timeout)
 
-    @property
-    def table_results_found(self):
-        try:
-            return self.sel.get_css_count(self._result_rows) > 0
-        except NoSuchElementException:
-            return False
-
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
 
