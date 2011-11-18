@@ -60,5 +60,5 @@ class TestSpecificVersions:
             report = report.get_row(count)
             product = report.product
             version = report.version
-            Assert.equal(product, details['product'])
+            Assert.equal(product, details['product'], msg='https://crash-stats-dev.allizom.org/topcrasher/byversion/Firefox')
             Assert.contains(version, details['versions'][1])
