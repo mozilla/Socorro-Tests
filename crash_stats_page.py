@@ -552,7 +552,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
-    _default_days_locator = "css=div[id='duration-nav']:nth(0) ul li a.bold"
+    _current_days_filter_locator = "css=div[id='duration-nav']:nth(0) ul li a.bold"
 
     def __init__(self, testsetup):
         self.sel = testsetup.selenium
@@ -590,8 +590,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
             return False
 
     @property
-    def default_filter_day(self):
-        return self.selenium.get_text(self._default_days_locator)
+    def current_days_filter(self):
+        return self.selenium.get_text(self._current_days_filter_locator)
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
