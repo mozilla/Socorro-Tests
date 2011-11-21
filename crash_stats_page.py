@@ -368,7 +368,7 @@ class CrashReportList(CrashStatsBasePage):
             return self.selenium.is_element_present(self._data_table_plugin_icon_locator)
 
         @property
-        def is_browser_icon_visibile(self):
+        def is_browser_icon_visible(self):
             return self.selenium.is_visible(self._data_table_browser_icon_locator)
 
         @property
