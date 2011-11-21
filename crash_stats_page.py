@@ -360,7 +360,7 @@ class CrashReportList(CrashStatsBasePage):
                 self.lookup = lookup
 
         @property
-        def is_plugin_icon_visibile(self):
+        def is_plugin_icon_visible(self):
             return self.selenium.is_visible(self._data_table_plugin_icon_locator)
 
         @property

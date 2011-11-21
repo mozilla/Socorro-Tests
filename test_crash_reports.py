@@ -358,7 +358,7 @@ class TestCrashReports:
             CrashStatsHomePage(mozwebqa)
             csp.select_product(product_name)
 
-    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
+    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17099455
         """
@@ -372,8 +372,15 @@ class TestCrashReports:
             Assert.true(signature_item.is_browser_icon_visibile)
             Assert.false(signature_item.is_plugin_icon_present)
 
+    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17099455
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        reports_page = csp.click_first_product_top_crashers_link()
         reports_page.click_plugin_filter()
+        signature_list_items = reports_page.signature_list_items
 
         for signature_item in signature_list_items:
-            Assert.true(signature_item.is_plugin_icon_visibile)
+            Assert.true(signature_item.is_plugin_icon_visible)
             Assert.false(signature_item.is_browser_icon_present)
