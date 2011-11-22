@@ -65,7 +65,7 @@ class TestCrashReports:
         crash_adu = csp.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
-        Assert.equal(details['product'], report_product, msg='https://crash-stats-dev.allizom.org/daily?p=Firefox&v[]=')
+        Assert.equal(details['product'], report_product, csp.get_url_current_page())
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
         self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
@@ -84,7 +84,7 @@ class TestCrashReports:
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/byversion/Firefox')
+            Assert.equal(details['product'], cstc.product_header, cstc.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -104,7 +104,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
         cstc = csp.select_report('Top Crashers by URL')
-        Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/byurl/Firefox')
+        Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -125,7 +125,7 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/bydomain/Firefox')
+            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -147,7 +147,7 @@ class TestCrashReports:
         details = csp.current_details
         cstc = csp.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/byversion/Firefox')
+            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
 
         cstc.click_filter_all()
         results = cstc.count_results
@@ -164,7 +164,7 @@ class TestCrashReports:
 
         #test external link works
         nightly_builds_page.click_link_to_ftp()
-        Assert.equal(website_link, nightly_builds_page.get_url_current_page(), msg='https://crash-stats-dev.allizom.org/products/Firefox/builds')
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page(), nightly_builds_page.get_url_current_page())
 
     def test_that_products_page_links_work(self, mozwebqa):
         products_page = ProductsLinksPage(mozwebqa)
@@ -174,7 +174,7 @@ class TestCrashReports:
 
         for product in products:
             csp = products_page.click_product(product)
-            Assert.true(csp.get_url_current_page().endswith(product), msg='https://crash-stats-dev.allizom.org/products')
+            Assert.true(csp.get_url_current_page().endswith(product), csp.get_url_current_page())
             Assert.contains(product, csp.get_page_name)
             products_page = ProductsLinksPage(mozwebqa)
 
@@ -212,7 +212,7 @@ class TestCrashReports:
             if csp.results_found:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
-                Assert.true(cstc.is_top_changers_highlighted, msg='https://crash-stats-dev.allizom.org/products/Firefox/versions/<<version>>/topchangers')
+                Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
 
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
@@ -224,7 +224,7 @@ class TestCrashReports:
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
         crash_per_user.table_row_count
-        Assert.equal('1995-01-01', crash_per_user.last_row_date_value, msg='https://crash-stats-dev.allizom.org/daily?p=Firefox&v[]=')
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value, crash_per_user.get_url_current_page())
 
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
         """
@@ -267,7 +267,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found, msg='https://crash-stats-dev.allizom.org/topcrasher/byversion/Firefox')
+            Assert.true(top_crasher_page.table_results_found, top_crasher_page.get_url_current_page())
             CrashStatsHomePage(mozwebqa)
 
     def test_the_thunderbird_releases_return_results(self, mozwebqa):
@@ -304,7 +304,7 @@ class TestCrashReports:
             crash_adu = csp.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product, msg='https://crash-stats-dev.allizom.org/daily?p=Firefox&v[]=')
+            Assert.equal(details['product'], report_product)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -312,7 +312,7 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/byversion/Firefox')
+            Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -332,7 +332,7 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/byurl/Firefox')
+            Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -342,7 +342,7 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header, msg='https://crash-stats-dev.allizom.org/topcrasher/bydomain/Firefox')
+            Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 

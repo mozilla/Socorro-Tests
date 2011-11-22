@@ -69,38 +69,38 @@ class TestSmokeTests:
         cssearch = csp.click_advanced_search()
         nav_product_list = csp.product_list
         search_product_list = cssearch.product_list
-        Assert.equal(len(nav_product_list), len(search_product_list), msg='https://crash-stats-dev.allizom.org/query/query')
+        Assert.equal(len(nav_product_list), len(search_product_list), csp.get_url_current_page())
         for i, prod_item in enumerate(nav_product_list):
-            Assert.equal(prod_item, search_product_list[i], msg='https://crash-stats-dev.allizom.org')
+            Assert.equal(prod_item, search_product_list[i], csp.get_url_current_page())
 
     def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
-        Assert.equal('Firefox', cs_advanced.currently_selected_product, msg='https://crash-stats-dev.allizom.org/query?advanced=1')
+        Assert.equal('Firefox', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
     def test_that_advanced_search_has_thunderbird_highlighted_in_multiselect(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Thunderbird')
         cs_advanced = csp.click_advanced_search()
-        Assert.equal('Thunderbird', cs_advanced.currently_selected_product, msg='https://crash-stats-dev.allizom.org/query?advanced=1')
+        Assert.equal('Thunderbird', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
     def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Fennec')
         cs_advanced = csp.click_advanced_search()
-        Assert.equal('Fennec', cs_advanced.currently_selected_product, msg='https://crash-stats-dev.allizom.org/query?advanced=1')
+        Assert.equal('Fennec', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
     def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('Camino')
         cs_advanced = csp.click_advanced_search()
-        Assert.equal('Camino', cs_advanced.currently_selected_product, msg='https://crash-stats-dev.allizom.org/query?advanced=1')
+        Assert.equal('Camino', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
     def test_that_advanced_search_has_seamonkey_highlighted_in_multiselect(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product('SeaMonkey')
         cs_advanced = csp.click_advanced_search()
-        Assert.equal('SeaMonkey', cs_advanced.currently_selected_product, msg='https://crash-stats-dev.allizom.org/query?advanced=1')
+        Assert.equal('SeaMonkey', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
     @xfail(reason="Disabled till Bug 652880 is fixed")
     def test_that_advanced_search_view_signature_for_firefox_crash(self, mozwebqa):
