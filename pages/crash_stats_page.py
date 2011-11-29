@@ -45,7 +45,7 @@ from selenium.common.exceptions import NoSuchElementException
 import re
 import time
 import base64
-from page import Page
+from pages.page import Page
 
 from mozwebqa.mozwebqa import TestSetup
 from version import FirefoxVersion

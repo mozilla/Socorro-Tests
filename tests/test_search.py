@@ -35,7 +35,7 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from crash_stats_page import CrashStatsHomePage
+from pages.crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
