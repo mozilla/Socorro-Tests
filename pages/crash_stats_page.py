@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
@@ -42,100 +42,13 @@
 
 from selenium import selenium
 from selenium.common.exceptions import NoSuchElementException
+from pages.base import CrashStatsBasePage
 import re
 import time
 import base64
-from pages.page import Page
 
 from mozwebqa.mozwebqa import TestSetup
 from version import FirefoxVersion
-
-
-class CrashStatsBasePage(Page):
-
-    _page_heading = 'css=div.page-heading > h2'
-
-    def __init__(self, testsetup):
-        Page.__init__(self, testsetup)
-        self.sel = self.selenium
-
-    @property
-    def page_title(self):
-        return self.sel.get_title()
-
-    @property
-    def page_heading(self):
-        self.wait_for_element_present(self._page_heading)
-        return self.sel.get_text(self._page_heading)
-
-    def get_attribute(self, element, attribute):
-        return self.sel.get_attribute(element + '@' + attribute)
-
-    def get_url_path(self, path):
-        self.sel.open(path)
-
-    def select_product(self, application):
-        '''
-            Select the Mozilla Product you want to report on
-        '''
-        self.sel.select(self._product_select, application)
-        self.sel.wait_for_page_to_load(self.timeout)
-
-    def select_version(self, version):
-        '''
-            Select the version of the application you want to report on
-        '''
-        self.sel.select(self._product_version_select, version)
-        self.sel.wait_for_page_to_load(self.timeout)
-
-    def select_report(self, report_name):
-        '''
-            Select the report type from the drop down
-            and wait for the page to reload
-        '''
-        self.sel.select(self._report_select, report_name)
-        self.sel.wait_for_page_to_load(self.timeout)
-        if 'Top Crashers' == report_name:
-            return CrashStatsTopCrashers(self.testsetup)
-        elif 'Top Crashers by Domain' == report_name:
-            return CrashStatsTopCrashersByDomain(self.testsetup)
-        elif 'Top Crashers by URL' == report_name:
-            return CrashStatsTopCrashersByUrl(self.testsetup)
-        elif 'Top Crashers by TopSite' == report_name:
-            return CrashStatsTopCrashersBySite(self.testsetup)
-        elif 'Crashes per User' == report_name:
-            return CrashStatsPerActiveDailyUser(self.testsetup)
-        elif 'Nightly Builds' == report_name:
-            return CrashStatsNightlyBuilds(self.testsetup)
-        elif 'Top Changers' == report_name:
-            return CrashStatsTopChangers(self.testsetup)
-
-    def click_server_status(self):
-        self.sel.click('link=Server Status')
-        self.sel.wait_for_page_to_load(self.timeout)
-        return CrashStatsStatus(self.testsetup)
-
-    def click_advanced_search(self):
-        self.sel.click('link=Advanced Search')
-        return CrashStatsAdvancedSearch(self.testsetup)
-
-    def can_find_text(self, text_to_search):
-        '''
-            finds if text is available on a page.
-        '''
-        return self.sel.is_text_present(text_to_search)
-
-    @property
-    def current_details(self):
-        details = {}
-        details['product'] = self.sel.get_selected_value(self._product_select)
-        try:
-            details['versions'] = self.sel.get_text(
-                'xpath=//select[@id="product_version_select"]/optgroup[2]').split(' ')
-        except:
-            details['versions'] = []
-        return details
-
 
 class CrashStatsHomePage(CrashStatsBasePage):
     '''

@@ -1,0 +1,138 @@
+#!/usr/bin/env python
+# ***** BEGIN LICENSE BLOCK *****
+# Version: MPL 1.1/GPL 2.0/LGPL 2.1
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License. You may obtain a copy of the License at
+# http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# The Original Code is Crash Tests Selenium Tests.
+#
+# The Initial Developer of the Original Code is
+# Mozilla.
+# Portions created by the Initial Developer are Copyright (C) 2011
+# the Initial Developer. All Rights Reserved.
+#
+# Contributor(s):
+#   David Burns
+#   Teodosia Pop <teodosia.pop@softvision.ro>
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
+#   Alin Trif <alin.trif@softvision.ro>
+#   Zac Campbell
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 2 or later (the "GPL"), or
+# the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+# in which case the provisions of the GPL or the LGPL are applicable instead
+# of those above. If you wish to allow use of your version of this file only
+# under the terms of either the GPL or the LGPL, and not to allow others to
+# use your version of this file under the terms of the MPL, indicate your
+# decision by deleting the provisions above and replace them with the notice
+# and other provisions required by the GPL or the LGPL. If you do not delete
+# the provisions above, a recipient may use your version of this file under
+# the terms of any one of the MPL, the GPL or the LGPL.
+#
+# ***** END LICENSE BLOCK *****
+
+from pages.page import Page
+
+class CrashStatsBasePage(Page):
+
+    _page_heading = 'css=div.page-heading > h2'
+
+    def __init__(self, testsetup):
+        Page.__init__(self, testsetup)
+        self.sel = self.selenium
+
+    @property
+    def page_title(self):
+        return self.sel.get_title()
+
+    @property
+    def page_heading(self):
+        self.wait_for_element_present(self._page_heading)
+        return self.sel.get_text(self._page_heading)
+
+    def get_attribute(self, element, attribute):
+        return self.sel.get_attribute(element + '@' + attribute)
+
+    def get_url_path(self, path):
+        self.sel.open(path)
+
+    def select_product(self, application):
+        '''
+            Select the Mozilla Product you want to report on
+        '''
+        self.sel.select(self._product_select, application)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    def select_version(self, version):
+        '''
+            Select the version of the application you want to report on
+        '''
+        self.sel.select(self._product_version_select, version)
+        self.sel.wait_for_page_to_load(self.timeout)
+
+    def select_report(self, report_name):
+        '''
+            Select the report type from the drop down
+            and wait for the page to reload
+        '''
+        self.sel.select(self._report_select, report_name)
+        self.sel.wait_for_page_to_load(self.timeout)
+        if 'Top Crashers' == report_name:
+            from pages.crash_stats_page import CrashStatsTopCrashers
+            return CrashStatsTopCrashers(self.testsetup)
+        elif 'Top Crashers by Domain' == report_name:
+            from pages.crash_stats_page import CrashStatsTopCrashersByDomain
+            return CrashStatsTopCrashersByDomain(self.testsetup)
+        elif 'Top Crashers by URL' == report_name:
+            from pages.crash_stats_page import CrashStatsTopCrashersByUrl
+            return CrashStatsTopCrashersByUrl(self.testsetup)
+        elif 'Top Crashers by TopSite' == report_name:
+            from pages.crash_stats_page import CrashStatsTopCrashersBySite
+            return CrashStatsTopCrashersBySite(self.testsetup)
+        elif 'Crashes per User' == report_name:
+            from pages.crash_stats_page import CrashStatsPerActiveDailyUser
+            return CrashStatsPerActiveDailyUser(self.testsetup)
+        elif 'Nightly Builds' == report_name:
+            from pages.crash_stats_page import CrashStatsNightlyBuilds
+            return CrashStatsNightlyBuilds(self.testsetup)
+        elif 'Top Changers' == report_name:
+            from pages.crash_stats_page import CrashStatsTopChangers
+            return CrashStatsTopChangers(self.testsetup)
+
+    def click_server_status(self):
+        self.sel.click('link=Server Status')
+        self.sel.wait_for_page_to_load(self.timeout)
+        from pages.crash_stats_page import CrashStatsStatus
+        return CrashStatsStatus(self.testsetup)
+
+    def click_advanced_search(self):
+        self.sel.click('link=Advanced Search')
+        from pages.crash_stats_page import CrashStatsAdvancedSearch
+        return CrashStatsAdvancedSearch(self.testsetup)
+
+    def can_find_text(self, text_to_search):
+        '''
+            finds if text is available on a page.
+        '''
+        return self.sel.is_text_present(text_to_search)
+
+    @property
+    def current_details(self):
+        details = {}
+        details['product'] = self.sel.get_selected_value(self._product_select)
+        try:
+            details['versions'] = self.sel.get_text(
+                'xpath=//select[@id="product_version_select"]/optgroup[2]').split(' ')
+        except:
+            details['versions'] = []
+        return details
