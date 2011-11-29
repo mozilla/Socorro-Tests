@@ -133,7 +133,7 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
-        cs_advanced.adv_select_version('Firefox 9.0a2')
+        cs_advanced.adv_select_version('Firefox 10.0a2')
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_radion_button(1)
         cs_advanced.filter_reports()
