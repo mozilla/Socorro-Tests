@@ -40,15 +40,12 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from selenium import selenium
 from selenium.common.exceptions import NoSuchElementException
 from pages.base import CrashStatsBasePage
+from version import FirefoxVersion
 import re
 import time
-import base64
 
-from mozwebqa.mozwebqa import TestSetup
-from version import FirefoxVersion
 
 class CrashStatsHomePage(CrashStatsBasePage):
     '''
@@ -78,25 +75,25 @@ class CrashStatsHomePage(CrashStatsBasePage):
         CrashStatsBasePage.__init__(self, testsetup)
 
         if product is None:
-            self.sel.open('/')
+            self.selenium.open('/')
             count = 0
-            while not re.search(r'http?\w://.*/products/.*', self.sel.get_location(), re.U):
+            while not re.search(r'http?\w://.*/products/.*', self.selenium.get_location(), re.U):
                 time.sleep(1)
                 count += 1
                 if count == 20:
                     raise Exception("Home Page has not loaded")
 
-            if not self.sel.get_title() == 'Crash Data for Firefox':
-                self.sel.select(self._product_select, 'Firefox')
-                self.sel.wait_for_page_to_load(self.timeout)
-            self.sel.window_maximize()
+            if not self.selenium.get_title() == 'Crash Data for Firefox':
+                self.selenium.select(self._product_select, 'Firefox')
+                self.selenium.wait_for_page_to_load(self.timeout)
+            self.selenium.window_maximize()
 
     def report_length(self, days):
         '''
             Click on the link with the amount of days you want the report to be
         '''
-        self.sel.click('link=' + days + ' days')
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click('link=' + days + ' days')
+        self.selenium.wait_for_page_to_load(self.timeout)
         self.wait_for_element_present('xpath=//a[text()="'
                                                 + days + ' days" and @class="selected"]')
 
@@ -104,27 +101,27 @@ class CrashStatsHomePage(CrashStatsBasePage):
         '''
             Type the signature or the id of a bug into the search bar and submit the form
         '''
-        self.sel.type(self._find_crash_id_or_signature, crash_id_or_signature)
-        self.sel.key_press(self._find_crash_id_or_signature, "\\13")
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.type(self._find_crash_id_or_signature, crash_id_or_signature)
+        self.selenium.key_press(self._find_crash_id_or_signature, "\\13")
+        self.selenium.wait_for_page_to_load(self.timeout)
         return CrashStatsAdvancedSearch(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
-        self.sel.click(topElement)
+        self.selenium.click(topElement)
         if element == 'Changers':
             self.wait_for_element_visible(self._top_changers_selected)
         else:
             self.wait_for_element_visible(self._top_crashers_selected)
 
     def click_first_product_top_crashers_link(self):
-        self.sel.click(self._first_product_top_crashers_link_locator)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._first_product_top_crashers_link_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
         return CrashReportList(self.testsetup)
 
     @property
     def product_list(self):
-        return self.sel.get_select_options(self._product_select)
+        return self.selenium.get_select_options(self._product_select)
 
     @property
     def current_versions(self):
@@ -142,15 +139,15 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     @property
     def first_signature(self):
-        return self.sel.get_text(self._first_signature_locator)
+        return self.selenium.get_text(self._first_signature_locator)
 
     @property
     def get_page_name(self):
-        return self.sel.get_text(self._heading_locator)
+        return self.selenium.get_text(self._heading_locator)
 
     @property
     def top_crashers_count(self):
-        return self.sel.get_css_count(self._top_crashers)
+        return self.selenium.get_css_count(self._top_crashers)
 
     @property
     def top_crashers(self):
@@ -162,7 +159,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def results_found(self):
         try:
-            return self.sel.get_css_count(self._results_table_rows) > 0
+            return self.selenium.get_css_count(self._results_table_rows) > 0
         except NoSuchElementException:
             return False
 
@@ -186,7 +183,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
         @property
         def version_name(self):
-            return self.sel.get_text("%s:nth(%s)" % (self._header_release_channel_locator, self.lookup))
+            return self.selenium.get_text("%s:nth(%s)" % (self._header_release_channel_locator, self.lookup))
 
         def click_top_crasher(self):
             self.selenium.click(self.absolute_locator(self._top_crashers))
@@ -213,12 +210,12 @@ class CrashReportList(CrashStatsBasePage):
         return CrashReport(self.testsetup, index, signature)
 
     def get_signature(self, index):
-        return self.sel.get_text(self._signature_text_locator % index)
+        return self.selenium.get_text(self._signature_text_locator % index)
 
     def click_signature(self, index):
         report = self.reports[index]
-        self.sel.click(self._signature_locator % index)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._signature_locator % index)
+        self.selenium.wait_for_page_to_load(self.timeout)
         return report
 
     def click_first_valid_signature(self):
@@ -234,7 +231,7 @@ class CrashReportList(CrashStatsBasePage):
 
     @property
     def reports_count(self):
-        return self.sel.get_css_count(self._reports_list_locator)
+        return self.selenium.get_css_count(self._reports_list_locator)
 
     @property
     def first_report_with_valid_signature(self):
@@ -265,7 +262,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def row_count(self):
-        return self.sel.get_css_count(self._row_locator)
+        return self.selenium.get_css_count(self._row_locator)
 
     def get_row(self, index):
         self._current_row_index = index
@@ -277,11 +274,11 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def product(self):
-        return self.sel.get_text(self.absolute_locator(self._product_locator))
+        return self.selenium.get_text(self.absolute_locator(self._product_locator))
 
     @property
     def version(self):
-        return self.sel.get_text(self.absolute_locator(self._version_locator))
+        return self.selenium.get_text(self.absolute_locator(self._version_locator))
 
     @property
     def has_valid_signature(self):
@@ -321,78 +318,78 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.wait_for_element_present(self._product_multiple_select)
 
     def adv_select_product(self, product):
-        self.sel.select(self._product_multiple_select, product)
+        self.selenium.select(self._product_multiple_select, product)
 
     def adv_select_version(self, version):
-        self.sel.select(self._version_multiple_select, version)
+        self.selenium.select(self._version_multiple_select, version)
 
     def adv_select_os(self, os):
-        self.sel.select(self._os_multiple_select, os)
+        self.selenium.select(self._os_multiple_select, os)
 
     def filter_reports(self):
-        self.sel.click(self._filter_crash_reports_button)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._filter_crash_reports_button)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def click_first_signature(self):
         self.wait_for_element_present(self._data_table_first_signature)
-        self.sel.click(self._data_table_first_signature)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._data_table_first_signature)
+        self.selenium.wait_for_page_to_load(self.timeout)
         return CrashStatsSignatureReport(self.testsetup)
 
     def build_id_field_input(self, value):
-        self.sel.type(self._build_id_locator, value)
+        self.selenium.type(self._build_id_locator, value)
 
     @property
     def build_id(self):
-        return self.sel.get_eval("navigator.buildID")
+        return self.selenium.get_eval("navigator.buildID")
 
     @property
     def first_signature_name(self):
-        return self.sel.get_text(self._data_table_first_signature)
+        return self.selenium.get_text(self._data_table_first_signature)
 
     @property
     def first_signature_number_of_results(self):
-        return self.sel.get_text(self._data_table_first_signature_results)
+        return self.selenium.get_text(self._data_table_first_signature_results)
 
     @property
     def currently_selected_product(self):
-        return self.sel.get_selected_value(self._product_multiple_select)
+        return self.selenium.get_selected_value(self._product_multiple_select)
 
     @property
     def product_list(self):
-        return self.sel.get_select_options(self._product_multiple_select)
+        return self.selenium.get_select_options(self._product_multiple_select)
 
     @property
     def results_found(self):
         try:
-            return self.sel.get_css_count("%s > tbody > tr" % self._data_table) > 0
+            return self.selenium.get_css_count("%s > tbody > tr" % self._data_table) > 0
         except NoSuchElementException:
             return False
 
     def query_results_text(self, lookup):
-        return self.sel.get_text(self._query_results_text + ":nth(%s)" % lookup)
+        return self.selenium.get_text(self._query_results_text + ":nth(%s)" % lookup)
 
     def select_radion_button(self, lookup):
-        self.sel.check(self._radio_items_locator + ":nth(%s)" % lookup)
+        self.selenium.check(self._radio_items_locator + ":nth(%s)" % lookup)
 
     @property
     def is_plugin_icon_visibile(self):
-        return self.sel.is_visible(self._data_table_signature_plugin_icon_locator)
+        return self.selenium.is_visible(self._data_table_signature_plugin_icon_locator)
 
     @property
     def is_plugin_icon_present(self):
-        return self.sel.is_element_present(self._data_table_signature_plugin_icon_locator)
+        return self.selenium.is_element_present(self._data_table_signature_plugin_icon_locator)
 
     @property
     def is_browser_icon_visibile(self):
-        return self.sel.is_visible(self._data_table_signature_browser_icon_locator)
+        return self.selenium.is_visible(self._data_table_signature_browser_icon_locator)
 
     @property
     def is_browser_icon_present(self):
-        return self.sel.is_element_present(self._data_table_signature_browser_icon_locator)
+        return self.selenium.is_element_present(self._data_table_signature_browser_icon_locator)
 
     def click_next(self):
-        self.sel.click(self._next_locator)
+        self.selenium.click(self._next_locator)
         self.wait_for_element_present(self._data_table)
 
 
@@ -400,16 +397,11 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 
     # https://crash-stats.allizom.org/report/list?
 
-    def __init__(self, testsetup):
-        CrashStatsBasePage.__init__(self, testsetup)
-        self.sel = testsetup.selenium
-        CrashStatsBasePage.__init__(self, testsetup)
-
     _total_items = "css=span.totalItems"
 
     @property
     def total_items_label(self):
-        return self.sel.get_text(self._total_items).replace(",", "")
+        return self.selenium.get_text(self._total_items).replace(",", "")
 
 
 class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
@@ -420,31 +412,24 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     _table_locator = "id=crash_data"
     _row_table_locator = "css=#crash_data > tbody > tr"
 
-    def __init__(self, testsetup):
-        '''
-            Creates a new instance of the class and gets the page ready for testing
-        '''
-        self.sel = testsetup.selenium
-        CrashStatsBasePage.__init__(self, testsetup)
-
     @property
     def product_select(self):
-        return self.sel.get_selected_value(self._product_select)
+        return self.selenium.get_selected_value(self._product_select)
 
     def type_start_date(self, date):
-        self.sel.type(self._date_start_locator, date)
+        self.selenium.type(self._date_start_locator, date)
 
     def click_generate_button(self):
-        self.sel.click(self._generate_button_locator)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._generate_button_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
     def is_table_visible(self):
-        return self.sel.is_visible(self._table_locator)
+        return self.selenium.is_visible(self._table_locator)
 
     @property
     def table_row_count(self):
-        return self.sel.get_css_count(self._row_table_locator)
+        return self.selenium.get_css_count(self._row_table_locator)
 
     @property
     def last_row_date_value(self):
@@ -462,38 +447,34 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
-    def __init__(self, testsetup):
-        self.sel = testsetup.selenium
-        CrashStatsBasePage.__init__(self, testsetup)
-
     @property
     def product_header(self):
-        return self.sel.get_text(self._product_header)
+        return self.selenium.get_text(self._product_header)
 
     @property
     def product_version_header(self):
-        return self.sel.get_text(self._product_version_header)
+        return self.selenium.get_text(self._product_version_header)
 
     @property
     def count_results(self):
-        return self.sel.get_css_count(self._result_rows)
+        return self.selenium.get_css_count(self._result_rows)
 
     def click_filter_all(self):
-        self.sel.click(self._filter_all)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._filter_all)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def click_filter_browser(self):
-        self.sel.click(self._filter_browser)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._filter_browser)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def click_filter_plugin(self):
-        self.sel.click(self._filter_plugin)
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click(self._filter_plugin)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
     def table_results_found(self):
         try:
-            return self.sel.get_css_count(self._result_rows) > 0
+            return self.selenium.get_css_count(self._result_rows) > 0
         except NoSuchElementException:
             return False
 
@@ -503,16 +484,13 @@ class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, testsetup):
-        self.sel = testsetup.selenium
-
     @property
     def product_header(self):
-        return self.sel.get_text(self._product_header)
+        return self.selenium.get_text(self._product_header)
 
     @property
     def product_version_header(self):
-        return self.sel.get_text(self._product_version_header)
+        return self.selenium.get_text(self._product_version_header)
 
 
 class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
@@ -520,16 +498,13 @@ class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, testsetup):
-        self.sel = testsetup.selenium
-
     @property
     def product_header(self):
-        return self.sel.get_text(self._product_header)
+        return self.selenium.get_text(self._product_header)
 
     @property
     def product_version_header(self):
-        return self.sel.get_text(self._product_version_header)
+        return self.selenium.get_text(self._product_version_header)
 
 
 class CrashStatsTopCrashersBySite(CrashStatsBasePage):
@@ -537,16 +512,13 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
     _product_header = 'id=tcburl-product'
     _product_version_header = 'id=tcburl-version'
 
-    def __init__(self, testsetup):
-        self.sel = testsetup.selenium
-
     @property
     def product_header(self):
-        return self.sel.get_text(self._product_header)
+        return self.selenium.get_text(self._product_header)
 
     @property
     def product_version_header(self):
-        return self.sel.get_text(self._product_version_header)
+        return self.selenium.get_text(self._product_version_header)
 
 
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
@@ -555,7 +527,7 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     @property
     def product_header(self):
-        return self.sel.get_text(self._page_heading)
+        return self.selenium.get_text(self._page_heading)
 
     @property
     def link_to_ftp(self):
@@ -575,19 +547,18 @@ class CrashStatsStatus(CrashStatsBasePage):
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
-        self.sel = testsetup.selenium
         self.wait_for_element_present(self._page_header)
 
     def at_a_glance(self):
-        if not self.sel.is_element_present(self._at_a_glance_locator):
+        if not self.selenium.is_element_present(self._at_a_glance_locator):
             raise Exception(self._at_a_glance_locator + ' is not available')
 
     def graphs(self):
-        if not self.sel.is_element_present(self._graphs_locator):
+        if not self.selenium.is_element_present(self._graphs_locator):
             raise Exception(self._graphs_locator + ' is not available')
 
     def latest_raw_stats(self):
-        if not self.sel.is_element_present(self._graphs_locator):
+        if not self.selenium.is_element_present(self._graphs_locator):
             raise Exception(self._latest_raw_stats + ' is not available')
 
 
@@ -598,17 +569,17 @@ class ProductsLinksPage(CrashStatsBasePage):
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
-        self.sel.open('/products/')
-        self.sel.wait_for_page_to_load(self.timeout)
-        self.sel.window_maximize()
+        self.selenium.open('/products/')
+        self.selenium.wait_for_page_to_load(self.timeout)
+        self.selenium.window_maximize()
 
     @property
     def get_products_page_name(self):
-        return self.sel.get_text(self._name_page_locator)
+        return self.selenium.get_text(self._name_page_locator)
 
     def click_product(self, product):
-        self.sel.click('%s:contains(%s) a' % (self._root_locator, product))
-        self.sel.wait_for_page_to_load(self.timeout)
+        self.selenium.click('%s:contains(%s) a' % (self._root_locator, product))
+        self.selenium.wait_for_page_to_load(self.timeout)
         return CrashStatsHomePage(self.testsetup, product)
 
 
@@ -616,11 +587,7 @@ class CrashStatsTopChangers(CrashStatsBasePage):
 
     _report_locator = 'id=report_select'
 
-    def __init__(self, testsetup):
-        CrashStatsBasePage.__init__(self, testsetup)
-        self.sel = testsetup.selenium
-
     @property
     def is_top_changers_highlighted(self):
-        selected_report = self.sel.get_selected_label(self._report_locator)
+        selected_report = self.selenium.get_selected_label(self._report_locator)
         return (selected_report == 'Top Changers')
