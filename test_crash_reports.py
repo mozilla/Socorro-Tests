@@ -38,18 +38,11 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsAdvancedSearch
-from crash_stats_page import CrashStatsPerActiveDailyUser
-from crash_stats_page import CrashStatsNightlyBuilds
-from unittestzero import Assert
 import pytest
 import re
-
-from crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
-import pytest
-import mozwebqa
+from crash_stats_page import CrashStatsHomePage
+from crash_stats_page import ProductsLinksPage
 
 
 xfail = pytest.mark.xfail
@@ -319,6 +312,7 @@ class TestCrashReports:
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product(product_name)
+
         for top_crasher in csp.top_crashers:
             top_crasher_name = top_crasher.version_name
             top_crasher_page = top_crasher.click_top_crasher()
@@ -349,8 +343,36 @@ class TestCrashReports:
     def _verify_results_are_returned(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.select_product(product_name)
+
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
             csp.select_product(product_name)
+
+    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17099455
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        reports_page = csp.click_first_product_top_crashers_link()
+        Assert.equal(reports_page.get_default_filter_text, 'Browser')
+
+        signature_list_items = reports_page.signature_list_items
+
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_browser_icon_visible)
+            Assert.false(signature_item.is_plugin_icon_present)
+
+    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17099455
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        reports_page = csp.click_first_product_top_crashers_link()
+        reports_page.click_plugin_filter()
+        signature_list_items = reports_page.signature_list_items
+
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_plugin_icon_visible)
+            Assert.false(signature_item.is_browser_icon_present)
