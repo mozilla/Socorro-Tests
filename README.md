@@ -20,7 +20,7 @@ Run
 
 followed by
 
-    sudo pip install -r requirements/mozwebqa.txt
+    sudo pip install -r requirements.txt
 
 __note__
 
