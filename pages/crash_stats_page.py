@@ -74,8 +74,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
         '''
         CrashStatsBasePage.__init__(self, testsetup)
 
-        if product is None:
-            self.selenium.open(self.base_url)
+        if not product:
+            #self.selenium.open(self.base_url)
+            self.selenium.open('/')
             self.selenium.wait_for_page_to_load(self.timeout)
             self.selenium.window_maximize()
 

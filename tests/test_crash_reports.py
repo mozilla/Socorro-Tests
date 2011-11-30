@@ -323,7 +323,7 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product(product_name)
+            csp.header.select_product(product_name)
 
     def _verify_current_version_selected_in_top_crashers_by_url_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -353,4 +353,4 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-            csp.select_product(product_name)
+            csp.header.select_product(product_name)

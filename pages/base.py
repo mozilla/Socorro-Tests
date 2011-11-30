@@ -162,13 +162,10 @@ class CrashStatsBasePage(Page):
         @property
         def current_product(self):
             return self.selenium.get_selected_value(self._product_select)
-        
-        @property
-        def current_versions(self):
-            return self.selenium.get_text(self._current_versions_locator).split(' ')
 
         @property
         def current_versions(self):
+            from pages.version import FirefoxVersion
             current_versions = []
             for i in range(self.selenium.get_css_count(self._current_versions_locator)):
                 current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
@@ -176,6 +173,7 @@ class CrashStatsBasePage(Page):
     
         @property
         def other_versions(self):
+            from pages.version import FirefoxVersion
             other_versions = []
             for i in range(self.selenium.get_css_count(self._other_versions_locator)):
                 other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
