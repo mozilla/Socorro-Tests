@@ -47,6 +47,7 @@ from pages.page import Page
 from selenium.common.exceptions import NoSuchElementException
 from version import FirefoxVersion
 
+
 class CrashStatsHomePage(CrashStatsBasePage):
     '''
         Page Object for Socorro
