@@ -40,14 +40,11 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from selenium import selenium
-from selenium.common.exceptions import NoSuchElementException
-from pages.base import CrashStatsBasePage
 import re
 import time
-import base64
-
 from mozwebqa.mozwebqa import TestSetup
+from pages.page import Page
+from selenium.common.exceptions import NoSuchElementException
 from version import FirefoxVersion
 
 class CrashStatsHomePage(CrashStatsBasePage):
@@ -183,6 +180,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
             if type(self.lookup) == int:
                 # lookup by index
                 return "%s:nth(%s) " % (self._top_crashers, self.lookup)
+            else:
+                # lookup by name
+                return "%s:contains(%s) " % (self._top_crashers, self.lookup)
 
         @property
         def version_name(self):
@@ -200,6 +200,13 @@ class CrashReportList(CrashStatsBasePage):
     _reports_list_locator = 'css=#signatureList tbody tr'
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
+
+    _default_filter_type_locator = "css=ul.tc-duration-type li a.selected"
+    _plugin_filter_locator = "css=ul.tc-duration-type li a:contains('Plugin')"
+
+    _signature_table_locator = "css=#signatureList .signature"
+    _first_signature_table_locator = "css=#signatureList .signature:nth(0)"
+    _data_table = 'css=#signatureList'
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
@@ -239,6 +246,47 @@ class CrashReportList(CrashStatsBasePage):
     @property
     def first_report_with_valid_signature(self):
         return [report for report in self.reports if report.has_valid_signature][0]
+
+    @property
+    def get_default_filter_text(self):
+        return self.selenium.get_text(self._default_filter_type_locator)
+
+    def click_plugin_filter(self):
+        self.selenium.click(self._plugin_filter_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def signature_list_count(self):
+        return self.selenium.get_css_count(self._signature_table_locator)
+
+    @property
+    def signature_list_items(self):
+        return [self.TableRegion(self.testsetup, i) for i in range(self.signature_list_count)]
+
+    class TableRegion(Page):
+        _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(5)'
+        _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
+        _data_table_plugin_icon_locator = _data_table_signature_locator + ' > div > img.plugin'
+
+        def __init__(self, testsetup, lookup):
+                Page.__init__(self, testsetup)
+                self.lookup = lookup
+
+        @property
+        def is_plugin_icon_visible(self):
+            return self.selenium.is_visible(self._data_table_plugin_icon_locator)
+
+        @property
+        def is_plugin_icon_present(self):
+            return self.selenium.is_element_present(self._data_table_plugin_icon_locator)
+
+        @property
+        def is_browser_icon_visible(self):
+            return self.selenium.is_visible(self._data_table_browser_icon_locator)
+
+        @property
+        def is_browser_icon_present(self):
+            return self.selenium.is_element_present(self._data_table_browser_icon_locator)
 
 
 class CrashReport(CrashStatsBasePage):
@@ -462,6 +510,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
+    _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
+
     def __init__(self, testsetup):
         self.sel = testsetup.selenium
         CrashStatsBasePage.__init__(self, testsetup)
@@ -496,6 +546,10 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
             return self.sel.get_css_count(self._result_rows) > 0
         except NoSuchElementException:
             return False
+
+    @property
+    def current_days_filter(self):
+        return self.selenium.get_text(self._current_days_filter_locator)
 
 
 class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
