@@ -40,11 +40,13 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from selenium.common.exceptions import NoSuchElementException
-from pages.base import CrashStatsBasePage
-from version import FirefoxVersion
 import re
 import time
+from mozwebqa.mozwebqa import TestSetup
+from pages.page import Page
+from pages.base import CrashStatsBasePage
+from selenium.common.exceptions import NoSuchElementException
+from version import FirefoxVersion
 
 
 class CrashStatsHomePage(CrashStatsBasePage):
@@ -498,15 +500,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
-<<<<<<< HEAD
-=======
     _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
 
-    def __init__(self, testsetup):
-        self.sel = testsetup.selenium
-        CrashStatsBasePage.__init__(self, testsetup)
-
->>>>>>> upstream/master
     @property
     def product_header(self):
         return self.selenium.get_text(self._product_header)

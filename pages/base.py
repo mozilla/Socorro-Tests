@@ -43,6 +43,7 @@
 
 from pages.page import Page
 
+
 class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
