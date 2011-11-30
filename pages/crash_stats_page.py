@@ -51,12 +51,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     '''
-    #_find_crash_id_or_signature = 'id=q'
-    #_product_select = 'id=products_select'
-    #_product_version_select = 'id=product_version_select'
-    #_current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
-    #_other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
-    #_report_select = 'id=report_select'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
@@ -87,15 +81,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.selenium.wait_for_page_to_load(self.timeout)
         self.wait_for_element_present('xpath=//a[text()="'
                                                 + days + ' days" and @class="selected"]')
-
-    #def search_for_crash(self, crash_id_or_signature):
-    #    '''
-    #        Type the signature or the id of a bug into the search bar and submit the form
-    #    '''
-    #    self.selenium.type(self._find_crash_id_or_signature, crash_id_or_signature)
-    #    self.selenium.key_press(self._find_crash_id_or_signature, "\\13")
-    #    self.selenium.wait_for_page_to_load(self.timeout)
-    #    return CrashStatsAdvancedSearch(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
@@ -470,7 +455,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _filter_plugin = "link=Plugin"
 
     _result_rows = "css=table#signatureList > tbody > tr"
-    
     _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
 
     @property
