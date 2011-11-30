@@ -47,7 +47,7 @@ class TestSearchForIdOrSignature:
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         results = csp.search_for_crash("this won't exist")
-        Assert.false(results.results_found)
+        Assert.false(results.results_found, results.get_url_current_page())
 
     @xfail(reason="Temporarily xfailing until https://www.pivotaltracker.com/story/show/19070579 is written, to cover 2 weeks' worth of data")
     def test_that_search_for_valid_signature(self, mozwebqa):
@@ -59,7 +59,7 @@ class TestSearchForIdOrSignature:
         reportlist = csp.click_first_product_top_crashers_link()
         signature = reportlist.first_valid_signature
         result = csp.search_for_crash(signature)
-        Assert.true(result.results_found)
+        Assert.true(result.results_found, result.get_url_current_page())
 
     @xfail(reason="Disabled till bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
@@ -108,7 +108,7 @@ class TestSearchForIdOrSignature:
 
         results_page_count = cs_advanced.first_signature_number_of_results
         cssr = cs_advanced.click_first_signature()
-        Assert.equal(results_page_count, cssr.total_items_label)
+        Assert.equal(results_page_count, cssr.total_items_label, cssr.get_url_current_page())
 
     @prod
     def test_that_search_for_a_given_build_id_works(self, mozwebqa):
@@ -125,7 +125,7 @@ class TestSearchForIdOrSignature:
         if cs_advanced.results_found:
             Assert.true(cs_advanced.first_signature_number_of_results > 0)
         else:
-            Assert.equal(cs_advanced.query_results_text(1), "No results were found.")
+            Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
 
     @prod
     def test_that_filter_for_browser_or_plugin_filters_results(self, mozwebqa):
@@ -133,7 +133,7 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
-        cs_advanced.adv_select_version('Firefox 9.0a2')
+        cs_advanced.adv_select_version('Firefox 10.0a2')
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_radion_button(1)
         cs_advanced.filter_reports()
@@ -141,7 +141,7 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_browser_icon_present:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_browser_icon_visibile)
+        Assert.true(cs_advanced.is_browser_icon_visibile, cs_advanced.get_url_current_page())
 
         cs_advanced.select_radion_button(2)
         cs_advanced.filter_reports()
@@ -149,4 +149,4 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_plugin_icon_present:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_plugin_icon_visibile)
+        Assert.true(cs_advanced.is_plugin_icon_visibile, cs_advanced.get_url_current_page())
