@@ -60,5 +60,5 @@ class TestSpecificVersions:
             report = report.get_row(count)
             product = report.product
             version = report.version
-            Assert.equal(product, details['product'])
+            Assert.equal(product, details['product'], report.get_url_current_page())
             Assert.contains(version, details['versions'][1])
