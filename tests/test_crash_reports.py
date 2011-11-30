@@ -38,16 +38,14 @@
 #
 # ***** END LICENSE BLOCK *****
 
+import pytest
+import re
 from pages.crash_stats_page import CrashStatsHomePage
 from pages.crash_stats_page import CrashStatsAdvancedSearch
 from pages.crash_stats_page import CrashStatsPerActiveDailyUser
 from pages.crash_stats_page import CrashStatsNightlyBuilds
-import pytest
-import re
-
 from pages.crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
-import mozwebqa
 
 xfail = pytest.mark.xfail
 prod = pytest.mark.prod
@@ -62,7 +60,7 @@ class TestCrashReports:
         crash_adu = csp.header.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
-        Assert.equal(details['product'], report_product)
+        Assert.equal(details['product'], report_product, csp.get_url_current_page())
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
         self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
@@ -81,7 +79,7 @@ class TestCrashReports:
         details = csp.current_details
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(details['product'], cstc.product_header, cstc.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -101,7 +99,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
         cstc = csp.header.select_report('Top Crashers by URL')
-        Assert.equal(details['product'], cstc.product_header)
+        Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -122,7 +120,7 @@ class TestCrashReports:
         if csp.results_found:
             details = csp.current_details
             cstc = csp.header.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -144,7 +142,7 @@ class TestCrashReports:
         details = csp.current_details
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
 
         cstc.click_filter_all()
         results = cstc.count_results
@@ -161,7 +159,7 @@ class TestCrashReports:
 
         #test external link works
         nightly_builds_page.click_link_to_ftp()
-        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page(), nightly_builds_page.get_url_current_page())
 
     def test_that_products_page_links_work(self, mozwebqa):
         products_page = ProductsLinksPage(mozwebqa)
@@ -171,7 +169,7 @@ class TestCrashReports:
 
         for product in products:
             csp = products_page.click_product(product)
-            Assert.true(csp.get_url_current_page().endswith(product))
+            Assert.true(csp.get_url_current_page().endswith(product), csp.get_url_current_page())
             Assert.contains(product, csp.get_page_name)
             products_page = ProductsLinksPage(mozwebqa)
 
@@ -209,7 +207,7 @@ class TestCrashReports:
             if csp.results_found:
                 csp.select_version(version)
                 cstc = csp.select_report('Top Changers')
-                Assert.true(cstc.is_top_changers_highlighted)
+                Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
 
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
@@ -221,7 +219,7 @@ class TestCrashReports:
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
         crash_per_user.table_row_count
-        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value, crash_per_user.get_url_current_page())
 
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
         """
@@ -262,10 +260,9 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
-        top_crashers = csp.top_crashers
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
+            Assert.true(top_crasher_page.table_results_found, top_crasher_page.get_url_current_page())
             CrashStatsHomePage(mozwebqa)
 
     def test_the_thunderbird_releases_return_results(self, mozwebqa):
@@ -317,13 +314,12 @@ class TestCrashReports:
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
-        top_crashers = csp.top_crashers
+
         for top_crasher in csp.top_crashers:
             top_crasher_name = top_crasher.version_name
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             csp = CrashStatsHomePage(mozwebqa)
-            csp.header.select_product(product_name)
 
     def _verify_current_version_selected_in_top_crashers_by_url_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -353,4 +349,41 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-            csp.header.select_product(product_name)
+#            csp.header.select_product(product_name)
+
+    def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17088605
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        top_crashers = csp.top_crashers
+        tc_page = top_crashers[3].click_top_crasher()
+
+        Assert.equal(tc_page.current_days_filter, '7')
+
+    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17099455
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        reports_page = csp.click_first_product_top_crashers_link()
+        Assert.equal(reports_page.get_default_filter_text, 'Browser')
+
+        signature_list_items = reports_page.signature_list_items
+
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_browser_icon_visible)
+            Assert.false(signature_item.is_plugin_icon_present)
+
+    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17099455
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        reports_page = csp.click_first_product_top_crashers_link()
+        reports_page.click_plugin_filter()
+        signature_list_items = reports_page.signature_list_items
+
+        for signature_item in signature_list_items:
+            Assert.true(signature_item.is_plugin_icon_visible)
+            Assert.false(signature_item.is_browser_icon_present)

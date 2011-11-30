@@ -43,6 +43,7 @@
 
 from pages.page import Page
 
+
 class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
@@ -144,7 +145,7 @@ class CrashStatsBasePage(Page):
         except:
             details['versions'] = []
         return details
-    
+
     @property
     def header(self):
         return self.Header(self)
@@ -240,3 +241,4 @@ class CrashStatsBasePage(Page):
             self.selenium.click(self._advanced_search_locator)
             from pages.crash_stats_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
+
