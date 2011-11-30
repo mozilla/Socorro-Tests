@@ -46,6 +46,8 @@ from pages.page import Page
 class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
+    _server_status_locator = 'link=Server Status'
+
 
     @property
     def page_title(self):
@@ -61,66 +63,66 @@ class CrashStatsBasePage(Page):
 
     def get_url_path(self, path):
         self.selenium.open(path)
-
-    def select_product(self, application):
-        '''
-            Select the Mozilla Product you want to report on
-        '''
-        self.selenium.select(self._product_select, application)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
-    def select_version(self, version):
-        '''
-            Select the version of the application you want to report on
-        '''
-        self.selenium.select(self._product_version_select, version)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
-    def select_report(self, report_name):
-        '''
-            Select the report type from the drop down
-            and wait for the page to reload
-        '''
-        self.selenium.select(self._report_select, report_name)
-        self.selenium.wait_for_page_to_load(self.timeout)
-        if 'Top Crashers' == report_name:
-            from pages.crash_stats_page import CrashStatsTopCrashers
-            return CrashStatsTopCrashers(self.testsetup)
-        elif 'Top Crashers by Domain' == report_name:
-            from pages.crash_stats_page import CrashStatsTopCrashersByDomain
-            return CrashStatsTopCrashersByDomain(self.testsetup)
-        elif 'Top Crashers by URL' == report_name:
-            from pages.crash_stats_page import CrashStatsTopCrashersByUrl
-            return CrashStatsTopCrashersByUrl(self.testsetup)
-        elif 'Top Crashers by TopSite' == report_name:
-            from pages.crash_stats_page import CrashStatsTopCrashersBySite
-            return CrashStatsTopCrashersBySite(self.testsetup)
-        elif 'Crashes per User' == report_name:
-            from pages.crash_stats_page import CrashStatsPerActiveDailyUser
-            return CrashStatsPerActiveDailyUser(self.testsetup)
-        elif 'Nightly Builds' == report_name:
-            from pages.crash_stats_page import CrashStatsNightlyBuilds
-            return CrashStatsNightlyBuilds(self.testsetup)
-        elif 'Top Changers' == report_name:
-            from pages.crash_stats_page import CrashStatsTopChangers
-            return CrashStatsTopChangers(self.testsetup)
-
+    #
+    #def select_product(self, application):
+    #    '''
+    #        Select the Mozilla Product you want to report on
+    #    '''
+    #    self.selenium.select(self._product_select, application)
+    #    self.selenium.wait_for_page_to_load(self.timeout)
+    #
+    #def select_version(self, version):
+    #    '''
+    #        Select the version of the application you want to report on
+    #    '''
+    #    self.selenium.select(self._product_version_select, version)
+    #    self.selenium.wait_for_page_to_load(self.timeout)
+    #
+    #def select_report(self, report_name):
+    #    '''
+    #        Select the report type from the drop down
+    #        and wait for the page to reload
+    #    '''
+    #    self.selenium.select(self._report_select, report_name)
+    #    self.selenium.wait_for_page_to_load(self.timeout)
+    #    if 'Top Crashers' == report_name:
+    #        from pages.crash_stats_page import CrashStatsTopCrashers
+    #        return CrashStatsTopCrashers(self.testsetup)
+    #    elif 'Top Crashers by Domain' == report_name:
+    #        from pages.crash_stats_page import CrashStatsTopCrashersByDomain
+    #        return CrashStatsTopCrashersByDomain(self.testsetup)
+    #    elif 'Top Crashers by URL' == report_name:
+    #        from pages.crash_stats_page import CrashStatsTopCrashersByUrl
+    #        return CrashStatsTopCrashersByUrl(self.testsetup)
+    #    elif 'Top Crashers by TopSite' == report_name:
+    #        from pages.crash_stats_page import CrashStatsTopCrashersBySite
+    #        return CrashStatsTopCrashersBySite(self.testsetup)
+    #    elif 'Crashes per User' == report_name:
+    #        from pages.crash_stats_page import CrashStatsPerActiveDailyUser
+    #        return CrashStatsPerActiveDailyUser(self.testsetup)
+    #    elif 'Nightly Builds' == report_name:
+    #        from pages.crash_stats_page import CrashStatsNightlyBuilds
+    #        return CrashStatsNightlyBuilds(self.testsetup)
+    #    elif 'Top Changers' == report_name:
+    #        from pages.crash_stats_page import CrashStatsTopChangers
+    #        return CrashStatsTopChangers(self.testsetup)
+    
     def click_server_status(self):
-        self.selenium.click('link=Server Status')
+        self.selenium.click(self._server_status_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
         from pages.crash_stats_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
-
-    def click_advanced_search(self):
-        self.selenium.click('link=Advanced Search')
-        from pages.crash_stats_page import CrashStatsAdvancedSearch
-        return CrashStatsAdvancedSearch(self.testsetup)
-
-    def can_find_text(self, text_to_search):
-        '''
-            finds if text is available on a page.
-        '''
-        return self.selenium.is_text_present(text_to_search)
+    
+    #def click_advanced_search(self):
+    #    self.selenium.click('link=Advanced Search')
+    #    from pages.crash_stats_page import CrashStatsAdvancedSearch
+    #    return CrashStatsAdvancedSearch(self.testsetup)
+    #
+    #def can_find_text(self, text_to_search):
+    #    '''
+    #        finds if text is available on a page.
+    #    '''
+    #    return self.selenium.is_text_present(text_to_search)
 
     @property
     def current_details(self):
@@ -132,3 +134,75 @@ class CrashStatsBasePage(Page):
         except:
             details['versions'] = []
         return details
+    
+    @property
+    def header(self):
+        return self.Header(self)
+    
+    class Header(Page):
+        _find_crash_id_or_signature = 'id=q'
+        _product_select = 'id=products_select'
+        _product_version_select = 'id=product_version_select'
+        _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
+        _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
+        _report_select = 'id=report_select'
+        
+        _advanced_search_locator = 'link=Advanced Search'
+        
+        def select_product(self, application):
+            '''
+                Select the Mozilla Product you want to report on
+            '''
+            self.selenium.select(self._product_select, application)
+            self.selenium.wait_for_page_to_load(self.timeout)
+    
+        def select_version(self, version):
+            '''
+                Select the version of the application you want to report on
+            '''
+            self.selenium.select(self._product_version_select, version)
+            self.selenium.wait_for_page_to_load(self.timeout)
+    
+        def select_report(self, report_name):
+            '''
+                Select the report type from the drop down
+                and wait for the page to reload
+            '''
+            self.selenium.select(self._report_select, report_name)
+            self.selenium.wait_for_page_to_load(self.timeout)
+            if 'Top Crashers' == report_name:
+                from pages.crash_stats_page import CrashStatsTopCrashers
+                return CrashStatsTopCrashers(self.testsetup)
+            elif 'Top Crashers by Domain' == report_name:
+                from pages.crash_stats_page import CrashStatsTopCrashersByDomain
+                return CrashStatsTopCrashersByDomain(self.testsetup)
+            elif 'Top Crashers by URL' == report_name:
+                from pages.crash_stats_page import CrashStatsTopCrashersByUrl
+                return CrashStatsTopCrashersByUrl(self.testsetup)
+            elif 'Top Crashers by TopSite' == report_name:
+                from pages.crash_stats_page import CrashStatsTopCrashersBySite
+                return CrashStatsTopCrashersBySite(self.testsetup)
+            elif 'Crashes per User' == report_name:
+                from pages.crash_stats_page import CrashStatsPerActiveDailyUser
+                return CrashStatsPerActiveDailyUser(self.testsetup)
+            elif 'Nightly Builds' == report_name:
+                from pages.crash_stats_page import CrashStatsNightlyBuilds
+                return CrashStatsNightlyBuilds(self.testsetup)
+            elif 'Top Changers' == report_name:
+                from pages.crash_stats_page import CrashStatsTopChangers
+                return CrashStatsTopChangers(self.testsetup)
+
+        def search_for_crash(self, crash_id_or_signature):
+            '''
+                Type the signature or the id of a bug into the search bar and submit the form
+            '''
+            self.selenium.type(self._find_crash_id_or_signature, crash_id_or_signature)
+            self.selenium.key_press(self._find_crash_id_or_signature, "\\13")
+            self.selenium.wait_for_page_to_load(self.timeout)
+            from pages.crash_stats_page import CrashStatsAdvancedSearch
+            return CrashStatsAdvancedSearch(self.testsetup)
+
+        def click_advanced_search(self):
+            self.selenium.click(self._advanced_search_locator)
+            from pages.crash_stats_page import CrashStatsAdvancedSearch
+            return CrashStatsAdvancedSearch(self.testsetup)
