@@ -44,6 +44,7 @@ import re
 import time
 from mozwebqa.mozwebqa import TestSetup
 from pages.page import Page
+from pages.base import CrashStatsBasePage
 from selenium.common.exceptions import NoSuchElementException
 from version import FirefoxVersion
 
