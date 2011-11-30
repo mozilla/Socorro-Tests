@@ -348,7 +348,7 @@ class TestCrashReports:
     def _verify_results_are_returned(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
-        top_crashers = csp.top_crashers
+
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
