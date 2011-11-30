@@ -170,7 +170,7 @@ class TestCrashReports:
         products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
 
         for product in products:
-            csp = products_page.header.click_product(product)
+            csp = products_page.click_product(product)
             Assert.true(csp.get_url_current_page().endswith(product))
             Assert.contains(product, csp.get_page_name)
             products_page = ProductsLinksPage(mozwebqa)
@@ -299,7 +299,7 @@ class TestCrashReports:
         page_title = csp.page_title
         Assert.true(product_name in page_title)
         if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
+            crash_adu = csp.header.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
             Assert.equal(details['product'], report_product)
@@ -330,7 +330,7 @@ class TestCrashReports:
         csp.header.select_product(product_name)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
+            cstc = csp.header.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
@@ -340,7 +340,7 @@ class TestCrashReports:
         csp.header.select_product(product_name)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
+            cstc = csp.header.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])

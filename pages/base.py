@@ -48,7 +48,6 @@ class CrashStatsBasePage(Page):
     _page_heading = 'css=div.page-heading > h2'
     _server_status_locator = 'link=Server Status'
 
-
     @property
     def page_title(self):
         return self.selenium.get_title()
@@ -123,14 +122,25 @@ class CrashStatsBasePage(Page):
     #        finds if text is available on a page.
     #    '''
     #    return self.selenium.is_text_present(text_to_search)
-
+    #
+    #@property
+    #def current_details(self):
+    #    details = {}
+    #    details['product'] = self.selenium.get_selected_value(self._product_select)
+    #    try:
+    #        details['versions'] = self.selenium.get_text(
+    #            'xpath=//select[@id="product_version_select"]/optgroup[2]').split(' ')
+    #    except:
+    #        details['versions'] = []
+    #    return details
+    
+    
     @property
     def current_details(self):
         details = {}
-        details['product'] = self.selenium.get_selected_value(self._product_select)
+        details['product'] = self.header.current_product
         try:
-            details['versions'] = self.selenium.get_text(
-                'xpath=//select[@id="product_version_select"]/optgroup[2]').split(' ')
+            details['versions'] = self.header.current_versions
         except:
             details['versions'] = []
         return details
@@ -149,6 +159,32 @@ class CrashStatsBasePage(Page):
         
         _advanced_search_locator = 'link=Advanced Search'
         
+        @property
+        def current_product(self):
+            return self.selenium.get_selected_value(self._product_select)
+        
+        @property
+        def current_versions(self):
+            return self.selenium.get_text(self._current_versions_locator).split(' ')
+
+        @property
+        def current_versions(self):
+            current_versions = []
+            for i in range(self.selenium.get_css_count(self._current_versions_locator)):
+                current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
+            return current_versions
+    
+        @property
+        def other_versions(self):
+            other_versions = []
+            for i in range(self.selenium.get_css_count(self._other_versions_locator)):
+                other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
+            return other_versions
+
+        @property
+        def product_list(self):
+            return self.selenium.get_select_options(self._product_select)
+
         def select_product(self, application):
             '''
                 Select the Mozilla Product you want to report on

@@ -75,17 +75,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
         CrashStatsBasePage.__init__(self, testsetup)
 
         if product is None:
-            self.selenium.open('/')
-            count = 0
-            while not re.search(r'http?\w://.*/products/.*', self.selenium.get_location(), re.U):
-                time.sleep(1)
-                count += 1
-                if count == 20:
-                    raise Exception("Home Page has not loaded")
-
-            if not self.selenium.get_title() == 'Crash Data for Firefox':
-                self.selenium.select(self._product_select, 'Firefox')
-                self.selenium.wait_for_page_to_load(self.timeout)
+            self.selenium.open(self.base_url)
+            self.selenium.wait_for_page_to_load(self.timeout)
             self.selenium.window_maximize()
 
     def report_length(self, days):
@@ -118,24 +109,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.selenium.click(self._first_product_top_crashers_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
         return CrashReportList(self.testsetup)
-
-    @property
-    def product_list(self):
-        return self.selenium.get_select_options(self._product_select)
-
-    @property
-    def current_versions(self):
-        current_versions = []
-        for i in range(self.selenium.get_css_count(self._current_versions_locator)):
-            current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
-        return current_versions
-
-    @property
-    def other_versions(self):
-        other_versions = []
-        for i in range(self.selenium.get_css_count(self._other_versions_locator)):
-            other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
-        return other_versions
 
     @property
     def first_signature(self):
