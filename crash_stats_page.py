@@ -552,7 +552,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _result_rows = "css=table#signatureList > tbody > tr"
 
-    _current_days_filter_locator = "css=div[id='duration-nav']:nth(0) ul li a.bold"
+    _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
 
     def __init__(self, testsetup):
         self.sel = testsetup.selenium
