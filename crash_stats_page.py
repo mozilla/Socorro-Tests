@@ -40,14 +40,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from selenium import selenium
-from selenium.common.exceptions import NoSuchElementException
 import re
 import time
-import base64
+from selenium.common.exceptions import NoSuchElementException
 from page import Page
-
-from mozwebqa.mozwebqa import TestSetup
 from version import FirefoxVersion
 
 
@@ -288,8 +284,8 @@ class CrashReportList(CrashStatsBasePage):
     _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
     _signature_text_locator = _signature_locator + " span"
 
-    _default_filter_type_locator = "css=div[id='duration-nav']:nth(1) ul li a.bold"
-    _plugin_filter_locator = "css=div[id='duration-nav']:nth(1) ul li a:contains('Plugin')"
+    _default_filter_type_locator = "css=ul.tc-duration-type li a.selected"
+    _plugin_filter_locator = "css=ul.tc-duration-type li a:contains('Plugin')"
 
     _signature_table_locator = "css=#signatureList .signature"
     _first_signature_table_locator = "css=#signatureList .signature:nth(0)"

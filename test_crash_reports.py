@@ -38,14 +38,12 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from crash_stats_page import CrashStatsHomePage
-from crash_stats_page import CrashStatsAdvancedSearch
-from crash_stats_page import CrashStatsPerActiveDailyUser
-from crash_stats_page import CrashStatsNightlyBuilds
-from crash_stats_page import ProductsLinksPage
-from unittestzero import Assert
 import pytest
 import re
+from unittestzero import Assert
+from crash_stats_page import CrashStatsHomePage
+from crash_stats_page import ProductsLinksPage
+
 
 xfail = pytest.mark.xfail
 prod = pytest.mark.prod
