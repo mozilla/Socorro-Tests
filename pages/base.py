@@ -74,10 +74,8 @@ class CrashStatsBasePage(Page):
     def current_details(self):
         details = {}
         details['product'] = self.header.current_product
-        try:
-            details['versions'] = self.header.current_versions
-        except:
-            details['versions'] = []
+        details['versions'] = self.header.current_versions
+        
         return details
 
     @property

@@ -349,7 +349,6 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-#            csp.header.select_product(product_name)
 
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
         """
