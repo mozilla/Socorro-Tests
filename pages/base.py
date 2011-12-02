@@ -63,7 +63,7 @@ class CrashStatsBasePage(Page):
 
     def get_url_path(self, path):
         self.selenium.open(path)
-    
+
     def click_server_status(self):
         self.selenium.click(self._server_status_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
@@ -75,13 +75,13 @@ class CrashStatsBasePage(Page):
         details = {}
         details['product'] = self.header.current_product
         details['versions'] = self.header.current_versions
-        
+
         return details
 
     @property
     def header(self):
         return self.Header(self)
-    
+
     class Header(Page):
         _find_crash_id_or_signature = 'id=q'
         _product_select = 'id=products_select'
@@ -89,9 +89,9 @@ class CrashStatsBasePage(Page):
         _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
         _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
         _report_select = 'id=report_select'
-        
+
         _advanced_search_locator = 'link=Advanced Search'
-        
+
         @property
         def current_product(self):
             return self.selenium.get_selected_value(self._product_select)
@@ -103,7 +103,7 @@ class CrashStatsBasePage(Page):
             for i in range(self.selenium.get_css_count(self._current_versions_locator)):
                 current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
             return current_versions
-    
+
         @property
         def other_versions(self):
             from pages.version import FirefoxVersion
@@ -122,14 +122,14 @@ class CrashStatsBasePage(Page):
             '''
             self.selenium.select(self._product_select, application)
             self.selenium.wait_for_page_to_load(self.timeout)
-    
+
         def select_version(self, version):
             '''
                 Select the version of the application you want to report on
             '''
             self.selenium.select(self._product_version_select, version)
             self.selenium.wait_for_page_to_load(self.timeout)
-    
+
         def select_report(self, report_name):
             '''
                 Select the report type from the drop down
