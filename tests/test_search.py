@@ -47,7 +47,7 @@ class TestSearchForIdOrSignature:
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        results = csp.search_for_crash("this won't exist")
+        results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found, results.get_url_current_page())
 
     @xfail(reason="Temporarily xfailing until https://www.pivotaltracker.com/story/show/19070579 is written, to cover 2 weeks' worth of data")
@@ -60,7 +60,7 @@ class TestSearchForIdOrSignature:
         reportlist = csp.click_first_product_top_crashers_link()
         signature = reportlist.first_valid_signature
 
-        result = csp.search_for_crash(signature)
+        result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found, result.get_url_current_page())
 
     @xfail(reason="Disabled till bug 652880 is fixed")
