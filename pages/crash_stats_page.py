@@ -40,12 +40,9 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import re
-import time
-from mozwebqa.mozwebqa import TestSetup
+from selenium.common.exceptions import NoSuchElementException
 from pages.page import Page
 from pages.base import CrashStatsBasePage
-from selenium.common.exceptions import NoSuchElementException
 from version import FirefoxVersion
 
 
@@ -54,12 +51,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     '''
-    _find_crash_id_or_signature = 'id=q'
-    _product_select = 'id=products_select'
-    _product_version_select = 'id=product_version_select'
-    _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
-    _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
-    _report_select = 'id=report_select'
     _first_product_top_crashers_link_locator = 'css=#release_channels .release_channel:first li:first a'
     _first_signature_locator = 'css=div.crash > p > a'
     _second_signature_locator = 'css=.crash:nth(2) > p > a'
@@ -77,17 +68,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
         CrashStatsBasePage.__init__(self, testsetup)
 
         if product is None:
+            #self.selenium.open(self.base_url)
             self.selenium.open('/')
-            count = 0
-            while not re.search(r'http?\w://.*/products/.*', self.selenium.get_location(), re.U):
-                time.sleep(1)
-                count += 1
-                if count == 20:
-                    raise Exception("Home Page has not loaded")
-
-            if not self.selenium.get_title() == 'Crash Data for Firefox':
-                self.selenium.select(self._product_select, 'Firefox')
-                self.selenium.wait_for_page_to_load(self.timeout)
+            self.selenium.wait_for_page_to_load(self.timeout)
             self.selenium.window_maximize()
 
     def report_length(self, days):
@@ -98,15 +81,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.selenium.wait_for_page_to_load(self.timeout)
         self.wait_for_element_present('xpath=//a[text()="'
                                                 + days + ' days" and @class="selected"]')
-
-    def search_for_crash(self, crash_id_or_signature):
-        '''
-            Type the signature or the id of a bug into the search bar and submit the form
-        '''
-        self.selenium.type(self._find_crash_id_or_signature, crash_id_or_signature)
-        self.selenium.key_press(self._find_crash_id_or_signature, "\\13")
-        self.selenium.wait_for_page_to_load(self.timeout)
-        return CrashStatsAdvancedSearch(self.testsetup)
 
     def click_on_top_(self, element):
         topElement = 'link=Top ' + element
@@ -120,24 +94,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         self.selenium.click(self._first_product_top_crashers_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
         return CrashReportList(self.testsetup)
-
-    @property
-    def product_list(self):
-        return self.selenium.get_select_options(self._product_select)
-
-    @property
-    def current_versions(self):
-        current_versions = []
-        for i in range(self.selenium.get_css_count(self._current_versions_locator)):
-            current_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._current_versions_locator, i))))
-        return current_versions
-
-    @property
-    def other_versions(self):
-        other_versions = []
-        for i in range(self.selenium.get_css_count(self._other_versions_locator)):
-            other_versions.append(FirefoxVersion(self.selenium.get_text('%s:nth(%i)' % (self._other_versions_locator, i))))
-        return other_versions
 
     @property
     def first_signature(self):
@@ -499,7 +455,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _filter_plugin = "link=Plugin"
 
     _result_rows = "css=table#signatureList > tbody > tr"
-
     _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
 
     @property

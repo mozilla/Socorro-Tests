@@ -49,7 +49,7 @@ class TestSpecificVersions:
 
         details = csp.current_details
         if len(details['versions']) > 0:
-            csp.select_version(details['versions'][1])
+            csp.header.select_version(details['versions'][1])
 
         report_list = csp.click_first_product_top_crashers_link()
         report = report_list.click_first_valid_signature()
@@ -60,5 +60,6 @@ class TestSpecificVersions:
             report = report.get_row(count)
             product = report.product
             version = report.version
+
             Assert.equal(product, details['product'], report.get_url_current_page())
-            Assert.contains(version, details['versions'][1])
+            Assert.contains(version, str(details['versions'][1]))

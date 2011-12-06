@@ -57,7 +57,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         page_title = csp.page_title
         Assert.true('Firefox' in page_title)
-        crash_adu = csp.select_report("Crashes per User")
+        crash_adu = csp.header.select_report("Crashes per User")
         details = csp.current_details
         report_product = crash_adu.product_select
         Assert.equal(details['product'], report_product, csp.get_url_current_page())
@@ -77,7 +77,7 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
-        cstc = csp.select_report('Top Crashers')
+        cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
             Assert.equal(details['product'], cstc.product_header, cstc.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
@@ -98,7 +98,7 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
-        cstc = csp.select_report('Top Crashers by URL')
+        cstc = csp.header.select_report('Top Crashers by URL')
         Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
@@ -119,7 +119,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
+            cstc = csp.header.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
@@ -140,7 +140,7 @@ class TestCrashReports:
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
-        cstc = csp.select_report('Top Crashers')
+        cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
             Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
 
@@ -150,7 +150,7 @@ class TestCrashReports:
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        nightly_builds_page = csp.select_report('Nightly Builds')
+        nightly_builds_page = csp.header.select_report('Nightly Builds')
         Assert.equal(nightly_builds_page.product_header, 'Nightly Builds for Firefox')
 
         website_link = nightly_builds_page.link_to_ftp
@@ -177,7 +177,7 @@ class TestCrashReports:
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
-        cstc = csp.select_report('Top Crashers')
+        cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
             Assert.equal(details['product'], cstc.product_header)
 
@@ -191,7 +191,7 @@ class TestCrashReports:
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         details = csp.current_details
-        cstc = csp.select_report('Top Crashers')
+        cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
             Assert.equal(details['product'], cstc.product_header)
 
@@ -205,8 +205,8 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.current_details['versions']:
             if csp.results_found:
-                csp.select_version(version)
-                cstc = csp.select_report('Top Changers')
+                csp.header.select_version(version)
+                cstc = csp.header.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
 
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
@@ -214,7 +214,7 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/17141439
         """
         csp = CrashStatsHomePage(mozwebqa)
-        crash_per_user = csp.select_report('Crashes per User')
+        crash_per_user = csp.header.select_report('Crashes per User')
         crash_per_user.type_start_date('1995-01-01')
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
@@ -292,65 +292,63 @@ class TestCrashReports:
 
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
         page_title = csp.page_title
         Assert.true(product_name in page_title)
         if csp.results_found:
-            crash_adu = csp.select_report("Crashes per User")
+            crash_adu = csp.header.select_report("Crashes per User")
             details = csp.current_details
             report_product = crash_adu.product_select
             Assert.equal(details['product'], report_product)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers')
+            cstc = csp.header.select_report('Top Crashers')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
 
         for top_crasher in csp.top_crashers:
             top_crasher_name = top_crasher.version_name
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             csp = CrashStatsHomePage(mozwebqa)
-            csp.select_product(product_name)
 
     def _verify_current_version_selected_in_top_crashers_by_url_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers by URL')
+            cstc = csp.header.select_report('Top Crashers by URL')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def _verify_current_version_selected_in_top_crashers_by_domain_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
         if csp.results_found:
             details = csp.current_details
-            cstc = csp.select_report('Top Crashers by Domain')
+            cstc = csp.header.select_report('Top Crashers by Domain')
             Assert.equal(details['product'], cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
     def _verify_results_are_returned(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.select_product(product_name)
+        csp.header.select_product(product_name)
 
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
-            csp.select_product(product_name)
 
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
         """
