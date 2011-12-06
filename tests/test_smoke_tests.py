@@ -67,7 +67,7 @@ class TestSmokeTests:
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cssearch = csp.header.click_advanced_search()
-        nav_product_list = csp.product_list
+        nav_product_list = csp.header.product_list
         search_product_list = cssearch.product_list
         Assert.equal(len(nav_product_list), len(search_product_list), csp.get_url_current_page())
         for i, prod_item in enumerate(nav_product_list):
