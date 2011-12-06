@@ -205,8 +205,8 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.current_details['versions']:
             if csp.results_found:
-                csp.select_version(version)
-                cstc = csp.select_report('Top Changers')
+                csp.header.select_version(version)
+                cstc = csp.header.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
 
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
