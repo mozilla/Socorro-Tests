@@ -289,13 +289,10 @@ class TestCrashReports:
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
-        page_title = csp.page_title
-        Assert.true(product_name in page_title)
+        Assert.contains(product_name, csp.page_title)
         if csp.results_found:
             crash_adu = csp.header.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+            Assert.equal(csp.header.current_product, crash_adu.product_select)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
