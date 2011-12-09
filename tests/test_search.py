@@ -167,7 +167,6 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         if cs_advanced.results_found:
             cs_advanced.click_plugin_filename_header()
-            print cs_advanced.plugin_filename_results_list()
             Assert.is_sorted_ascending(cs_advanced.plugin_filename_results_list())
 
             cs_advanced.click_plugin_filename_header()
