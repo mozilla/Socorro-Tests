@@ -19,7 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
+# Contributor(s): David Burns, Schalk Neethling(espressive)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -129,7 +129,7 @@ class TestSearchForIdOrSignature:
             Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
 
     @prod
-    def test_that_filter_for_browser_or_plugin_filters_results(self, mozwebqa):
+    def test_that_filter_for_browser_results(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -142,8 +142,17 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_browser_icon_present:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
-
+        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())        
+        
+    @prod
+    def test_that_plugin_filters_result(self, mozwebqa):
+        #https://www.pivotaltracker.com/story/show/17769047
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_advanced = csp.header.click_advanced_search()
+        cs_advanced.adv_select_product('Firefox')
+        cs_advanced.adv_select_version('Firefox 10.0a2')
+        cs_advanced.adv_select_os('Windows')
+        
         cs_advanced.select_radion_button(2)
         cs_advanced.filter_reports()
 
