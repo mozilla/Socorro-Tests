@@ -143,7 +143,7 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_browser_icon_present:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_browser_icon_visibile, cs_advanced.get_url_current_page())
+        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
 
         cs_advanced.select_radion_button(2)
         cs_advanced.filter_reports()
