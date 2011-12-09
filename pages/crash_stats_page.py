@@ -413,6 +413,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.selenium.click(self._plugin_filename_header_locator)
 
     def plugin_filename_results_list(self):
+        # TODO remove lower() pending resolution of: https://github.com/AutomatedTester/unittest-zero/issues/9
         return [(self.selenium.get_text('%s tr:nth(%s) > td:nth-child(3)' % (self._data_table, (i + 1)))).lower() for i in range(0, self.results_count)]
 
 
