@@ -12,51 +12,52 @@ You will need a version of the [Java Runtime Environment][JRE] installed
 [JRE]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 ### Python
-Before you will be able to run these tests you will need to have Python 2.6 installed.
+Before you're able to run these tests, you'll need to have Python 2.6 installed.
 
-Run
+Run:
 
     easy_install pip
 
-followed by
+followed by:
 
     sudo pip install -r requirements.txt
 
 __note__
 
-If you are running on Ubuntu/Debian you will need to do following first
+If you are running on Ubuntu/Debian, you will need to first do:
 
     sudo apt-get install python-setuptools
-    
+
 to install the required Python libraries.
 
 ### Selenium
-Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-2.5.0.jar'
+Once this is all set up, you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-2.x.x.jar',
+where "2.x.x" is the latest shipping version #.
 
 To start the Selenium server run the following command:
 
-    java -jar ~/Downloads/selenium-server-standalone-2.5.0.jar
+    java -jar ~/Downloads/selenium-server-standalone-2.x.x.jar
 
-Change the path/name to the downloaded Selenium server file.
+Change the path/name to the downloaded Selenium-server file.
 
 [Selenium Downloads]: http://code.google.com/p/selenium/downloads/list
 
 ### Running tests locally
 
-To run tests locally it's a simple case of calling py.test from the Socorro-tests directory
-<br />You should specify the following  argument for the selenium rc: --api=rc
-<br />The base URL should be a valid instance of crash-stats-dev: --baseurl=http://crash-stats-dev.allizom.org
+1. To run tests locally, simply call py.test from the Socorro-tests directory
+2. You should specify the following argument for Selenium RC: --api=rc
+3. The base URL should be a valid instance of crash-stats-dev: --baseurl=http://crash-stats-dev.allizom.org
 
     py.test --api=rc --baseurl=http://example.com
 
-For other instructions type py.test --help .
+For other instructions, type py.test --help.
 
 
 Writing Tests
 -------------
 
-If you want to get involved and add more tests then there's just a few things
-we'd like to ask you to do:
+If you want to get involved and add more tests, then there are just a few things
+we'd like to ask that you do:
 
 1. Use the [template files][GitHub Templates] for all new tests and page objects
 2. Follow our simple [style guide][Style Guide]
