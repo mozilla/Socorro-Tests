@@ -318,6 +318,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_signature_browser_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.browser'
     _data_table_signature_plugin_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.plugin'
     _next_locator = 'css=.pagination>a:contains("Next") '
+    _plugin_filename_header_locator = "css=table#signatureList > thead th:contains('Plugin Filename')"
 
     def __init__(self, testsetup):
         '''
@@ -375,6 +376,13 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         except NoSuchElementException:
             return False
 
+    @property
+    def results_count(self):
+        try:
+            return self.selenium.get_css_count("%s > tbody > tr" % self._data_table)
+        except NoSuchElementException:
+            return 0
+
     def query_results_text(self, lookup):
         return self.selenium.get_text(self._query_results_text + ":nth(%s)" % lookup)
 
@@ -400,6 +408,12 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def click_next(self):
         self.selenium.click(self._next_locator)
         self.wait_for_element_present(self._data_table)
+
+    def click_plugin_filename_header(self):
+        self.selenium.click(self._plugin_filename_header_locator)
+
+    def plugin_filename_results_list(self):
+        return [(self.selenium.get_text(self._data_table + ' tr:nth(%s) > td:nth-child(3)' % (i + 1))).lower() for i in range(0, self.results_count)]
 
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
