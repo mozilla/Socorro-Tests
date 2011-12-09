@@ -136,14 +136,14 @@ class TestCrashReports:
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
+            Assert.equal(product, cstc.product_header, csp.get_url_current_page())
 
         cstc.click_filter_all()
         results = cstc.count_results
-        Assert.true(results > 0, "%s results found, expected >0" % results)
+        Assert.greater(results, 0)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
