@@ -187,14 +187,13 @@ class TestCrashReports:
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_plugin()
-        results = cstc.count_results
-        Assert.true(results > 0, "%s results found, expected >0" % results)
+        Assert.greater(cstc.count_results, 0)
 
     @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
