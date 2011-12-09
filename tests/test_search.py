@@ -136,11 +136,12 @@ class TestSearchForIdOrSignature:
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('Firefox 10.0a2')
         cs_advanced.adv_select_os('Windows')
-        cs_advanced.select_radion_button(1)
+        cs_advanced.select_radio_button(1)
         cs_advanced.filter_reports()
 
         while not cs_advanced.is_browser_icon_present:
             cs_advanced.click_next()
+
 
         Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())        
         
@@ -153,7 +154,8 @@ class TestSearchForIdOrSignature:
         cs_advanced.adv_select_version('Firefox 10.0a2')
         cs_advanced.adv_select_os('Windows')
         
-        cs_advanced.select_radion_button(2)
+        cs_advanced.select_radio_button(2)
+
         cs_advanced.filter_reports()
 
         while not cs_advanced.is_plugin_icon_present:
