@@ -199,7 +199,7 @@ class TestCrashReports:
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         csp = CrashStatsHomePage(mozwebqa)
-        for version in csp.current_details['versions']:
+        for version in csp.header.current_versions:
             if csp.results_found:
                 csp.header.select_version(version)
                 cstc = csp.header.select_report('Top Changers')
