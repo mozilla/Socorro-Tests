@@ -382,7 +382,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         self.selenium.check(self._radio_items_locator + ":nth(%s)" % lookup)
 
     @property
-    def is_plugin_icon_visibile(self):
+    def is_plugin_icon_visible(self):
         return self.selenium.is_visible(self._data_table_signature_plugin_icon_locator)
 
     @property
@@ -390,7 +390,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return self.selenium.is_element_present(self._data_table_signature_plugin_icon_locator)
 
     @property
-    def is_browser_icon_visibile(self):
+    def is_browser_icon_visible(self):
         return self.selenium.is_visible(self._data_table_signature_browser_icon_locator)
 
     @property
