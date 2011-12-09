@@ -151,3 +151,24 @@ class TestSearchForIdOrSignature:
             cs_advanced.click_next()
 
         Assert.true(cs_advanced.is_plugin_icon_visibile, cs_advanced.get_url_current_page())
+
+    @prod
+    def test_that_plugin_filename_column_sorts(self, mozwebqa):
+        """
+        https://bugzilla.mozilla.org/show_bug.cgi?id=562380
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_advanced = csp.header.click_advanced_search()
+
+        cs_advanced.adv_select_product('Firefox')
+        cs_advanced.adv_select_version('All')
+        cs_advanced.select_radion_button(2)
+        cs_advanced.filter_reports()
+        if cs_advanced.results_found:
+            cs_advanced.click_plugin_filename_header()
+            Assert.is_sorted_ascending(cs_advanced.plugin_filename_results_list())
+
+            cs_advanced.click_plugin_filename_header()
+            Assert.is_sorted_descending(cs_advanced.plugin_filename_results_list())
+        else:
+            Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
