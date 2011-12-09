@@ -318,9 +318,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
         if csp.results_found:
-            details = csp.current_details
+            product = csp.header.current_product
             cstc = csp.header.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
