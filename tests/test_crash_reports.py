@@ -55,12 +55,9 @@ class TestCrashReports:
 
     def test_that_reports_form_has_same_product_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        page_title = csp.page_title
-        Assert.true('Firefox' in page_title)
+        Assert.contains('Firefox', csp.page_title)
         crash_adu = csp.header.select_report("Crashes per User")
-        details = csp.current_details
-        report_product = crash_adu.product_select
-        Assert.equal(details['product'], report_product, csp.get_url_current_page())
+        Assert.equal(csp.header.current_product, crash_adu.product_select, csp.get_url_current_page())
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
         self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
