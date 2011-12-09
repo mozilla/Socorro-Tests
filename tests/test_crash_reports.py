@@ -142,8 +142,7 @@ class TestCrashReports:
             Assert.equal(product, cstc.product_header, csp.get_url_current_page())
 
         cstc.click_filter_all()
-        results = cstc.count_results
-        Assert.greater(results, 0)
+        Assert.greater(cstc.count_results, 0)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -179,8 +178,7 @@ class TestCrashReports:
             Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_browser()
-        results = cstc.count_results
-        Assert.greater(results, 0)
+        Assert.greater(cstc.count_results, 0)
 
     @prod
     @xfail(reason='Disabled until Bug 700628 is fixed')
