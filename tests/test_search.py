@@ -150,7 +150,7 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_plugin_icon_present:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_plugin_icon_visibile, cs_advanced.get_url_current_page())
+        Assert.true(cs_advanced.is_plugin_icon_visible, cs_advanced.get_url_current_page())
 
     @prod
     def test_that_plugin_filename_column_sorts(self, mozwebqa):
