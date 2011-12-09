@@ -63,7 +63,6 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found, result.get_url_current_page())
 
-    @xfail(reason="Disabled till bug 652880 is fixed")
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
