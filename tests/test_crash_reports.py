@@ -114,10 +114,10 @@ class TestCrashReports:
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
+        product = csp.header.current_product
+        cstc = csp.header.select_report('Top Crashers by Domain')
         if csp.results_found:
-            details = csp.current_details
-            cstc = csp.header.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
+            Assert.equal(product, cstc.product_header, csp.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
