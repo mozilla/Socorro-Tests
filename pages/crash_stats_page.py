@@ -25,6 +25,7 @@
 #   Bebe <florin.strugariu@softvision.ro>
 #   Dave Hunt <dhunt@mozilla.com>
 #   Alin Trif <alin.trif@softvision.ro>
+#   Rajeev N B <coder.rshetty@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -386,7 +387,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def query_results_text(self, lookup):
         return self.selenium.get_text(self._query_results_text + ":nth(%s)" % lookup)
 
-    def select_radion_button(self, lookup):
+    def select_radio_button(self, lookup):
         self.selenium.check(self._radio_items_locator + ":nth(%s)" % lookup)
 
     @property
