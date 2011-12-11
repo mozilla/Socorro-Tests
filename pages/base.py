@@ -48,6 +48,7 @@ class CrashStatsBasePage(Page):
 
     _page_heading = 'css=div.page-heading > h2'
     _server_status_locator = 'link=Server Status'
+    _link_to_bugzilla = 'css=.panel a'
 
     @property
     def page_title(self):
@@ -77,6 +78,10 @@ class CrashStatsBasePage(Page):
         details['versions'] = self.header.current_versions
 
         return details
+
+    @property
+    def link_to_bugzilla(self):
+        return self.selenium.get_attribute("%s@href" % self._link_to_bugzilla)
 
     @property
     def header(self):
