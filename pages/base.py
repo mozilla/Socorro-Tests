@@ -71,14 +71,6 @@ class CrashStatsBasePage(Page):
         return CrashStatsStatus(self.testsetup)
 
     @property
-    def current_details(self):
-        details = {}
-        details['product'] = self.header.current_product
-        details['versions'] = self.header.current_versions
-
-        return details
-
-    @property
     def header(self):
         return self.Header(self)
 
