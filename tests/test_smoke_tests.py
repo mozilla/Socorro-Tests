@@ -40,6 +40,7 @@
 from pages.crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
 import pytest
+import urllib
 xfail = pytest.mark.xfail
 
 
@@ -158,6 +159,12 @@ class TestSmokeTests:
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
-        import urllib
         response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
         Assert.equal(404, response.getcode())
+
+    def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
+        ''' Bug 631737 '''
+        csp = CrashStatsHomePage(mozwebqa)
+        path = '/invaliddomain'
+        csp.get_url_path(path)
+        Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
