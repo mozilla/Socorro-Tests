@@ -72,14 +72,6 @@ class CrashStatsBasePage(Page):
         return CrashStatsStatus(self.testsetup)
 
     @property
-    def current_details(self):
-        details = {}
-        details['product'] = self.header.current_product
-        details['versions'] = self.header.current_versions
-
-        return details
-
-    @property
     def link_to_bugzilla(self):
         return self.selenium.get_attribute("%s@href" % self._link_to_bugzilla)
 

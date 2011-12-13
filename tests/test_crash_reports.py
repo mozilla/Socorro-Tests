@@ -55,12 +55,9 @@ class TestCrashReports:
 
     def test_that_reports_form_has_same_product_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        page_title = csp.page_title
-        Assert.true('Firefox' in page_title)
+        Assert.contains('Firefox', csp.page_title)
         crash_adu = csp.header.select_report("Crashes per User")
-        details = csp.current_details
-        report_product = crash_adu.product_select
-        Assert.equal(details['product'], report_product, csp.get_url_current_page())
+        Assert.equal(csp.header.current_product, crash_adu.product_select, csp.get_url_current_page())
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
         self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
@@ -76,10 +73,10 @@ class TestCrashReports:
 
     def test_that_current_version_selected_in_top_crashers_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header, cstc.get_url_current_page())
+            Assert.equal(product, cstc.product_header, cstc.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -97,9 +94,9 @@ class TestCrashReports:
 
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers by URL')
-        Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
+        Assert.equal(product, cstc.product_header, csp.get_url_current_page())
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -117,10 +114,10 @@ class TestCrashReports:
 
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
+        product = csp.header.current_product
+        cstc = csp.header.select_report('Top Crashers by Domain')
         if csp.results_found:
-            details = csp.current_details
-            cstc = csp.header.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
+            Assert.equal(product, cstc.product_header, csp.get_url_current_page())
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -139,14 +136,13 @@ class TestCrashReports:
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header, csp.get_url_current_page())
+            Assert.equal(product, cstc.product_header, csp.get_url_current_page())
 
         cstc.click_filter_all()
-        results = cstc.count_results
-        Assert.true(results > 0, "%s results found, expected >0" % results)
+        Assert.greater(cstc.count_results, 0)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -176,34 +172,32 @@ class TestCrashReports:
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_browser()
-        results = cstc.count_results
-        Assert.true(results > 0, "%s results found, expected >0" % results)
+        Assert.greater(cstc.count_results, 0)
 
     @prod
     @xfail(reason='Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
-        details = csp.current_details
+        product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_plugin()
-        results = cstc.count_results
-        Assert.true(results > 0, "%s results found, expected >0" % results)
+        Assert.greater(cstc.count_results, 0)
 
     @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         csp = CrashStatsHomePage(mozwebqa)
-        for version in csp.current_details['versions']:
+        for version in csp.header.current_versions:
             if csp.results_found:
                 csp.header.select_version(version)
                 cstc = csp.header.select_report('Top Changers')
@@ -293,21 +287,18 @@ class TestCrashReports:
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
-        page_title = csp.page_title
-        Assert.true(product_name in page_title)
+        Assert.contains(product_name, csp.page_title)
         if csp.results_found:
             crash_adu = csp.header.select_report("Crashes per User")
-            details = csp.current_details
-            report_product = crash_adu.product_select
-            Assert.equal(details['product'], report_product)
+            Assert.equal(csp.header.current_product, crash_adu.product_select)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
         if csp.results_found:
-            details = csp.current_details
+            product = csp.header.current_product
             cstc = csp.header.select_report('Top Crashers')
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -325,9 +316,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
         if csp.results_found:
-            details = csp.current_details
+            product = csp.header.current_product
             cstc = csp.header.select_report('Top Crashers by URL')
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
@@ -335,9 +326,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
         if csp.results_found:
-            details = csp.current_details
+            product = csp.header.current_product
             cstc = csp.header.select_report('Top Crashers by Domain')
-            Assert.equal(details['product'], cstc.product_header)
+            Assert.equal(product, cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 

@@ -47,19 +47,16 @@ class TestSpecificVersions:
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        details = csp.current_details
-        if len(details['versions']) > 0:
-            csp.header.select_version(details['versions'][1])
+        product = csp.header.current_product
+        versions = csp.header.current_versions
+
+        if len(versions) > 0:
+            csp.header.select_version(versions[1])
 
         report_list = csp.click_first_product_top_crashers_link()
         report = report_list.click_first_valid_signature()
 
-        count = 0
-        while count < report.row_count:
-            count += 1
-            report = report.get_row(count)
-            product = report.product
-            version = report.version
-
-            Assert.equal(product, details['product'], report.get_url_current_page())
-            Assert.contains(version, str(details['versions'][1]))
+        for i in range(report.row_count):
+            report = report.get_row(i + 1)
+            Assert.equal(report.product, product, report.get_url_current_page())
+            Assert.contains(report.version, str(versions[1]))
