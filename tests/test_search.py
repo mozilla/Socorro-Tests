@@ -173,7 +173,7 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.select_radion_button(2)
+        cs_advanced.select_radio_button(2)
         cs_advanced.filter_reports()
         if cs_advanced.results_found:
             cs_advanced.click_plugin_filename_header()
