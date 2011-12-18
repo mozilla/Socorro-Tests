@@ -62,7 +62,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _heading_locator = "css=.page-heading h2"
     _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
-    def __init__(self, testsetup, product=None):
+    def __init__(self, testsetup, product = None):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
@@ -254,7 +254,7 @@ class CrashReport(CrashStatsBasePage):
     _version_locator = " td:nth-of-type(4)"
     _row_locator = "css=#reportsList tbody tr"
 
-    def __init__(self, testsetup, index, signature=None):
+    def __init__(self, testsetup, index, signature = None):
         CrashStatsBasePage.__init__(self, testsetup)
         self.index = index
         self._signature = signature
