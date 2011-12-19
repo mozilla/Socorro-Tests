@@ -61,14 +61,18 @@ class TestLayout:
         Assert.is_sorted_descending(csp.header.current_versions, csp.get_url_current_page())
         Assert.is_sorted_descending(csp.header.other_versions, csp.get_url_current_page())
 
-    def test_that_report_topcrasher_correlation_are_not_returning_http500(self, mozwebqa):
+    def test_that_topcrasher_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/topcrasher')
         Assert.contains('Top Crashers', csp.get_page_name)
         Assert.true(csp.results_found(), 'No results found!')
 
+    def test_that_report_is_not_returning_http500(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/report')
         Assert.contains('Page not Found', csp.get_page_name)
 
+    def test_that_correlation_is_not_returning_http500(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/correlation')
         Assert.contains('Page not Found', csp.get_page_name)
