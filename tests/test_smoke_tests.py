@@ -162,6 +162,7 @@ class TestSmokeTests:
         response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
         Assert.equal(404, response.getcode())
 
+    @xfail(reason="Bug 631737")
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         ''' Bug 631737 '''
         csp = CrashStatsHomePage(mozwebqa)
