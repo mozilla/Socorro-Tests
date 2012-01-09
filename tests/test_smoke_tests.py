@@ -49,20 +49,10 @@ class TestSmokeTests:
     def test_that_server_status_page_loads(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csstat = csp.click_server_status()
-        try:
-            csstat.at_a_glance()
-        except Exception, e:
-            Assert.fail(str(e))
 
-        try:
-            csstat.graphs()
-        except Exception, e:
-            Assert.fail(str(e))
-
-        try:
-            csstat.latest_raw_stats()
-        except Exception, e:
-            Assert.fail(str(e))
+        Assert.true(csstat.is_at_a_glance_present(), 'Server summary not found')
+        Assert.true(csstat.are_graphs_present(), '4 graphs not found')
+        Assert.true(csstat.is_latest_raw_stats_present(), 'Raw stats not found')
 
     @xfail(reason="Disabled till Bug 612679 is fixed")
     def test_that_options_are_sorted_the_same(self, mozwebqa):
