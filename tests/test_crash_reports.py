@@ -161,7 +161,7 @@ class TestCrashReports:
         products_page = ProductsLinksPage(mozwebqa)
         #An extra check that products page is loaded
         Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
-        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid']
 
         for product in products:
             csp = products_page.click_product(product)
