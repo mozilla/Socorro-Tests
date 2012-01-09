@@ -463,8 +463,8 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
 class CrashStatsTopCrashers(CrashStatsBasePage):
 
-    _product_header = 'css=h2 > span#current-product'
-    _product_version_header = 'css=h2 > span.current-version'
+    _product_header = 'id=current-product'
+    _product_version_header = 'id=current-version'
 
     _filter_all = "link=All"
     _filter_browser = "link=Browser"
