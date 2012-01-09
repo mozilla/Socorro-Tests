@@ -570,26 +570,18 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
 class CrashStatsStatus(CrashStatsBasePage):
 
-    _page_header = 'css=h2:contains("Server Status")'
-    _at_a_glance_locator = 'css=div.title:contains("At a Glance")'
-    _graphs_locator = 'css=div.title:contains("Graphs")'
-    _latest_raw_stats = 'css=div.title:contains("Latest Raw Stats")'
+    _at_a_glance_locator = 'css=div.panel > div > table.server_status'
+    _graphs_locator = 'css=div.panel > div > div.server-status-graph'
+    _latest_raw_stats = 'css=div.panel > div > table#server-stats-table'
 
-    def __init__(self, testsetup):
-        CrashStatsBasePage.__init__(self, testsetup)
-        self.wait_for_element_present(self._page_header)
+    def is_at_a_glance_present(self):
+        return self.selenium.is_element_present(self._at_a_glance_locator)
 
-    def at_a_glance(self):
-        if not self.selenium.is_element_present(self._at_a_glance_locator):
-            raise Exception(self._at_a_glance_locator + ' is not available')
+    def are_graphs_present(self):
+        return self.selenium.get_css_count(self._graphs_locator) == 4
 
-    def graphs(self):
-        if not self.selenium.is_element_present(self._graphs_locator):
-            raise Exception(self._graphs_locator + ' is not available')
-
-    def latest_raw_stats(self):
-        if not self.selenium.is_element_present(self._graphs_locator):
-            raise Exception(self._latest_raw_stats + ' is not available')
+    def is_latest_raw_stats_present(self):
+        return self.selenium.is_element_present(self._latest_raw_stats)
 
 
 class ProductsLinksPage(CrashStatsBasePage):
