@@ -139,10 +139,10 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_radio_button(1)
         cs_advanced.filter_reports()
 
-        while not cs_advanced.is_browser_icon_present:
-            cs_advanced.click_next()
+        # while not cs_advanced.is_browser_icon_present:
+        #    cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
+        # Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
 
     @prod
     def test_that_plugin_filters_result(self, mozwebqa):
