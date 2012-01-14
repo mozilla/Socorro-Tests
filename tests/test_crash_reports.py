@@ -23,6 +23,7 @@
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alin Trif <alin.trif@softvision.ro>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -181,7 +182,7 @@ class TestCrashReports:
         Assert.greater(cstc.count_results, 0)
 
     @prod
-    @xfail(reason='Disabled until Bug 700628 is fixed')
+    @xfail(reason = 'Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -193,7 +194,7 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.greater(cstc.count_results, 0)
 
-    @xfail(reason="Disabled until Bug 603561 is fixed")
+    @xfail(reason = "Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         csp = CrashStatsHomePage(mozwebqa)
@@ -377,3 +378,15 @@ class TestCrashReports:
         for signature_item in signature_list_items:
             Assert.true(signature_item.is_plugin_icon_visible)
             Assert.false(signature_item.is_browser_icon_present)
+
+    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
+        """
+        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.header.select_version('3.5.13')
+        cstc = csp.header.select_report('Top Crashers')
+        cstc.click_filter_days('14')
+        Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+        cstc.click_filter_plugin()
+        Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
