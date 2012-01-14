@@ -50,7 +50,6 @@ class TestSearchForIdOrSignature:
         results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found, results.get_url_current_page())
 
-    @xfail(reason="Temporarily xfailing until https://www.pivotaltracker.com/story/show/19070579 is written, to cover 2 weeks' worth of data")
     def test_that_search_for_valid_signature(self, mozwebqa):
         '''
             This is a test for
@@ -135,7 +134,7 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
-        cs_advanced.adv_select_version('Firefox 10.0a2')
+        cs_advanced.adv_select_version('Firefox 11.0a2')
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_radio_button(1)
         cs_advanced.filter_reports()
@@ -143,18 +142,17 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_browser_icon_present:
             cs_advanced.click_next()
 
+        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
 
-        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())        
-        
     @prod
     def test_that_plugin_filters_result(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
-        cs_advanced.adv_select_version('Firefox 10.0a2')
+        cs_advanced.adv_select_version('Firefox 9.0.1')
         cs_advanced.adv_select_os('Windows')
-        
+
         cs_advanced.select_radio_button(2)
 
         cs_advanced.filter_reports()

@@ -93,6 +93,7 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, mozwebqa):
         self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Fennec')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
@@ -101,18 +102,23 @@ class TestCrashReports:
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Thunderbird')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'SeaMonkey')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Camino')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Fennec')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
@@ -122,15 +128,19 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Thunderbird')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'SeaMonkey')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Camino')
 
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Fennec')
 
@@ -162,7 +172,7 @@ class TestCrashReports:
         products_page = ProductsLinksPage(mozwebqa)
         #An extra check that products page is loaded
         Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
-        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec']
+        products = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid']
 
         for product in products:
             csp = products_page.click_product(product)
