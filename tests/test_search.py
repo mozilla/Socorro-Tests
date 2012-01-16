@@ -139,6 +139,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_radio_button(1)
         cs_advanced.filter_reports()
 
+        # The following blocks are disabled due to findings from bug 718218
         # while not cs_advanced.is_browser_icon_present:
         #    cs_advanced.click_next()
 
