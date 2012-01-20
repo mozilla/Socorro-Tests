@@ -26,6 +26,7 @@
 #   Dave Hunt <dhunt@mozilla.com>
 #   Alin Trif <alin.trif@softvision.ro>
 #   Rajeev N B <coder.rshetty@gmail.com>
+#   Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -62,7 +63,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _heading_locator = "css=.page-heading h2"
     _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
-    def __init__(self, testsetup, product=None):
+    def __init__(self, testsetup, product = None):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
@@ -254,7 +255,7 @@ class CrashReport(CrashStatsBasePage):
     _version_locator = " td:nth-of-type(4)"
     _row_locator = "css=#reportsList tbody tr"
 
-    def __init__(self, testsetup, index, signature=None):
+    def __init__(self, testsetup, index, signature = None):
         CrashStatsBasePage.__init__(self, testsetup)
         self.index = index
         self._signature = signature
@@ -436,6 +437,7 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     _generate_button_locator = "id=daily_search_version_form_submit"
     _table_locator = "id=crash_data"
     _row_table_locator = "css=#crash_data > tbody > tr"
+    _page_title = 'Crashes per Active Daily User for Firefox'
 
     @property
     def product_select(self):
@@ -447,6 +449,10 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     def click_generate_button(self):
         self.selenium.click(self._generate_button_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_mixed_content_warning_shown(self):
+        return self.selenium.is_alert_present()
 
     @property
     def is_table_visible(self):
