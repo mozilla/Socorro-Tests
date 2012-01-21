@@ -26,6 +26,7 @@
 #   Dave Hunt <dhunt@mozilla.com>
 #   Alin Trif <alin.trif@softvision.ro>
 #   Rajeev N B <coder.rshetty@gmail.com>
+#   Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -495,6 +496,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     def click_filter_plugin(self):
         self.selenium.click(self._filter_plugin)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_filter_days(self, days):
+        '''
+            Click on the link with the amount of days you want to filter by
+        '''
+        self.selenium.click('link=' + days)
         self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
