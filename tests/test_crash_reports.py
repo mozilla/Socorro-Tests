@@ -93,7 +93,7 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_header_for_fennec(self, mozwebqa):
         self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Fennec')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
@@ -102,23 +102,23 @@ class TestCrashReports:
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_thunderbird(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Thunderbird')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_seamonkey(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'SeaMonkey')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_camino(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Camino')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_url_header_for_fennec(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_url_header(mozwebqa, 'Fennec')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
@@ -128,19 +128,19 @@ class TestCrashReports:
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_thunderbird(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Thunderbird')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_seamonkey(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'SeaMonkey')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_camino(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Camino')
 
-    @xfail(reason = "Disabled until Bug 690462 is fixed")
+    @xfail(reason="Disabled until Bug 690462 is fixed")
     def test_that_current_version_selected_in_top_crashers_by_domain_header_for_fennec(self, mozwebqa):
         self._verify_current_version_selected_in_top_crashers_by_domain_header(mozwebqa, 'Fennec')
 
@@ -192,7 +192,7 @@ class TestCrashReports:
         Assert.greater(cstc.count_results, 0)
 
     @prod
-    @xfail(reason = 'Disabled until Bug 700628 is fixed')
+    @xfail(reason='Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -204,7 +204,7 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.greater(cstc.count_results, 0)
 
-    @xfail(reason = "Disabled until Bug 603561 is fixed")
+    @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         csp = CrashStatsHomePage(mozwebqa)
