@@ -192,7 +192,7 @@ class TestCrashReports:
         Assert.greater(cstc.count_results, 0)
 
     @prod
-    @xfail(reason = 'Disabled until Bug 700628 is fixed')
+    @xfail(reason='Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -204,7 +204,7 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.greater(cstc.count_results, 0)
 
-    @xfail(reason = "Disabled until Bug 603561 is fixed")
+    @xfail(reason="Disabled until Bug 603561 is fixed")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
         csp = CrashStatsHomePage(mozwebqa)
@@ -389,6 +389,17 @@ class TestCrashReports:
             Assert.true(signature_item.is_plugin_icon_visible)
             Assert.false(signature_item.is_browser_icon_present)
 
+    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/18049001
+        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        cpu = csp.header.select_report('Crashes per User')
+        cpu.click_generate_button()
+        Assert.true(cpu.is_the_current_page)
+        Assert.false(cpu.is_mixed_content_warning_shown)
+
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=655506
@@ -400,3 +411,4 @@ class TestCrashReports:
         Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
         cstc.click_filter_plugin()
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+

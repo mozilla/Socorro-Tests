@@ -437,6 +437,7 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     _generate_button_locator = "id=daily_search_version_form_submit"
     _table_locator = "id=crash_data"
     _row_table_locator = "css=#crash_data > tbody > tr"
+    _page_title = 'Crashes per Active Daily User for Firefox'
 
     @property
     def product_select(self):
@@ -448,6 +449,10 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     def click_generate_button(self):
         self.selenium.click(self._generate_button_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_mixed_content_warning_shown(self):
+        return self.selenium.is_alert_present()
 
     @property
     def is_table_visible(self):
