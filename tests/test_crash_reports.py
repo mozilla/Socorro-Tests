@@ -399,3 +399,16 @@ class TestCrashReports:
         cpu.click_generate_button()
         Assert.true(cpu.is_the_current_page)
         Assert.false(cpu.is_mixed_content_warning_shown)
+
+    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
+        """
+        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.header.select_version('3.5.13')
+        cstc = csp.header.select_report('Top Crashers')
+        cstc.click_filter_days('14')
+        Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+        cstc.click_filter_plugin()
+        Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+

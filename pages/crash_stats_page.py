@@ -503,6 +503,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         self.selenium.click(self._filter_plugin)
         self.selenium.wait_for_page_to_load(self.timeout)
 
+    def click_filter_days(self, days):
+        '''
+            Click on the link with the amount of days you want to filter by
+        '''
+        self.selenium.click('link=' + days)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
     @property
     def table_results_found(self):
         try:
