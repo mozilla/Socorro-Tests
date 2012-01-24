@@ -26,6 +26,7 @@
 #   Dave Hunt <dhunt@mozilla.com>
 #   Alin Trif <alin.trif@softvision.ro>
 #   Rajeev N B <coder.rshetty@gmail.com>
+#   Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -315,9 +316,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _radio_items_locator = 'css=.radio-item > label > input'
 
-    _data_table_signature_coloumn_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
-    _data_table_signature_browser_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.browser'
-    _data_table_signature_plugin_icon_locator = _data_table_signature_coloumn_locator + ' > div > img.plugin'
+    _data_table_signature_column_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
+    _data_table_signature_browser_icon_locator = _data_table_signature_column_locator + ' > div > img.browser'
+    _data_table_signature_plugin_icon_locator = _data_table_signature_column_locator + ' > div > img.plugin'
     _next_locator = 'css=.pagination>a:contains("Next")'
     _plugin_filename_header_locator = "css=table#signatureList > thead th:contains('Plugin Filename')"
 
@@ -436,6 +437,7 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     _generate_button_locator = "id=daily_search_version_form_submit"
     _table_locator = "id=crash_data"
     _row_table_locator = "css=#crash_data > tbody > tr"
+    _page_title = 'Crashes per Active Daily User for Firefox'
 
     @property
     def product_select(self):
@@ -447,6 +449,10 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
     def click_generate_button(self):
         self.selenium.click(self._generate_button_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_mixed_content_warning_shown(self):
+        return self.selenium.is_alert_present()
 
     @property
     def is_table_visible(self):
@@ -495,6 +501,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     def click_filter_plugin(self):
         self.selenium.click(self._filter_plugin)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_filter_days(self, days):
+        '''
+            Click on the link with the amount of days you want to filter by
+        '''
+        self.selenium.click('link=' + days)
         self.selenium.wait_for_page_to_load(self.timeout)
 
     @property

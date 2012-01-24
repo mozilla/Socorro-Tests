@@ -23,6 +23,7 @@
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alin Trif <alin.trif@softvision.ro>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -387,3 +388,27 @@ class TestCrashReports:
         for signature_item in signature_list_items:
             Assert.true(signature_item.is_plugin_icon_visible)
             Assert.false(signature_item.is_browser_icon_present)
+
+    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/18049001
+        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        cpu = csp.header.select_report('Crashes per User')
+        cpu.click_generate_button()
+        Assert.true(cpu.is_the_current_page)
+        Assert.false(cpu.is_mixed_content_warning_shown)
+
+    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
+        """
+        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csp.header.select_version('3.5.13')
+        cstc = csp.header.select_report('Top Crashers')
+        cstc.click_filter_days('14')
+        Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+        cstc.click_filter_plugin()
+        Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+
