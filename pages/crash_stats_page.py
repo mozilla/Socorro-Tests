@@ -319,7 +319,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_signature_column_locator = 'css=table#signatureList > tbody > tr > td:nth-child(2)'
     _data_table_signature_browser_icon_locator = _data_table_signature_column_locator + ' > div > img.browser'
     _data_table_signature_plugin_icon_locator = _data_table_signature_column_locator + ' > div > img.plugin'
-    _next_locator = 'css=.pagination>a:contains("Next") '
+    _next_locator = 'css=.pagination>a:contains("Next")'
     _plugin_filename_header_locator = "css=table#signatureList > thead th:contains('Plugin Filename')"
 
     def __init__(self, testsetup):
@@ -409,7 +409,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def click_next(self):
         self.selenium.click(self._next_locator)
-        self.wait_for_element_present(self._data_table)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def click_plugin_filename_header(self):
         self.selenium.click(self._plugin_filename_header_locator)
