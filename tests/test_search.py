@@ -129,6 +129,7 @@ class TestSearchForIdOrSignature:
             Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
 
     @prod
+    @xfail(reason="Disabled until bug 720037 is fixed")
     def test_that_filter_for_browser_results(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
