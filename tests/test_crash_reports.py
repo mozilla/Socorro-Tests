@@ -379,7 +379,7 @@ class TestCrashReports:
     def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/18059001
-        https://bugzilla.mozilla.org/show_bug.cgi?id=642580#c0
+        https://bugzilla.mozilla.org/show_bug.cgi?id=642580
         """
         csp = CrashStatsHomePage(mozwebqa)
         csas = csp.header.click_advanced_search()
