@@ -376,3 +376,14 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
+    def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/18059001
+        https://bugzilla.mozilla.org/show_bug.cgi?id=642580#c0
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        csas = csp.header.click_advanced_search()
+        Assert.true(csas.is_the_current_page)
+        csas.build_id_field_input('http://www.google.com')
+        csas.filter_reports()
+        Assert.equal('No results were found.', csas.query_results_text_no_results)
