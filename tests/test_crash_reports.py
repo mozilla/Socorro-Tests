@@ -376,3 +376,11 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
+    def test_that_top_changers_data_is_available(self, mozwebqa):
+        '''
+        https://www.pivotaltracker.com/story/show/18059119
+        '''
+        csp = CrashStatsHomePage(mozwebqa)
+        cstc = csp.header.select_report('Top Changers')
+        Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
+
