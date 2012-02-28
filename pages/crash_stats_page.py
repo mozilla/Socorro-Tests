@@ -271,7 +271,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
 
-    _query_results_text = "css=.body.notitle "
+    _query_results_text = "css=.body.notitle"
+
+    _query_results_text_no_results_locator = "css=.body.notitle:nth(0) p:nth(1)"
 
     _build_id_locator = "css=#build_id"
 
@@ -282,6 +284,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_signature_plugin_icon_locator = _data_table_signature_column_locator + ' > div > img.plugin'
     _next_locator = 'css=.pagination>a:contains("Next")'
     _plugin_filename_header_locator = "css=table#signatureList > thead th:contains('Plugin Filename')"
+    _page_title = 'Query Results - Mozilla Crash Reports'
 
     def __init__(self, testsetup):
         '''
@@ -348,6 +351,10 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def query_results_text(self, lookup):
         return self.selenium.get_text(self._query_results_text + ":nth(%s)" % lookup)
+
+    @property
+    def query_results_text_no_results(self):
+        return self.selenium.get_text(self._query_results_text_no_results_locator)
 
     def select_radio_button(self, lookup):
         self.selenium.check(self._radio_items_locator + ":nth(%s)" % lookup)
