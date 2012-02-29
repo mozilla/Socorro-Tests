@@ -119,8 +119,8 @@ class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
 
     _reports_list_locator = 'css=#signatureList tbody tr'
-    _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(5) a"
-    _signature_text_locator = _signature_locator + " span"
+    _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(4) a"
+    _signature_text_locator = _signature_locator + ".signature"
 
     _default_filter_type_locator = "css=ul.tc-duration-type li a.selected"
     _plugin_filter_locator = "css=ul.tc-duration-type li a:contains('Plugin')"
@@ -185,7 +185,7 @@ class CrashReportList(CrashStatsBasePage):
         return [self.TableRegion(self.testsetup, i) for i in range(self.signature_list_count)]
 
     class TableRegion(Page):
-        _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(5)'
+        _data_table_signature_locator = 'css=table#signatureList > tbody > tr > td:nth-child(4)'
         _data_table_browser_icon_locator = _data_table_signature_locator + ' > div > img.browser'
         _data_table_plugin_icon_locator = _data_table_signature_locator + ' > div > img.plugin'
 
