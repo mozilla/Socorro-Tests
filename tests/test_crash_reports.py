@@ -387,3 +387,11 @@ class TestCrashReports:
         csas.build_id_field_input('http://www.google.com')
         csas.filter_reports()
         Assert.equal('No results were found.', csas.query_results_text_no_results)
+
+    def test_that_top_changers_data_is_available(self, mozwebqa):
+        '''
+        https://www.pivotaltracker.com/story/show/18059119
+        '''
+        csp = CrashStatsHomePage(mozwebqa)
+        cstc = csp.header.select_report('Top Changers')
+        Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
