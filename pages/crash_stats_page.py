@@ -490,34 +490,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.selenium.get_text(self._current_days_filter_locator)
 
 
-class CrashStatsTopCrashersByUrl(CrashStatsBasePage):
-
-    _product_header = 'id=tcburl-product'
-    _product_version_header = 'id=tcburl-version'
-
-    @property
-    def product_header(self):
-        return self.selenium.get_text(self._product_header)
-
-    @property
-    def product_version_header(self):
-        return self.selenium.get_text(self._product_version_header)
-
-
-class CrashStatsTopCrashersByDomain(CrashStatsBasePage):
-
-    _product_header = 'id=tcburl-product'
-    _product_version_header = 'id=tcburl-version'
-
-    @property
-    def product_header(self):
-        return self.selenium.get_text(self._product_header)
-
-    @property
-    def product_version_header(self):
-        return self.selenium.get_text(self._product_version_header)
-
-
 class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 
     _product_header = 'id=tcburl-product'

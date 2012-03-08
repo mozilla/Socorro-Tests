@@ -99,12 +99,6 @@ class CrashStatsBasePage(Page):
             if 'Top Crashers' == report_name:
                 from pages.crash_stats_page import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
-            elif 'Top Crashers by Domain' == report_name:
-                from pages.crash_stats_page import CrashStatsTopCrashersByDomain
-                return CrashStatsTopCrashersByDomain(self.testsetup)
-            elif 'Top Crashers by URL' == report_name:
-                from pages.crash_stats_page import CrashStatsTopCrashersByUrl
-                return CrashStatsTopCrashersByUrl(self.testsetup)
             elif 'Top Crashers by TopSite' == report_name:
                 from pages.crash_stats_page import CrashStatsTopCrashersBySite
                 return CrashStatsTopCrashersBySite(self.testsetup)
