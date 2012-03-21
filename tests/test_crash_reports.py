@@ -202,7 +202,7 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
-    @xfail
+    @xfail(reason='Lack of data on the staging server')
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
