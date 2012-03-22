@@ -21,7 +21,7 @@ class TestCrashReports:
     def test_that_reports_form_has_same_product_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         Assert.contains('Firefox', csp.page_title)
-        crash_adu = csp.header.select_report("Crashes per User")
+        crash_adu = csp.header.select_report('Crashes per User')
         Assert.equal(csp.header.current_product, crash_adu.product_select, csp.get_url_current_page())
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
@@ -117,9 +117,11 @@ class TestCrashReports:
         cstc.click_filter_plugin()
         Assert.greater(cstc.count_results, 0)
 
-    @xfail(reason="Disabled until Bug 603561 is fixed")
+    @xfail(reason='Disabled until Bug 603561 is fixed')
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
-        """ Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229"""
+        """
+        Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229
+        """
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
             if csp.results_found:
@@ -215,7 +217,7 @@ class TestCrashReports:
         csp.header.select_product(product_name)
         Assert.contains(product_name, csp.page_title)
         if csp.results_found:
-            crash_adu = csp.header.select_report("Crashes per User")
+            crash_adu = csp.header.select_report('Crashes per User')
             Assert.equal(csp.header.current_product, crash_adu.product_select)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
@@ -320,9 +322,9 @@ class TestCrashReports:
         Assert.equal('No results were found.', csas.query_results_text_no_results)
 
     def test_that_top_changers_data_is_available(self, mozwebqa):
-        '''
+        """
         https://www.pivotaltracker.com/story/show/18059119
-        '''
+        """
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)

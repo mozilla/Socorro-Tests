@@ -40,7 +40,7 @@ class Page(object):
             return True
 
     def click_link(self, link, wait_flag=False):
-        self.selenium.click("link=%s" % link)
+        self.selenium.click('link=%s' % link)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(self.timeout)
 
@@ -88,7 +88,7 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout / 1000:
-                raise Exception(element + " is not visible")
+                raise Exception(element + ' is not visible')
 
     def wait_for_element_not_visible(self, element):
         count = 0
@@ -96,7 +96,7 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timout / 1000:
-                raise Exception(element + " is still visible")
+                raise Exception(element + ' is still visible')
 
     def wait_for_page(self, url_regex):
         count = 0
@@ -104,4 +104,4 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout / 1000:
-                raise Exception("Sites Page has not loaded")
+                raise Exception('Sites Page has not loaded')
