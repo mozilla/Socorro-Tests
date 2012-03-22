@@ -203,6 +203,7 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
+    @xfail(reason='Lack of data on the staging server')
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
@@ -243,7 +244,7 @@ class TestCrashReports:
 
         for top_crasher in csp.top_crashers:
             top_crasher_page = top_crasher.click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found)
+            Assert.true(top_crasher_page.table_results_found, 'No results found')
             CrashStatsHomePage(mozwebqa)
 
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
