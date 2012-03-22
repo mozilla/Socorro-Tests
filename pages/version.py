@@ -11,7 +11,8 @@ from distutils.version import Version
 
 class FirefoxVersion(Version):
 
-    """Version numbering for Firefox.
+    """
+    Version numbering for Firefox.
 
     The following are valid version numbers (shown in the order that
     would be obtained by sorting according to the supplied cmp function):
@@ -29,11 +30,10 @@ class FirefoxVersion(Version):
 
     version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))? ((a|b|pre|\(beta\))(\d*))?$', re.VERBOSE)
 
-
-    def parse (self, vstring):
+    def parse(self, vstring):
         match = self.version_re.match(vstring)
         if not match:
-            raise ValueError, "invalid version number '%s'" % vstring
+            raise ValueError, 'invalid version number "%s"' % vstring
 
         (major, minor, patch, prerelease, prerelease_num) = \
             match.group(1, 2, 4, 6, 7)
@@ -52,8 +52,7 @@ class FirefoxVersion(Version):
         else:
             self.prerelease = None
 
-
-    def __str__ (self):
+    def __str__(self):
 
         if self.version[2] == 0:
             vstring = string.join(map(str, self.version[0:2]), '.')
@@ -67,12 +66,10 @@ class FirefoxVersion(Version):
 
         return vstring
 
+    def __repr__(self):
+        return 'FirefoxVersion ("%s")' % str(self)
 
-    def __repr__ (self):
-        return "FirefoxVersion ('%s')" % str(self)
-
-
-    def __cmp__ (self, other):
+    def __cmp__(self, other):
         if isinstance(other, StringType):
             other = FirefoxVersion(other)
 

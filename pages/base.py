@@ -35,7 +35,7 @@ class CrashStatsBasePage(Page):
 
     @property
     def link_to_bugzilla(self):
-        return self.selenium.get_attribute("%s@href" % self._link_to_bugzilla)
+        return self.selenium.get_attribute('%s@href' % self._link_to_bugzilla)
 
     @property
     def header(self):
@@ -45,8 +45,8 @@ class CrashStatsBasePage(Page):
         _find_crash_id_or_signature = 'id=q'
         _product_select = 'id=products_select'
         _product_version_select = 'id=product_version_select'
-        _current_versions_locator = "css=#product_version_select optgroup:nth(1) option"
-        _other_versions_locator = "css=#product_version_select optgroup:nth(2) option"
+        _current_versions_locator = 'css=#product_version_select optgroup:nth(1) option'
+        _other_versions_locator = 'css=#product_version_select optgroup:nth(2) option'
         _report_select = 'id=report_select'
 
         _advanced_search_locator = 'link=Advanced Search'
@@ -117,7 +117,7 @@ class CrashStatsBasePage(Page):
                 Type the signature or the id of a bug into the search bar and submit the form
             '''
             self.selenium.type(self._find_crash_id_or_signature, crash_id_or_signature)
-            self.selenium.key_press(self._find_crash_id_or_signature, "\\13")
+            self.selenium.key_press(self._find_crash_id_or_signature, '\\13')
             self.selenium.wait_for_page_to_load(self.timeout)
             from pages.crash_stats_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)

@@ -21,7 +21,7 @@ class TestSmokeTests:
         Assert.true(csstat.are_graphs_present(), '4 graphs not found')
         Assert.true(csstat.is_latest_raw_stats_present(), 'Raw stats not found')
 
-    @xfail(reason="Disabled till Bug 612679 is fixed")
+    @xfail(reason='Disabled till Bug 612679 is fixed')
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cssearch = csp.header.click_advanced_search()
@@ -60,7 +60,7 @@ class TestSmokeTests:
         cs_advanced = csp.header.click_advanced_search()
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
-    @xfail(reason="Disabled till Bug 652880 is fixed")
+    @xfail(reason='Disabled till Bug 652880 is fixed')
     def test_that_advanced_search_view_signature_for_firefox_crash(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -116,12 +116,14 @@ class TestSmokeTests:
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
-        response = urllib.urlopen(mozwebqa.base_url + "/query/simple")
+        response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
         Assert.equal(404, response.getcode())
 
-    @xfail(reason="Bug 631737")
+    @xfail(reason='Bug 631737')
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
-        ''' Bug 631737 '''
+        """
+        Bug 631737
+        """
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invaliddomain'
         csp.get_url_path(path)

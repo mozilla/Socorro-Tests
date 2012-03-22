@@ -21,7 +21,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_changers = 'css=a:contains("Top Changers")'
     _top_crashers_selected = _top_crashers + '.selected'
     _top_changers_selected = _top_changers + '.selected'
-    _heading_locator = "css=.page-heading h2"
+    _heading_locator = 'css=.page-heading h2'
     _results_table_rows = 'css=div.body table.tablesorter tbody > tr'
 
     def __init__(self, testsetup, product=None):
@@ -87,7 +87,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
     class CrashReportsRegion(CrashStatsBasePage):
 
         _top_crashers = 'css=a:contains("Top Crashers")'
-        _header_release_channel_locator = "css=.release_channel h4"
+        _header_release_channel_locator = 'css=.release_channel h4'
 
         def __init__(self, testsetup, lookup):
             CrashStatsBasePage.__init__(self, testsetup)
@@ -100,14 +100,14 @@ class CrashStatsHomePage(CrashStatsBasePage):
         def _root_locator(self):
             if type(self.lookup) == int:
                 # lookup by index
-                return "%s:nth(%s) " % (self._top_crashers, self.lookup)
+                return '%s:nth(%s) ' % (self._top_crashers, self.lookup)
             else:
                 # lookup by name
-                return "%s:contains(%s) " % (self._top_crashers, self.lookup)
+                return '%s:contains(%s) ' % (self._top_crashers, self.lookup)
 
         @property
         def version_name(self):
-            return self.selenium.get_text("%s:nth(%s)" % (self._header_release_channel_locator, self.lookup))
+            return self.selenium.get_text('%s:nth(%s)' % (self._header_release_channel_locator, self.lookup))
 
         def click_top_crasher(self):
             self.selenium.click(self.absolute_locator(self._top_crashers))
@@ -119,14 +119,14 @@ class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
 
     _reports_list_locator = 'css=#signatureList tbody tr'
-    _signature_locator = _reports_list_locator + ":nth-of-type(%s) td:nth-of-type(4) a"
-    _signature_text_locator = _signature_locator + ".signature"
+    _signature_locator = _reports_list_locator + ':nth-of-type(%s) td:nth-of-type(4) a'
+    _signature_text_locator = _signature_locator + '.signature'
 
-    _default_filter_type_locator = "css=ul.tc-duration-type li a.selected"
-    _plugin_filter_locator = "css=ul.tc-duration-type li a:contains('Plugin')"
+    _default_filter_type_locator = 'css=ul.tc-duration-type li a.selected'
+    _plugin_filter_locator = 'css=ul.tc-duration-type li a:contains("Plugin")'
 
-    _signature_table_locator = "css=#signatureList .signature"
-    _first_signature_table_locator = "css=#signatureList .signature:nth(0)"
+    _signature_table_locator = 'css=#signatureList .signature'
+    _first_signature_table_locator = 'css=#signatureList .signature:nth(0)'
     _data_table = 'css=#signatureList'
 
     def __init__(self, testsetup):
@@ -212,9 +212,9 @@ class CrashReportList(CrashStatsBasePage):
 
 class CrashReport(CrashStatsBasePage):
 
-    _product_locator = " td:nth-of-type(3)"
-    _version_locator = " td:nth-of-type(4)"
-    _row_locator = "css=#reportsList tbody tr"
+    _product_locator = ' td:nth-of-type(3)'
+    _version_locator = ' td:nth-of-type(4)'
+    _row_locator = 'css=#reportsList tbody tr'
 
     def __init__(self, testsetup, index, signature=None):
         CrashStatsBasePage.__init__(self, testsetup)
@@ -226,7 +226,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def root_locator(self):
-        return self._row_locator + ":nth-of-type(%s)" % (self._current_row_index)
+        return self._row_locator + ':nth-of-type(%s)' % (self._current_row_index)
 
     @property
     def row_index(self):
@@ -254,7 +254,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def has_valid_signature(self):
-        if self.signature == "(empty signature)":
+        if self.signature == '(empty signature)':
             return False
         return True
 
@@ -271,11 +271,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_first_signature = 'css=table#signatureList > tbody > tr > td > a'
     _data_table_first_signature_results = 'css=table#signatureList > tbody > tr > td:nth-child(3)'
 
-    _query_results_text = "css=.body.notitle"
+    _query_results_text = 'css=.body.notitle'
 
-    _query_results_text_no_results_locator = "css=.body.notitle:nth(0) p:nth(1)"
+    _query_results_text_no_results_locator = 'css=.body.notitle:nth(0) p:nth(1)'
 
-    _build_id_locator = "css=#build_id"
+    _build_id_locator = 'css=#build_id'
 
     _radio_items_locator = 'css=.radio-item > label > input'
 
@@ -283,7 +283,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _data_table_signature_browser_icon_locator = _data_table_signature_column_locator + ' > div > img.browser'
     _data_table_signature_plugin_icon_locator = _data_table_signature_column_locator + ' > div > img.plugin'
     _next_locator = 'css=.pagination>a:contains("Next")'
-    _plugin_filename_header_locator = "css=table#signatureList > thead th:contains('Plugin Filename')"
+    _plugin_filename_header_locator = 'css=table#signatureList > thead th:contains("Plugin Filename")'
     _page_title = 'Query Results - Mozilla Crash Reports'
 
     def __init__(self, testsetup):
@@ -317,7 +317,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def build_id(self):
-        return self.selenium.get_eval("navigator.buildID")
+        return self.selenium.get_eval('navigator.buildID')
 
     @property
     def first_signature_name(self):
@@ -338,26 +338,26 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     @property
     def results_found(self):
         try:
-            return self.selenium.get_css_count("%s > tbody > tr" % self._data_table) > 0
+            return self.selenium.get_css_count('%s > tbody > tr' % self._data_table) > 0
         except NoSuchElementException:
             return False
 
     @property
     def results_count(self):
         try:
-            return self.selenium.get_css_count("%s > tbody > tr" % self._data_table)
+            return self.selenium.get_css_count('%s > tbody > tr' % self._data_table)
         except NoSuchElementException:
             return 0
 
     def query_results_text(self, lookup):
-        return self.selenium.get_text(self._query_results_text + ":nth(%s)" % lookup)
+        return self.selenium.get_text(self._query_results_text + ':nth(%s)' % lookup)
 
     @property
     def query_results_text_no_results(self):
         return self.selenium.get_text(self._query_results_text_no_results_locator)
 
     def select_radio_button(self, lookup):
-        self.selenium.check(self._radio_items_locator + ":nth(%s)" % lookup)
+        self.selenium.check(self._radio_items_locator + ':nth(%s)' % lookup)
 
     @property
     def is_plugin_icon_visible(self):
@@ -391,7 +391,7 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 
     # https://crash-stats.allizom.org/report/list?
 
-    _total_items = "css=span.totalItems"
+    _total_items = 'css=span.totalItems'
 
     @property
     def total_items_label(self):
@@ -402,9 +402,9 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     _product_select = 'id=daily_search_version_form_products'
     _date_start_locator = 'css=.daily_search_body .date[name="date_start"]'
-    _generate_button_locator = "id=daily_search_version_form_submit"
-    _table_locator = "id=crash_data"
-    _row_table_locator = "css=#crash_data > tbody > tr"
+    _generate_button_locator = 'id=daily_search_version_form_submit'
+    _table_locator = 'id=crash_data'
+    _row_table_locator = 'css=#crash_data > tbody > tr'
     _page_title = 'Crashes per Active Daily User for Firefox'
 
     @property
@@ -440,12 +440,12 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _product_header = 'id=current-product'
     _product_version_header = 'id=current-version'
 
-    _filter_all = "link=All"
-    _filter_browser = "link=Browser"
-    _filter_plugin = "link=Plugin"
+    _filter_all = 'link=All'
+    _filter_browser = 'link=Browser'
+    _filter_plugin = 'link=Plugin'
 
-    _result_rows = "css=table#signatureList > tbody > tr"
-    _current_days_filter_locator = "css=ul.tc-duration-days li a.selected"
+    _result_rows = 'css=table#signatureList > tbody > tr'
+    _current_days_filter_locator = 'css=ul.tc-duration-days li a.selected'
 
     @property
     def product_header(self):
@@ -514,7 +514,7 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     @property
     def link_to_ftp(self):
-        return self.selenium.get_attribute("%s@href" % self._link_to_ftp_locator)
+        return self.selenium.get_attribute('%s@href' % self._link_to_ftp_locator)
 
     def click_link_to_ftp(self):
         self.selenium.click(self._link_to_ftp_locator)
@@ -539,7 +539,7 @@ class CrashStatsStatus(CrashStatsBasePage):
 
 class ProductsLinksPage(CrashStatsBasePage):
 
-    _root_locator = "css=.body li"
+    _root_locator = 'css=.body li'
     _name_page_locator = 'css=#mainbody h2'
 
     def __init__(self, testsetup):

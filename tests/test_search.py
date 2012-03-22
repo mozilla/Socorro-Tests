@@ -19,10 +19,10 @@ class TestSearchForIdOrSignature:
         Assert.false(results.results_found, results.get_url_current_page())
 
     def test_that_search_for_valid_signature(self, mozwebqa):
-        '''
+        """
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
-        '''
+        """
         csp = CrashStatsHomePage(mozwebqa)
         reportlist = csp.click_first_product_top_crashers_link()
         signature = reportlist.first_valid_signature
@@ -30,7 +30,7 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found, result.get_url_current_page())
 
-    @xfail(reason="Bug 710091")
+    @xfail(reason='Bug 710091')
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -65,14 +65,14 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
 
-    @xfail(reason="Disabled until bug 688256 is fixed")
+    @xfail(reason='Disabled until bug 688256 is fixed')
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
 
-        cs_advanced.adv_select_product("Firefox")
-        cs_advanced.adv_select_version("All")
+        cs_advanced.adv_select_product('Firefox')
+        cs_advanced.adv_select_version('All')
         cs_advanced.filter_reports()
 
         results_page_count = cs_advanced.first_signature_number_of_results
@@ -94,10 +94,10 @@ class TestSearchForIdOrSignature:
         if cs_advanced.results_found:
             Assert.true(cs_advanced.first_signature_number_of_results > 0)
         else:
-            Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
+            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.', cs_advanced.get_url_current_page())
 
     @prod
-    @xfail(reason="Disabled until bug 720037 is fixed")
+    @xfail(reason='Disabled until bug 720037 is fixed')
     def test_that_filter_for_browser_results(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
@@ -153,4 +153,4 @@ class TestSearchForIdOrSignature:
             cs_advanced.click_plugin_filename_header()
             Assert.is_sorted_descending(cs_advanced.plugin_filename_results_list())
         else:
-            Assert.equal(cs_advanced.query_results_text(1), "No results were found.", cs_advanced.get_url_current_page())
+            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.', cs_advanced.get_url_current_page())
