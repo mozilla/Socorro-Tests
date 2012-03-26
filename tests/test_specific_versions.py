@@ -4,7 +4,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from pages.crash_stats_page import CrashStatsHomePage
-from pages.crash_stats_page import CrashStatsAdvancedSearch
 import pytest
 from unittestzero import Assert
 xfail = pytest.mark.xfail
