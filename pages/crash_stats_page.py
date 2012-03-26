@@ -17,7 +17,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     '''
-    _first_product_top_crashers_link_locator = (By.CSS_SELECTOR, '#release_channels .release_channel:first li:first a')
+    _first_product_top_crashers_link_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(1) > a')
     _first_signature_locator = (By.CSS_SELECTOR, 'div.crash > p > a')
     _second_signature_locator = (By.CSS_SELECTOR, '.crash:nth-of-type(3) > p > a')
     _top_crashers_locator = (By.CSS_SELECTOR, 'a:contains("Top Crashers")')
@@ -52,6 +52,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def click_first_product_top_crashers_link(self):
         self.selenium.find_element(*self._first_product_top_crashers_link_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_present(*self._first_product_top_crashers_link_locator))
         return CrashReportList(self.testsetup)
 
     @property
@@ -102,7 +103,7 @@ class CrashReportList(CrashStatsBasePage):
     # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
 
     _reports_list_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
-    _signature_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4) a')
+    _signature_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4) > a')
     _signature_text_locator = (By.CSS_SELECTOR, '.signature')
 
     _default_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
@@ -134,11 +135,11 @@ class CrashReportList(CrashStatsBasePage):
         return report
 
     def click_first_valid_signature(self):
-        return self.click_signature(self.first_report_with_valid_signature.row_index)
+        return self.click_signature(*self.first_report_with_valid_signature.row_index)
 
     @property
     def first_valid_signature(self):
-        return self.get_signature(self.first_report_with_valid_signature.row_index)
+        return self.get_signature(*self.first_report_with_valid_signature.row_index)
 
     @property
     def reports(self):
@@ -185,54 +186,59 @@ class CrashReportList(CrashStatsBasePage):
             return self.selenium.find_element(*self._data_table_signature_locator).find_element(*self._data_table_browser_icon_locator).is_displayed()
 
 
-#class CrashReport(CrashStatsBasePage):
-#
-#    _product_locator = (By.CSS_SELECTOR, ' td:nth-of-type(3)')
-#    _version_locator = (By.CSS_SELECTOR, ' td:nth-of-type(4)')
-#    _row_locator = (By.CSS_SELECTOR, 'reportsList tbody tr')
-#
-#    def __init__(self, testsetup, index, signature=None):
-#        CrashStatsBasePage.__init__(self, testsetup)
-#        self.index = index
-#        self._signature = signature
-#
-#    def absolute_locator(self, relative_locator):
-#        return self.root_locator + relative_locator
-#
-#    @property
-#    def root_locator(self):
-#        return self.selenium.
-#        return self._row_locator + ':nth-of-type(%s)' % (self._current_row_index)
-#
-#    @property
-#    def row_index(self):
-#        return self.index
-#
-#    @property
-#    def row_count(self):
-#        return len(self.selenium.find_elements(*self._row_locator))
-#
-#    def get_row(self, index):
-#        self._current_row_index = index
-#        return self
-#
-#    @property
-#    def signature(self):
-#        return self._signature
-#
-#    @property
-#    def product(self):
-#        return self.selenium.get_text(self.absolute_locator(self._product_locator))
-#
-#    @property
-#    def version(self):
-#        return self.selenium.get_text(self.absolute_locator(self._version_locator))
-#
-#    @property
-#    def has_valid_signature(self):
-#        if self.signature == '(empty signature)':
-#            return False
-#        return True
+class CrashReport(CrashStatsBasePage):
+
+    _row_locator = (By.CSS_SELECTOR, 'reportsList tbody tr')
+
+    def __init__(self, testsetup, index, signature=None):
+        CrashStatsBasePage.__init__(self, testsetup)
+        self.index = index
+        self._signature = signature
+
+    @property
+    def row_index(self):
+        return self.index
+
+    @property
+    def row_count(self):
+        return len(self.table_region_elements)
+
+    def get_row(self, index):
+        self._current_row_index = index
+        return self
+
+    @property
+    def signature(self):
+        return self._signature
+
+    @property
+    def has_valid_signature(self):
+        if self.signature == '(empty signature)':
+            return False
+        return True
+
+    @property
+    def table_region_elements(self):
+        return [self.TableRegion(self.testsetup, element) for element in self.selenium.find_elements(*self._row_locator)]
+
+    class TableRegion(Page):
+        _product_locator = (By.CSS_SELECTOR, ' td:nth-of-type(3)')
+        _version_locator = (By.CSS_SELECTOR, ' td:nth-of-type(4)')
+
+        def __init__(self, testsetup, element):
+            Page.__init__(self, testsetup)
+            self._root_element = element
+
+        @property
+        def version(self):
+            return self._root_element.find_element(*self._version_locator).text
+
+        @property
+        def product(self):
+            return self._root_element.find_element(*self._product_locator).text
+
+
+
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):

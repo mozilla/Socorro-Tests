@@ -18,7 +18,7 @@ class TestSpecificVersions:
         versions = csp.header.current_versions
 
         if len(versions) > 0:
-            csp.header.select_version(versions[1])
+            csp.header.select_version(str(versions[1]))
 
         report_list = csp.click_first_product_top_crashers_link()
         report = report_list.click_first_valid_signature()

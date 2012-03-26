@@ -77,17 +77,15 @@ class CrashStatsBasePage(Page):
             '''
                 Select the Mozilla Product you want to report on
             '''
-            product = self.selenium.find_element(*self._product_select_locator)
-            select = Select(product)
-            select.select_by_value(application)
+            self.selenium.find_element(*self._product_select_locator).select_by_value(application)
 
         def select_version(self, version):
             '''
                 Select the version of the application you want to report on
             '''
-            version = self.selenium.find_element(*self._product_version_select)
-            select = Select(version)
-            select.select_by_value(version)
+            version_dropdown = self.selenium.find_element(*self._product_version_select)
+            select = Select(version_dropdown)
+            select.select_by_visible_text(version)
 
         def select_report(self, report_name):
             '''
