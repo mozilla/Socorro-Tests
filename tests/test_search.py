@@ -18,6 +18,7 @@ class TestSearchForIdOrSignature:
         results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found, results.get_url_current_page())
 
+    ###TODO
     def test_that_search_for_valid_signature(self, mozwebqa):
         """
             This is a test for
@@ -30,7 +31,6 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found, result.get_url_current_page())
 
-    @xfail(reason='Bug 710091')
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -65,6 +65,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
 
+    ####TODO
     @xfail(reason='Disabled until bug 688256 is fixed')
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
@@ -77,6 +78,7 @@ class TestSearchForIdOrSignature:
 
         results_page_count = cs_advanced.first_signature_number_of_results
         cssr = cs_advanced.click_first_signature()
+        cssr.click_reports()
         Assert.equal(results_page_count, cssr.total_items_label, cssr.get_url_current_page())
 
     @prod
@@ -108,7 +110,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_radio_button(1)
         cs_advanced.filter_reports()
 
-        while not cs_advanced.is_browser_icon_present:
+        while not cs_advanced.is_browser_icon_visible:
             try:
                 cs_advanced.click_next()
             except:
@@ -129,7 +131,7 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.filter_reports()
 
-        while not cs_advanced.is_plugin_icon_present:
+        while not cs_advanced.is_plugin_icon_visible:
             cs_advanced.click_next()
 
         Assert.true(cs_advanced.is_plugin_icon_visible, cs_advanced.get_url_current_page())

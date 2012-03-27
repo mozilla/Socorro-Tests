@@ -65,7 +65,7 @@ class TestCrashReports:
         if csp.results_found:
             Assert.equal(product, cstc.product_header, csp.get_url_current_page())
 
-        cstc.click_filter_all()
+        cstc.click_filter_by('All')
         Assert.greater(cstc.count_results, 0)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
@@ -98,14 +98,12 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        if csp.results_found:
+        if csp.results_found():
             Assert.equal(product, cstc.product_header)
 
-        cstc.click_filter_browser()
+        cstc.click_filter_by('Browser')
         Assert.greater(cstc.count_results, 0)
 
-    @prod
-    @xfail(reason='Disabled until Bug 700628 is fixed')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -114,7 +112,7 @@ class TestCrashReports:
         if csp.results_found:
             Assert.equal(product, cstc.product_header)
 
-        cstc.click_filter_plugin()
+        cstc.click_filter_by('Plugin')
         Assert.greater(cstc.count_results, 0)
 
     @xfail(reason='Disabled until Bug 603561 is fixed')
@@ -125,7 +123,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
             if csp.results_found:
-                csp.header.select_version(version)
+                csp.header.select_version(str(version))
                 cstc = csp.header.select_report('Top Changers')
                 Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
 
@@ -139,7 +137,6 @@ class TestCrashReports:
         crash_per_user.type_start_date('1995-01-01')
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
-        crash_per_user.table_row_count
         Assert.equal('1995-01-01', crash_per_user.last_row_date_value, crash_per_user.get_url_current_page())
 
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
@@ -176,6 +173,12 @@ class TestCrashReports:
         """
         self._verify_top_crashers_links_work(mozwebqa, 'Fennec')
 
+    def test_that_top_crashers_reports_links_work_for_fennecandroid(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17086667
+        """
+        self._verify_top_crashers_links_work(mozwebqa, 'FennecAndroid')
+
     def test_the_firefox_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
@@ -192,7 +195,6 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'Thunderbird')
 
-    @prod
     def test_the_camino_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
@@ -205,12 +207,17 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
-    @xfail(reason='Lack of data on the staging server')
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
         self._verify_results_are_returned(mozwebqa, 'Fennec')
+
+    def test_the_fennecandroid_releases_return_results(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/20145655
+        """
+        self._verify_results_are_returned(mozwebqa, 'FennecAndroid')
 
     def _verify_reports_form_have_same_product(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
@@ -248,83 +255,83 @@ class TestCrashReports:
             top_crasher_page = top_crasher.click_top_crasher()
             Assert.true(top_crasher_page.table_results_found, 'No results found')
             CrashStatsHomePage(mozwebqa)
-
-    def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17088605
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        top_crashers = csp.top_crashers
-        tc_page = top_crashers[3].click_top_crasher()
-
-        Assert.equal(tc_page.current_days_filter, '7')
-
-    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17099455
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        reports_page = csp.click_first_product_top_crashers_link()
-        Assert.equal(reports_page.get_default_filter_text, 'Browser')
-
-        signature_list_items = reports_page.signature_list_items
-
-        for signature_item in signature_list_items:
-            Assert.true(signature_item.is_browser_icon_visible)
-            Assert.false(signature_item.is_plugin_icon_present)
-
-    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17099455
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        reports_page = csp.click_first_product_top_crashers_link()
-        reports_page.click_plugin_filter()
-        signature_list_items = reports_page.signature_list_items
-
-        for signature_item in signature_list_items:
-            Assert.true(signature_item.is_plugin_icon_visible)
-            Assert.false(signature_item.is_browser_icon_present)
-
-    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18049001
-        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        cpu = csp.header.select_report('Crashes per User')
-        cpu.click_generate_button()
-        Assert.true(cpu.is_the_current_page)
-        Assert.false(cpu.is_mixed_content_warning_shown)
-
-    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
-        """
-        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_version('3.5.13')
-        cstc = csp.header.select_report('Top Crashers')
-        cstc.click_filter_days('14')
-        Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
-        cstc.click_filter_plugin()
-        Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
-
-    def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18059001
-        https://bugzilla.mozilla.org/show_bug.cgi?id=642580
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        csas = csp.header.click_advanced_search()
-        Assert.true(csas.is_the_current_page)
-        csas.build_id_field_input('http://www.google.com')
-        csas.filter_reports()
-        Assert.equal('No results were found.', csas.query_results_text_no_results)
-
-    def test_that_top_changers_data_is_available(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18059119
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        cstc = csp.header.select_report('Top Changers')
-        Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
+#
+#    def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/17088605
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        top_crashers = csp.top_crashers
+#        tc_page = top_crashers[3].click_top_crasher()
+#
+#        Assert.equal(tc_page.current_days_filter, '7')
+#
+#    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/17099455
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        reports_page = csp.click_first_product_top_crashers_link()
+#        Assert.equal(reports_page.get_default_filter_text, 'Browser')
+#
+#        signature_items = reports_page.signature_list_items
+#
+#        for signature_item in signature_items:
+#            Assert.true(signature_item.is_browser_icon_visible)
+#            Assert.false(signature_item.is_plugin_icon_present)
+#
+#    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/17099455
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        reports_page = csp.click_first_product_top_crashers_link()
+#        reports_page.click_plugin_filter()
+#        signature_list_items = reports_page.signature_list_items
+#
+#        for signature_item in signature_list_items:
+#            Assert.true(signature_item.is_plugin_icon_visible)
+#            Assert.false(signature_item.is_browser_icon_present)
+#
+#    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/18049001
+#        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        cpu = csp.header.select_report('Crashes per User')
+#        cpu.click_generate_button()
+#        Assert.true(cpu.is_the_current_page)
+#        Assert.false(cpu.is_mixed_content_warning_shown)
+#
+#    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
+#        """
+#        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        csp.header.select_version('3.5.13')
+#        cstc = csp.header.select_report('Top Crashers')
+#        cstc.click_filter_days_by('14')
+#        Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+#        cstc.click_filter_by('Plugin')
+#        Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+#
+#    def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/18059001
+#        https://bugzilla.mozilla.org/show_bug.cgi?id=642580
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        csas = csp.header.click_advanced_search()
+#        Assert.true(csas.is_the_current_page)
+#        csas.build_id_field_input('http://www.google.com')
+#        csas.filter_reports()
+#        Assert.equal('No results were found.', csas.query_results_text_no_results)
+#
+#    def test_that_top_changers_data_is_available(self, mozwebqa):
+#        """
+#        https://www.pivotaltracker.com/story/show/18059119
+#        """
+#        csp = CrashStatsHomePage(mozwebqa)
+#        cstc = csp.header.select_report('Top Changers')
+#        Assert.not_equal('Top changers currently unavailable', cstc.page_heading)

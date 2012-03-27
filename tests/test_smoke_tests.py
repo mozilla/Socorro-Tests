@@ -17,9 +17,9 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         csstat = csp.click_server_status()
 
-        Assert.true(csstat.is_at_a_glance_present(), 'Server summary not found')
-        Assert.true(csstat.are_graphs_present(), '4 graphs not found')
-        Assert.true(csstat.is_latest_raw_stats_present(), 'Raw stats not found')
+        Assert.true(csstat.is_at_a_glance_present, 'Server summary not found')
+        Assert.true(csstat.are_graphs_present, '4 graphs not found')
+        Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
     @xfail(reason='Disabled till Bug 612679 is fixed')
     def test_that_options_are_sorted_the_same(self, mozwebqa):
@@ -28,7 +28,7 @@ class TestSmokeTests:
         nav_product_list = csp.header.product_list
         search_product_list = cssearch.product_list
         Assert.equal(len(nav_product_list), len(search_product_list), csp.get_url_current_page())
-        for i, prod_item in enumerate(nav_product_list):
+        for i, prod_item in range(0, len(nav_product_list)):
             Assert.equal(prod_item, search_product_list[i], csp.get_url_current_page())
 
     def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self, mozwebqa):
@@ -60,7 +60,6 @@ class TestSmokeTests:
         cs_advanced = csp.header.click_advanced_search()
         Assert.equal('SeaMonkey', cs_advanced.currently_selected_product, cs_advanced.get_url_current_page())
 
-    @xfail(reason='Disabled till Bug 652880 is fixed')
     def test_that_advanced_search_view_signature_for_firefox_crash(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -123,6 +122,7 @@ class TestSmokeTests:
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         """
         Bug 631737
+        THIS TEST NEEDS REFACTORING!!!
         """
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invaliddomain'

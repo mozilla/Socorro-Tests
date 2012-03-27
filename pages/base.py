@@ -14,7 +14,7 @@ from pages.page import Page
 class CrashStatsBasePage(Page):
 
     _page_heading = (By.CSS_SELECTOR, 'div.page-heading > h2')
-    _server_status_locator = (By.LINK_TEXT, ' Server Status')
+    _server_status_locator = (By.LINK_TEXT, 'Server Status')
     _link_to_bugzilla_locator = (By.CSS_SELECTOR, '.panel a')
 
     @property
@@ -24,13 +24,13 @@ class CrashStatsBasePage(Page):
 
     @property
     def page_heading(self):
-        return self.selenium.find_element(*self._page_heading).get_attribute('title')
+        return self.selenium.find_element(*self._page_heading).text
 
     def get_attribute(self, element, attribute):
         return self.selenium.find_element(*element).get_attribute(attribute)
 
     def get_url_path(self, path):
-        self.selenium.open(path)
+        self.selenium.get(path)
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
@@ -48,8 +48,8 @@ class CrashStatsBasePage(Page):
     class Header(Page):
         _find_crash_id_or_signature = (By.ID, 'q')
         _product_select_locator = (By.ID, 'products_select')
-        _product_version_select = (By.ID, 'product_version_select')
-        _current_versions_locator = (By.CSS_SELECTOR, '#product_version_select optgroup:nth-of-type(2) option')
+        _product_version_select = (By.ID, 'report_select')
+        _all_versions_locator = (By.CSS_SELECTOR, '#product_version_select')
         _other_versions_locator = (By.CSS_SELECTOR, '#product_version_select optgroup:nth-of-type(3) option')
         _report_select = (By.ID, 'report_select')
 
@@ -65,25 +65,27 @@ class CrashStatsBasePage(Page):
         def current_versions(self):
             from pages.version import FirefoxVersion
             current_versions = []
-            for element in self.selenium.find_elements(*self._current_versions_locator):
+            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(By.CSS_SELECTOR, ' optgroup:nth-of-type(2) option'):
                 current_versions.append(FirefoxVersion(element.text))
             return current_versions
 
         @property
         def product_list(self):
-            return self.selenium.find_elements(*self._product_select_locator)
+            return self.selenium.find_element(*self._product_select_locator).find_elements(By.CSS_SELECTOR, 'option')
 
         def select_product(self, application):
             '''
                 Select the Mozilla Product you want to report on
             '''
-            self.selenium.find_element(*self._product_select_locator).select_by_value(application)
+            element = self.selenium.find_element(*self._product_select_locator)
+            select = Select(element)
+            return select.select_by_visible_text(application)
 
         def select_version(self, version):
             '''
                 Select the version of the application you want to report on
             '''
-            version_dropdown = self.selenium.find_element(*self._product_version_select)
+            version_dropdown = self.selenium.find_element(*self._all_versions_locator)
             select = Select(version_dropdown)
             select.select_by_visible_text(version)
 
@@ -92,7 +94,10 @@ class CrashStatsBasePage(Page):
                 Select the report type from the drop down
                 and wait for the page to reload
             '''
-            self.selenium.find_element(*self._report_select).select(report_name)
+            report_dropdown = self.selenium.find_element(*self._product_version_select)
+            select = Select(report_dropdown)
+            select.select_by_visible_text(report_name)
+
             if 'Top Crashers' == report_name:
                 from pages.crash_stats_page import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
@@ -117,4 +122,9 @@ class CrashStatsBasePage(Page):
             serch_box.send_keys(crash_id_or_signature)
             serch_box.send_keys(Keys.RETURN)
             from pages.crash_stats_page import CrashStatsAdvancedSearch
+            return CrashStatsAdvancedSearch(self.testsetup)
+
+        def click_advanced_search(self):
+            self.selenium.find_element(*self._advanced_search_locator).click()
+            from crash_stats_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
