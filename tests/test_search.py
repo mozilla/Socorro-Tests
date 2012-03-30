@@ -18,7 +18,7 @@ class TestSearchForIdOrSignature:
         results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found, results.get_url_current_page())
 
-    ###TODO
+    @pytest.mark.xfail(reason='will be refactored in the next pull')
     def test_that_search_for_valid_signature(self, mozwebqa):
         """
             This is a test for

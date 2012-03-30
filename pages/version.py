@@ -13,6 +13,19 @@ class FirefoxVersion(Version):
 
     """
     Version numbering for Firefox.
+
+    The following are valid version numbers (shown in the order that
+    would be obtained by sorting according to the supplied cmp function):
+
+    3.6 3.6.0 (these two are equivalent)
+    4.0
+    5.0a1
+    5.0(beta)
+    5.0b3
+    5.0pre
+    5.0
+    6.0.1
+
     """
 
     version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))? ((a|b|pre|\(beta\))(\d*))?$', re.VERBOSE)

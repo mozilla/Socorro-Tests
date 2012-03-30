@@ -259,8 +259,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _query_results_text = (By.CSS_SELECTOR, '.body.notitle p')
 
-    _query_results_text_no_results_locator = (By.CSS_SELECTOR, '.body.notitle > p:nth-of-type(2)')
-
     _build_id_locator = (By.ID, 'build_id')
 
     _radio_items_locator = (By.CSS_SELECTOR, '.radio-item > label > input')
@@ -342,13 +340,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def query_results_text(self, index):
         result = self.selenium.find_elements(*self._query_results_text)
         if index == 0:
-            return result[0].text
+            return result[index].text
         else:
-            return result[-1].text
-
-    @property
-    def query_results_text_no_results(self):
-        return self.selenium.find_element(*self._query_results_text_no_results_locator).text
+            return result[index].text
 
     def select_radio_button(self, lookup):
         radio_buttons = self.selenium.find_elements(*self._radio_items_locator)

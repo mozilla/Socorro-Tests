@@ -50,7 +50,8 @@ class CrashStatsBasePage(Page):
         _product_select_locator = (By.ID, 'products_select')
         _product_version_select = (By.ID, 'report_select')
         _all_versions_locator = (By.CSS_SELECTOR, '#product_version_select')
-        _other_versions_locator = (By.CSS_SELECTOR, '#product_version_select optgroup:nth-of-type(3) option')
+        _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
+        _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
         _report_select = (By.ID, 'report_select')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
@@ -65,9 +66,17 @@ class CrashStatsBasePage(Page):
         def current_versions(self):
             from pages.version import FirefoxVersion
             current_versions = []
-            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(By.CSS_SELECTOR, ' optgroup:nth-of-type(2) option'):
-                current_versions.append(FirefoxVersion(element.text))
+            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._current_versions_locator):
+                str(current_versions.append(FirefoxVersion(element.text)))
             return current_versions
+
+        @property
+        def other_versions(self):
+            from pages.version import FirefoxVersion
+            other_versions = []
+            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._other_versions_locator):
+                str(other_versions.append(FirefoxVersion(element.text)))
+            return other_versions
 
         @property
         def product_list(self):

@@ -6,11 +6,11 @@
 from pages.crash_stats_page import CrashStatsHomePage
 import pytest
 from unittestzero import Assert
-xfail = pytest.mark.xfail
 
 
 class TestSpecificVersions:
 
+    @pytest.mark.xfail(reason='will be refactored in the next pull')
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 

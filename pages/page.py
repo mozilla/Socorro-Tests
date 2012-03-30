@@ -5,8 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import re
-import time
-import base64
 
 from unittestzero import Assert
 from selenium.webdriver.support.ui import WebDriverWait
