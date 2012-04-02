@@ -4,8 +4,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from pages.page import Page
 from pages.base import CrashStatsBasePage
@@ -115,41 +113,26 @@ class CrashReportList(CrashStatsBasePage):
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
 
-    def get_report(self, index):
-        return self.reports[index]
-
-    def set_report(self, index):
-        signature = self.get_signature(index)
-        return CrashReport(self.testsetup, index, signature)
-
-    def get_signature(self, index):
-        return self.selenium.find_element(self._signature_locator[0],
-                        ':nth-of-type(%s)' % (self._signature_text_locator[1], index + 1)).text
-
     def click_signature(self, index):
-        report = self.reports[index]
-        return self.selenium.find_element(self._signature_locator[0],
-                        ':nth-of-type(%s) ' % (self._signature_text_locator[1], index + 1)).click
-        return report
+        signatures = self.selenium.find_elements(*self._signature_text_locator)
+        signatures[index].click()
+        return self.CrashReport(self.testsetup)
 
     def click_first_valid_signature(self):
-        return self.click_signature(*self.first_report_with_valid_signature.row_index)
+        for i in self.selenium.find_elements(*self._signature_locator):
+            if i.text != 'empty signature':
+                i.click()
+                return CrashReport(self.testsetup)
 
     @property
     def first_valid_signature(self):
-        return self.get_signature(*self.first_report_with_valid_signature.row_index)
-
-    @property
-    def reports(self):
-        return self._reports
+        for i in self.selenium.find_elements(*self._signature_locator):
+            if i.text != 'empty signature':
+                    return i.text
 
     @property
     def reports_count(self):
         return len(self.selenium.find_elements(*self._reports_list_locator))
-
-    @property
-    def first_report_with_valid_signature(self):
-        return [report for report in self.reports if report.has_valid_signature][0]
 
     @property
     def get_default_filter_text(self):
@@ -171,9 +154,9 @@ class CrashReportList(CrashStatsBasePage):
         _data_table_browser_icon_locator = (By.CSS_SELECTOR, 'div > img.browser')
         _data_table_plugin_icon_locator = (By.CSS_SELECTOR, 'div > img.plugin')
 
-        def __init__(self, testsetup, element):
+        def __init__(self, testsetup, signature):
                 Page.__init__(self, testsetup)
-                self.element = element
+                self._signature = signature
 
         @property
         def is_plugin_icon_visible(self):
@@ -192,56 +175,35 @@ class CrashReportList(CrashStatsBasePage):
             return self.is_element_present(*self._data_table_browser_icon_locator)
 
 
-class CrashReport(CrashStatsBasePage):
+class CrashReport(Page):
+    _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
+    _report_locator = (By.CSS_SELECTOR, '.ui-state-default.ui-corner-top:nth-of-type(4)')
 
-    _row_locator = (By.CSS_SELECTOR, 'reportsList tbody tr')
-
-    def __init__(self, testsetup, index, signature=None):
-        CrashStatsBasePage.__init__(self, testsetup)
-        self.index = index
-        self._signature = signature
+    def __init__(self, testsetup):
+        Page.__init__(self, testsetup)
 
     @property
-    def row_index(self):
-        return self.index
+    def reports(self):
+        return [self.Report(self.testsetup, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
 
-    @property
-    def row_count(self):
-        return len(self.table_region_elements)
+    def click_reports(self):
+        self.selenium.find_element(*self._report_locator).click()
 
-    def get_row(self, index):
-        self._current_row_index = index
-        return self
-
-    @property
-    def signature(self):
-        return self._signature
-
-    @property
-    def has_valid_signature(self):
-        if self.signature == '(empty signature)':
-            return False
-        return True
-
-    @property
-    def table_region_elements(self):
-        return [self.TableRegion(self.testsetup, element) for element in self.selenium.find_elements(*self._row_locator)]
-
-    class TableRegion(Page):
-        _product_locator = (By.CSS_SELECTOR, ' td:nth-of-type(3)')
-        _version_locator = (By.CSS_SELECTOR, ' td:nth-of-type(4)')
+    class Report(Page):
+        _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
+        _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
             self._root_element = element
 
         @property
-        def version(self):
-            return self._root_element.find_element(*self._version_locator).text
-
-        @property
         def product(self):
             return self._root_element.find_element(*self._product_locator).text
+
+        @property
+        def version(self):
+            return self._root_element.find_element(*self._version_locator).text
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):

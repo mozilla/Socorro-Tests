@@ -18,17 +18,16 @@ class TestSearchForIdOrSignature:
         results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found, results.get_url_current_page())
 
-    @pytest.mark.xfail(reason='will be refactored in the next pull')
     def test_that_search_for_valid_signature(self, mozwebqa):
         """
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         """
         csp = CrashStatsHomePage(mozwebqa)
-        reportlist = csp.click_first_product_top_crashers_link()
-        signature = reportlist.first_valid_signature
+        report_list = csp.click_first_product_top_crashers_link()
+        signature = report_list.first_valid_signature
 
-        result = csp.header.search_for_crash(signature)
+        result = csp.header.search_for_crash(signature[:30])
         Assert.true(result.results_found, result.get_url_current_page())
 
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
