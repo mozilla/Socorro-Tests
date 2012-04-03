@@ -56,3 +56,6 @@ class Page(object):
             return self.selenium.find_element(*locator).is_displayed()
         except NoSuchElementException, ElementNotVisibleException:
             return False
+
+    def return_to_previous_page(self):
+        self.selenium.back()

@@ -143,11 +143,12 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         top_crashers = csp.top_crashers
 
-        for top_crasher in top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
+        for idx in range(len(csp.top_crashers)):
+            top_crasher_name = top_crashers[idx].version_name
+            top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             CrashStatsHomePage(mozwebqa)
+            top_crashers = csp.top_crashers
 
     def test_that_top_crashers_reports_links_work_for_thunderbird(self, mozwebqa):
         """
@@ -181,10 +182,12 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/20145655
         """
         csp = CrashStatsHomePage(mozwebqa)
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
+        top_crashers = csp.top_crashers
+        for idx in range(len(top_crashers)):
+            top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.true(top_crasher_page.table_results_found, top_crasher_page.get_url_current_page())
             CrashStatsHomePage(mozwebqa)
+            top_crashers = csp.top_crashers
 
     def test_the_thunderbird_releases_return_results(self, mozwebqa):
         """
@@ -204,6 +207,7 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
+    @prod
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
@@ -237,21 +241,25 @@ class TestCrashReports:
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
+        top_crashers = csp.top_crashers
 
-        for top_crasher in csp.top_crashers:
-            top_crasher_name = top_crasher.version_name
-            top_crasher_page = top_crasher.click_top_crasher()
+        for idx in range(len(csp.top_crashers)):
+            top_crasher_name = top_crashers[idx].version_name
+            top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
-            csp = CrashStatsHomePage(mozwebqa)
+            top_crasher_page.return_to_previous_page()
+            top_crashers = csp.top_crashers
 
     def _verify_results_are_returned(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
+        top_crashers = csp.top_crashers
 
-        for top_crasher in csp.top_crashers:
-            top_crasher_page = top_crasher.click_top_crasher()
+        for idx in range(len(top_crashers)):
+            top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.true(top_crasher_page.table_results_found, 'No results found')
-            CrashStatsHomePage(mozwebqa)
+            top_crasher_page.return_to_previous_page()
+            top_crashers = csp.top_crashers
 
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
         """
