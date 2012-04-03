@@ -494,4 +494,4 @@ class CrashStatsTopChangers(CrashStatsBasePage):
     def is_top_changers_highlighted(self):
         report = self.selenium.find_element(*self._report_locator)
         selected_report = Select(report)
-        return (selected_report.first_selected_option == 'Top Changers')
+        return selected_report.first_selected_option == 'Top Changers'
