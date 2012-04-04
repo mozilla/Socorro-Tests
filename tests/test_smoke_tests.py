@@ -122,7 +122,6 @@ class TestSmokeTests:
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         """
         Bug 631737
-        THIS TEST NEEDS REFACTORING!!!
         """
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invaliddomain'

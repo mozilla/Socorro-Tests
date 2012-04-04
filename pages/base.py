@@ -26,9 +26,6 @@ class CrashStatsBasePage(Page):
     def page_heading(self):
         return self.selenium.find_element(*self._page_heading).text
 
-    def get_attribute(self, element, attribute):
-        return self.selenium.find_element(*element).get_attribute(attribute)
-
     def get_url_path(self, path):
         self.selenium.get(path)
 

@@ -19,7 +19,7 @@ class TestSearchForIdOrSignature:
         Assert.false(results.results_found, results.get_url_current_page())
 
     def test_that_search_for_valid_signature(self, mozwebqa):
-        """
+        """.....
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         """
@@ -27,7 +27,7 @@ class TestSearchForIdOrSignature:
         report_list = csp.click_first_product_top_crashers_link()
         signature = report_list.first_valid_signature
 
-        result = csp.header.search_for_crash(signature[:30])
+        result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found, result.get_url_current_page())
 
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
@@ -64,7 +64,6 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
 
-    ####TODO
     @xfail(reason='Disabled until bug 688256 is fixed')
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310

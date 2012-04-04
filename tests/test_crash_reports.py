@@ -10,7 +10,6 @@ from pages.crash_stats_page import ProductsLinksPage
 from unittestzero import Assert
 
 xfail = pytest.mark.xfail
-prod = pytest.mark.prod
 
 
 class TestCrashReports:
@@ -68,7 +67,7 @@ class TestCrashReports:
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         nightly_builds_page = csp.header.select_report('Nightly Builds')
-        Assert.equal(nightly_builds_page.product_header, 'Nightly Builds for Firefox')
+        Assert.equal(nightly_builds_page.page_heading, 'Nightly Builds for Firefox')
 
         website_link = nightly_builds_page.link_to_ftp
         #check that the link is valid
@@ -87,7 +86,7 @@ class TestCrashReports:
         for product in products:
             csp = products_page.click_product(product)
             Assert.true(csp.get_url_current_page().endswith(product), csp.get_url_current_page())
-            Assert.contains(product, csp.get_page_name)
+            Assert.contains(product, csp.page_heading)
             products_page = ProductsLinksPage(mozwebqa)
 
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
@@ -207,7 +206,6 @@ class TestCrashReports:
         """
         self._verify_results_are_returned(mozwebqa, 'SeaMonkey')
 
-    @prod
     def test_the_fennec_releases_return_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/20145655
@@ -279,9 +277,7 @@ class TestCrashReports:
         reports_page = csp.click_first_product_top_crashers_link()
         Assert.equal(reports_page.get_default_filter_text, 'Browser')
 
-        signature_items = reports_page.signature_list_items
-
-        for signature_item in signature_items:
+        for signature_item in reports_page.signature_list_items:
             Assert.true(signature_item.is_browser_icon_visible)
             Assert.false(signature_item.is_plugin_icon_present)
 

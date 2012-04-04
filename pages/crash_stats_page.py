@@ -22,7 +22,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_crashers_elements_locator = (By.CSS_SELECTOR, 'ul > li:nth-of-type(1) > a')
     _top_changers_elements_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(2) > a')
     _top_selected_locator = (By.CSS_SELECTOR, '.selected')
-    _heading_locator = (By.CSS_SELECTOR, '.page-heading h2')
     _results_table_rows = (By.CSS_SELECTOR, 'div.body table.tablesorter tbody > tr')
 
     def __init__(self, testsetup, product=None):
@@ -32,7 +31,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         CrashStatsBasePage.__init__(self, testsetup)
 
         if product is None:
-            #self.selenium.open(self.base_url)
             self.selenium.get(self.base_url)
 
     def report_length(self, days):
@@ -56,10 +54,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def first_signature(self):
         return self.selenium.find_element(*self._first_signature_locator).text
-
-    @property
-    def get_page_name(self):
-        return self.selenium.find_element(*self._heading_locator).text
 
     @property
     def top_crashers(self):
@@ -100,7 +94,6 @@ class CrashReportList(CrashStatsBasePage):
     _plugin_filter_locator = (By.CSS_SELECTOR, '.tc-duration-type.tc-filter > li:nth-child(4) > a')
 
     _signature_table_locator = (By.CSS_SELECTOR, '#signatureList .signature')
-    _first_signature_table_locator = (By.CSS_SELECTOR, 'tr:nth-child(1) a.signature')
     _data_table = (By.ID, 'signatureList')
 
     def click_signature(self, index):
@@ -118,7 +111,8 @@ class CrashReportList(CrashStatsBasePage):
     def first_valid_signature(self):
         for i in self.selenium.find_elements(*self._signature_locator):
             if i.text != 'empty signature':
-                    return i.text
+                    break
+        return i.text
 
     @property
     def reports_count(self):
@@ -168,9 +162,6 @@ class CrashReportList(CrashStatsBasePage):
 class CrashReport(Page):
     _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
     _report_locator = (By.CSS_SELECTOR, '.ui-state-default.ui-corner-top:nth-of-type(4)')
-
-    def __init__(self, testsetup):
-        Page.__init__(self, testsetup)
 
     @property
     def reports(self):
@@ -434,10 +425,6 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     _link_to_ftp_locator = (By.CSS_SELECTOR, '.notitle > p > a')
-
-    @property
-    def product_header(self):
-        return self.selenium.find_element(*self._page_heading).text
 
     @property
     def link_to_ftp(self):

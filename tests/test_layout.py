@@ -29,15 +29,15 @@ class TestLayout:
     def test_that_topcrasher_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/topcrasher')
-        Assert.contains('Top Crashers', csp.get_page_name)
+        Assert.contains('Top Crashers', csp.page_heading)
         Assert.true(csp.results_found(), 'No results found!')
 
     def test_that_report_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/report')
-        Assert.contains('Page not Found', csp.get_page_name)
+        Assert.contains('Page not Found', csp.page_heading)
 
     def test_that_correlation_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/correlation')
-        Assert.contains('Page not Found', csp.get_page_name)
+        Assert.contains('Page not Found', csp.page_heading)
