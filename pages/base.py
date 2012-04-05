@@ -45,7 +45,7 @@ class CrashStatsBasePage(Page):
     class Header(Page):
         _find_crash_id_or_signature = (By.ID, 'q')
         _product_select_locator = (By.ID, 'products_select')
-        _product_version_select = (By.ID, 'report_select')
+        _report_select_locator = (By.ID, 'report_select')
         _all_versions_locator = (By.CSS_SELECTOR, '#product_version_select')
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
@@ -76,6 +76,12 @@ class CrashStatsBasePage(Page):
             return other_versions
 
         @property
+        def current_report(self):
+            element = self.selenium.find_element(*self._report_select_locator)
+            select = Select(element)
+            return select.first_selected_option.text
+
+        @property
         def product_list(self):
             return self.selenium.find_element(*self._product_select_locator).find_elements(By.CSS_SELECTOR, 'option')
 
@@ -100,7 +106,7 @@ class CrashStatsBasePage(Page):
                 Select the report type from the drop down
                 and wait for the page to reload
             '''
-            report_dropdown = self.selenium.find_element(*self._product_version_select)
+            report_dropdown = self.selenium.find_element(*self._report_select_locator)
             select = Select(report_dropdown)
             select.select_by_visible_text(report_name)
 
