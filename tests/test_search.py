@@ -16,7 +16,7 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
 
         results = csp.header.search_for_crash("this won't exist")
-        Assert.false(results.results_found, results.get_url_current_page())
+        Assert.false(results.results_found)
 
     def test_that_search_for_valid_signature(self, mozwebqa):
         """.....
@@ -28,7 +28,7 @@ class TestSearchForIdOrSignature:
         signature = report_list.first_valid_signature
 
         result = csp.header.search_for_crash(signature)
-        Assert.true(result.results_found, result.get_url_current_page())
+        Assert.true(result.results_found)
 
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -77,7 +77,7 @@ class TestSearchForIdOrSignature:
         results_page_count = cs_advanced.first_signature_number_of_results
         cssr = cs_advanced.click_first_signature()
         cssr.click_reports()
-        Assert.equal(results_page_count, cssr.total_items_label, cssr.get_url_current_page())
+        Assert.equal(results_page_count, cssr.total_items_label)
 
     @prod
     def test_that_search_for_a_given_build_id_works(self, mozwebqa):
@@ -94,7 +94,7 @@ class TestSearchForIdOrSignature:
         if cs_advanced.results_found:
             Assert.true(cs_advanced.first_signature_number_of_results > 0)
         else:
-            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.', cs_advanced.get_url_current_page())
+            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')
 
     @prod
     @xfail(reason='Disabled until bug 720037 is fixed')
@@ -114,7 +114,7 @@ class TestSearchForIdOrSignature:
             except:
                 Assert.fail('reached the last page and no data was found')
 
-        Assert.true(cs_advanced.is_browser_icon_visible, cs_advanced.get_url_current_page())
+        Assert.true(cs_advanced.is_browser_icon_visible)
 
     @prod
     def test_that_plugin_filters_result(self, mozwebqa):
@@ -132,7 +132,7 @@ class TestSearchForIdOrSignature:
         while not cs_advanced.is_plugin_icon_visible:
             cs_advanced.click_next()
 
-        Assert.true(cs_advanced.is_plugin_icon_visible, cs_advanced.get_url_current_page())
+        Assert.true(cs_advanced.is_plugin_icon_visible)
 
     @prod
     def test_that_plugin_filename_column_sorts(self, mozwebqa):
@@ -153,4 +153,4 @@ class TestSearchForIdOrSignature:
             cs_advanced.click_plugin_filename_header()
             Assert.is_sorted_descending(cs_advanced.plugin_filename_results_list())
         else:
-            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.', cs_advanced.get_url_current_page())
+            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')

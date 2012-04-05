@@ -17,14 +17,14 @@ class TestLayout:
 
         product_list = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid']
         products = [product.text for product in  csp.header.product_list]
-        Assert.equal(product_list, products, csp.get_url_current_page())
+        Assert.equal(product_list, products)
 
     @xfail(reason='Bug 687841 - Versions in Navigation Bar appear in wrong order')
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        Assert.is_sorted_descending(csp.header.current_versions, csp.get_url_current_page())
-        Assert.is_sorted_descending(csp.header.other_versions, csp.get_url_current_page())
+        Assert.is_sorted_descending(csp.header.current_versions)
+        Assert.is_sorted_descending(csp.header.other_versions)
 
     def test_that_topcrasher_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
