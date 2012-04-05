@@ -16,8 +16,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         https://crash-stats.allizom.org/
     '''
     _first_product_top_crashers_link_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(1) > a')
-    _first_signature_locator = (By.CSS_SELECTOR, 'div.crash > p > a')
-    _second_signature_locator = (By.CSS_SELECTOR, '.crash:nth-of-type(3) > p > a')
     _top_crashers_regions_locator = (By.CSS_SELECTOR, '.release_channel')
     _top_crashers_elements_locator = (By.CSS_SELECTOR, 'ul > li:nth-of-type(1) > a')
     _top_changers_elements_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(2) > a')
@@ -44,10 +42,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     def click_first_product_top_crashers_link(self):
         self.selenium.find_element(*self._first_product_top_crashers_link_locator).click()
         return CrashReportList(self.testsetup)
-
-    @property
-    def first_signature(self):
-        return self.selenium.find_element(*self._first_signature_locator).text
 
     @property
     def top_crashers(self):
