@@ -33,12 +33,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         if product is None:
             self.selenium.get(self.base_url)
 
-    def report_length(self, days):
-        '''
-            Click on the link with the amount of days you want the report to be
-        '''
-        self.selenium.find_element(*getattr(self, 'link= %s days') % days).click()
-
     def click_on_top_(self, element):
         topElement = self.selenium.find_element(*getattr(self, 'link=Top %s' % element))
         topElement.click()
