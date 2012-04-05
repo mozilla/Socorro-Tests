@@ -93,7 +93,7 @@ class CrashStatsBasePage(Page):
             '''
             version_dropdown = self.selenium.find_element(*self._all_versions_locator)
             select = Select(version_dropdown)
-            select.select_by_visible_text(version)
+            select.select_by_visible_text(str(version))
 
         def select_report(self, report_name):
             '''
