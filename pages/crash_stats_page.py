@@ -360,22 +360,11 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
 class CrashStatsTopCrashers(CrashStatsBasePage):
 
-    _product_header_locator = (By.ID, 'current-product')
-    _product_version_header_locator = (By.ID, 'current-version')
-
     _filter_by_locator = (By.CSS_SELECTOR, '.tc-duration-type.tc-filter > li > a')
     _filter_days_by_locator = (By.CSS_SELECTOR, '.tc-duration-days.tc-filter > li > a')
 
     _result_rows_locator = (By.CSS_SELECTOR, 'table#signatureList > tbody > tr')
     _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
-
-    @property
-    def product_header(self):
-        return self.selenium.find_element(*self._product_header_locator).text
-
-    @property
-    def product_version_header(self):
-        return self.selenium.find_element(*self._product_version_header_locator)
 
     @property
     def count_results(self):
