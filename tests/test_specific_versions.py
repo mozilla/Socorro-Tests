@@ -23,5 +23,5 @@ class TestSpecificVersions:
         crash_report_page.click_reports()
 
         for report in crash_report_page.reports:
-            Assert.equal(report.product, product, crash_report_page.get_url_current_page())
+            Assert.equal(report.product, product)
             Assert.contains(report.version, str(versions[1]))
