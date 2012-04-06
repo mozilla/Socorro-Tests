@@ -99,8 +99,7 @@ class CrashReportList(CrashStatsBasePage):
     def first_valid_signature(self):
         for i in self.selenium.find_elements(*self._signature_locator):
             if i.text != 'empty signature':
-                    break
-        return i.text
+                    return i.text
 
     @property
     def reports_count(self):
