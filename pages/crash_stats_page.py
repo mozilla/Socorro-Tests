@@ -16,8 +16,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         https://crash-stats.allizom.org/
     '''
     _first_product_top_crashers_link_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(1) > a')
-    _first_signature_locator = (By.CSS_SELECTOR, 'div.crash > p > a')
-    _second_signature_locator = (By.CSS_SELECTOR, '.crash:nth-of-type(3) > p > a')
     _top_crashers_regions_locator = (By.CSS_SELECTOR, '.release_channel')
     _top_crashers_elements_locator = (By.CSS_SELECTOR, 'ul > li:nth-of-type(1) > a')
     _top_changers_elements_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(2) > a')
@@ -33,12 +31,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
         if product is None:
             self.selenium.get(self.base_url)
 
-    def report_length(self, days):
-        '''
-            Click on the link with the amount of days you want the report to be
-        '''
-        self.selenium.find_element(*getattr(self, 'link= %s days') % days).click()
-
     def click_on_top_(self, element):
         topElement = self.selenium.find_element(*getattr(self, 'link=Top %s' % element))
         topElement.click()
@@ -50,10 +42,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     def click_first_product_top_crashers_link(self):
         self.selenium.find_element(*self._first_product_top_crashers_link_locator).click()
         return CrashReportList(self.testsetup)
-
-    @property
-    def first_signature(self):
-        return self.selenium.find_element(*self._first_signature_locator).text
 
     @property
     def top_crashers(self):
@@ -111,8 +99,7 @@ class CrashReportList(CrashStatsBasePage):
     def first_valid_signature(self):
         for i in self.selenium.find_elements(*self._signature_locator):
             if i.text != 'empty signature':
-                    break
-        return i.text
+                    return i.text
 
     @property
     def reports_count(self):

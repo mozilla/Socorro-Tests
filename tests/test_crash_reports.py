@@ -18,7 +18,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         Assert.contains('Firefox', csp.page_title)
         crash_adu = csp.header.select_report('Crashes per User')
-        Assert.equal(csp.header.current_product, crash_adu.product_select, csp.get_url_current_page())
+        Assert.equal(csp.header.current_product, crash_adu.product_select)
 
     def test_that_reports_form_has_same_product_for_thunderbird(self, mozwebqa):
         self._verify_reports_form_have_same_product(mozwebqa, 'Thunderbird')
@@ -37,7 +37,7 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(product, cstc.header.current_product, cstc.get_url_current_page())
+            Assert.equal(product, cstc.header.current_product)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.header.current_version in details['versions'])
 
@@ -59,7 +59,7 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(product, cstc.header.current_product, csp.get_url_current_page())
+            Assert.equal(product, cstc.header.current_product)
 
         cstc.click_filter_by('All')
         Assert.greater(cstc.count_results, 0)
@@ -75,7 +75,7 @@ class TestCrashReports:
 
         #test external link works
         nightly_builds_page.click_link_to_ftp()
-        Assert.equal(website_link, nightly_builds_page.get_url_current_page(), nightly_builds_page.get_url_current_page())
+        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
 
     def test_that_products_page_links_work(self, mozwebqa):
         products_page = ProductsLinksPage(mozwebqa)
@@ -85,7 +85,7 @@ class TestCrashReports:
 
         for product in products:
             csp = products_page.click_product(product)
-            Assert.true(csp.get_url_current_page().endswith(product), csp.get_url_current_page())
+            Assert.true(csp.get_url_current_page().endswith(product))
             Assert.contains(product, csp.page_heading)
             products_page = ProductsLinksPage(mozwebqa)
 
@@ -121,7 +121,7 @@ class TestCrashReports:
             if csp.results_found:
                 csp.header.select_version(version)
                 cstc = csp.header.select_report('Top Changers')
-                Assert.true(cstc.is_top_changers_highlighted, cstc.get_url_current_page())
+                Assert.true(cstc.is_top_changers_highlighted)
 
     @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
@@ -133,7 +133,7 @@ class TestCrashReports:
         crash_per_user.type_start_date('1995-01-01')
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
-        Assert.equal('1995-01-01', crash_per_user.last_row_date_value, crash_per_user.get_url_current_page())
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
 
     def test_that_top_crashers_reports_links_work_for_firefox(self, mozwebqa):
         """
@@ -184,7 +184,7 @@ class TestCrashReports:
         top_crashers = csp.top_crashers
         for idx in range(len(top_crashers)):
             top_crasher_page = top_crashers[idx].click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found, top_crasher_page.get_url_current_page())
+            Assert.true(top_crasher_page.table_results_found)
             CrashStatsHomePage(mozwebqa)
             top_crashers = csp.top_crashers
 
