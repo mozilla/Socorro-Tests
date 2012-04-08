@@ -5,6 +5,7 @@
 
 import pytest
 from pages.crash_stats_page import CrashStatsHomePage
+from pages.crash_stats_page import CrashStatsTopCrashers
 from unittestzero import Assert
 xfail = pytest.mark.xfail
 
@@ -29,8 +30,9 @@ class TestLayout:
     def test_that_topcrasher_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.get_url_path(csp.base_url + '/topcrasher')
-        Assert.contains('Top Crashers', csp.page_heading)
-        Assert.true(csp.results_found(), 'No results found!')
+        tc = CrashStatsTopCrashers(mozwebqa)
+        Assert.contains('Top Crashers', tc.page_heading)
+        Assert.true(tc.table_results_found, 'No results found!')
 
     def test_that_report_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)

@@ -36,7 +36,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        if csp.results_found:
+        if cstc.table_results_found:
             Assert.equal(product, cstc.product_header)
             #Bug 611694 - Disabled till bug fixed
             #Assert.true(cstc.product_version_header in details['versions'])
@@ -58,7 +58,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        if csp.results_found:
+        if cstc.table_results_found:
             Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_by('All')
@@ -94,7 +94,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        if csp.results_found():
+        if cstc.table_results_found:
             Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_by('Browser')
@@ -105,7 +105,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        if csp.results_found:
+        if cstc.table_results_found:
             Assert.equal(product, cstc.product_header)
 
         cstc.click_filter_by('Plugin')
@@ -118,10 +118,9 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
-            if csp.results_found:
-                csp.header.select_version(version)
-                cstc = csp.header.select_report('Top Changers')
-                Assert.true(cstc.is_top_changers_highlighted)
+            csp.header.select_version(version)
+            cstc = csp.header.select_report('Top Changers')
+            Assert.true(cstc.is_top_changers_highlighted)
 
     @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
@@ -222,19 +221,19 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
         Assert.contains(product_name, csp.page_title)
-        if csp.results_found:
-            crash_adu = csp.header.select_report('Crashes per User')
-            Assert.equal(csp.header.current_product, crash_adu.product_select)
+
+        crash_adu = csp.header.select_report('Crashes per User')
+        Assert.equal(csp.header.current_product, crash_adu.product_select)
 
     def _verify_version_selected_in_top_crashers_header(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product_name)
-        if csp.results_found:
-            product = csp.header.current_product
-            cstc = csp.header.select_report('Top Crashers')
-            Assert.equal(product, cstc.product_header)
-            #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+
+        product = csp.header.current_product
+        cstc = csp.header.select_report('Top Crashers')
+        Assert.equal(product, cstc.product_header)
+        #Bug 611694 - Disabled till bug fixed
+        #Assert.true(cstc.product_version_header in details['versions'])
 
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)

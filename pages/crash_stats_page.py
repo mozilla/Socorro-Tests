@@ -20,7 +20,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _top_crashers_elements_locator = (By.CSS_SELECTOR, 'ul > li:nth-of-type(1) > a')
     _top_changers_elements_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(2) > a')
     _top_selected_locator = (By.CSS_SELECTOR, '.selected')
-    _results_table_rows = (By.CSS_SELECTOR, 'div.body table.tablesorter tbody > tr')
 
     def __init__(self, testsetup, product=None):
         '''
@@ -46,12 +45,6 @@ class CrashStatsHomePage(CrashStatsBasePage):
     @property
     def top_crashers(self):
         return [self.CrashReportsRegion(self.testsetup, element) for element in self.selenium.find_elements(*self._top_crashers_regions_locator)]
-
-    def results_found(self):
-        try:
-            return len(self.selenium.find_elements(*self._results_table_rows)) > 0
-        except NoSuchElementException:
-            return False
 
     class CrashReportsRegion(CrashStatsBasePage):
 
