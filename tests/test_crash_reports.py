@@ -26,24 +26,23 @@ class TestCrashReports:
         crash_adu = csp.header.select_report('Crashes per User')
         Assert.equal(csp.header.current_product, crash_adu.product_select)
 
-    @pytest.mark.xfail(reason = '#Bug 611694 - Selecting product and report doesn\'t choose latest version')
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
-
         csp.header.select_product(product)
 
         cstc = csp.header.select_report('Top Crashers')
-        Assert.equal(product, cstc.product_header)
-        Assert.equal(cstc.header.current_version, cstc.product_version_header)
+        Assert.equal(product, cstc.page_heading_product)
+        Assert.equal(cstc.header.current_version, cstc.page_heading_version)
 
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('All')
         Assert.greater(cstc.count_results, 0)
@@ -76,8 +75,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Browser')
         Assert.greater(cstc.count_results, 0)
@@ -87,8 +87,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.count_results, 0)
@@ -103,7 +104,7 @@ class TestCrashReports:
             csp.header.select_version(version)
             cstc = csp.header.select_report('Top Changers')
             Assert.true(cstc.is_top_changers_highlighted)
-
+    
     @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
