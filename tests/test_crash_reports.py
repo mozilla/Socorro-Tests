@@ -101,24 +101,24 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
-            
+
             csp.header.select_version(str(version))
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
-    #
-    #@pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
-    #def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
-    #    """
-    #    https://www.pivotaltracker.com/story/show/17141439
-    #    """
-    #    csp = CrashStatsHomePage(mozwebqa)
-    #    crash_per_user = csp.header.select_report('Crashes per User')
-    #    crash_per_user.type_start_date('1995-01-01')
-    #    crash_per_user.click_generate_button()
-    #    Assert.true(crash_per_user.is_table_visible)
-    #    Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
 
-    @pytest.mark.parametrize(('product'), _expected_products)    
+    @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
+    def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
+        """
+        https://www.pivotaltracker.com/story/show/17141439
+        """
+        csp = CrashStatsHomePage(mozwebqa)
+        crash_per_user = csp.header.select_report('Crashes per User')
+        crash_per_user.type_start_date('1995-01-01')
+        crash_per_user.click_generate_button()
+        Assert.true(crash_per_user.is_table_visible)
+        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
+
+
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         """
         https://www.pivotaltracker.com/story/show/17086667
