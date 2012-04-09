@@ -46,7 +46,7 @@ class CrashStatsBasePage(Page):
         _find_crash_id_or_signature = (By.ID, 'q')
         _product_select_locator = (By.ID, 'products_select')
         _report_select_locator = (By.ID, 'report_select')
-        _all_versions_locator = (By.CSS_SELECTOR, '#product_version_select')
+        _all_versions_locator = (By.ID, 'product_version_select')
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
         _report_select = (By.ID, 'report_select')
@@ -56,6 +56,12 @@ class CrashStatsBasePage(Page):
         @property
         def current_product(self):
             element = self.selenium.find_element(*self._product_select_locator)
+            select = Select(element)
+            return select.first_selected_option.text
+
+        @property
+        def current_version(self):
+            element = self.selenium.find_element(*self._all_versions_locator)
             select = Select(element)
             return select.first_selected_option.text
 
