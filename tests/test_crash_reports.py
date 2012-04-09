@@ -36,10 +36,11 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+        
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
             #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+            #Assert.true(cstc.page_heading_version in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, mozwebqa):
         self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Thunderbird')
@@ -58,8 +59,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('All')
         Assert.greater(cstc.count_results, 0)
@@ -94,8 +96,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Browser')
         Assert.greater(cstc.count_results, 0)
@@ -105,8 +108,9 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
+
         if cstc.table_results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.count_results, 0)
@@ -118,9 +122,10 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
+
             csp.header.select_version(version)
             cstc = csp.header.select_report('Top Changers')
-            Assert.true(cstc.is_top_changers_highlighted)
+            Assert.equal(cstc.header.current_report, 'Top Changers')
 
     @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
@@ -231,7 +236,7 @@ class TestCrashReports:
 
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-        Assert.equal(product, cstc.product_header)
+        Assert.equal(product, cstc.page_heading_product)
         #Bug 611694 - Disabled till bug fixed
         #Assert.true(cstc.product_version_header in details['versions'])
 
