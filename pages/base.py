@@ -82,6 +82,12 @@ class CrashStatsBasePage(Page):
             return other_versions
 
         @property
+        def current_report(self):
+            element = self.selenium.find_element(*self._report_select_locator)
+            select = Select(element)
+            return select.first_selected_option.text
+
+        @property
         def product_list(self):
             return self.selenium.find_element(*self._product_select_locator).find_elements(By.CSS_SELECTOR, 'option')
 
