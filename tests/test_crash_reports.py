@@ -37,9 +37,9 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
             #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+            #Assert.true(cstc.page_heading_version in details['versions'])
 
     def test_that_current_version_selected_in_top_crashers_header_for_thunderbird(self, mozwebqa):
         self._verify_version_selected_in_top_crashers_header(mozwebqa, 'Thunderbird')
@@ -59,7 +59,7 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('All')
         Assert.greater(cstc.count_results, 0)
@@ -95,7 +95,7 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found():
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Browser')
         Assert.greater(cstc.count_results, 0)
@@ -106,7 +106,7 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if csp.results_found:
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.count_results, 0)
@@ -232,9 +232,9 @@ class TestCrashReports:
         if csp.results_found:
             product = csp.header.current_product
             cstc = csp.header.select_report('Top Crashers')
-            Assert.equal(product, cstc.product_header)
+            Assert.equal(product, cstc.page_heading_product)
             #Bug 611694 - Disabled till bug fixed
-            #Assert.true(cstc.product_version_header in details['versions'])
+            #Assert.true(cstc.page_heading_version in details['versions'])
 
     def _verify_top_crashers_links_work(self, mozwebqa, product_name):
         csp = CrashStatsHomePage(mozwebqa)
