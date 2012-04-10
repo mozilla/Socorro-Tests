@@ -44,18 +44,24 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             self.selenium.find_element(*locator)
-            return True
         except NoSuchElementException:
             return False
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
-    def is_element_visible(self, *locator):
+    def is_element_visible(self, parent_element, *locator):
+        self.selenium.implicitly_wait(0)
         try:
-            return self.selenium.find_element(*locator).is_displayed()
+            if parent_element is not None:
+                return parent_element.find_element(*locator).is_displayed()
+            else:
+                return self.selenium.find_element(*locator).is_displayed()
         except NoSuchElementException, ElementNotVisibleException:
             return False
+        finally:
+            # set back to where you once belonged
+            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
     def return_to_previous_page(self):
         self.selenium.back()

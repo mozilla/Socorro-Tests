@@ -32,7 +32,7 @@ class TestLayout:
         csp.get_url_path(csp.base_url + '/topcrasher')
         tc = CrashStatsTopCrashers(mozwebqa)
         Assert.contains('Top Crashers', tc.page_heading)
-        Assert.true(tc.table_results_found, 'No results found!')
+        Assert.true(tc.results_found, 'No results found!')
 
     def test_that_report_is_not_returning_http500(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)

@@ -5,6 +5,7 @@
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 from pages.page import Page
 from pages.base import CrashStatsBasePage
 from selenium.webdriver.support.select import Select
@@ -40,7 +41,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def click_first_product_top_crashers_link(self):
         self.selenium.find_element(*self._first_product_top_crashers_link_locator).click()
-        return CrashReportList(self.testsetup)
+        return CrashStatsTopCrashers(self.testsetup)
 
     @property
     def top_crashers(self):
@@ -64,91 +65,19 @@ class CrashStatsHomePage(CrashStatsBasePage):
             return CrashStatsTopCrashers(self.testsetup)
 
 
-class CrashReportList(CrashStatsBasePage):
-    # https://crash-stats.allizom.org/topcrasher/byversion/Firefox/7.0a2/7/plugin
-
-    _reports_list_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
-    _signature_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4) > a')
-    _signature_text_locator = (By.CSS_SELECTOR, '.signature')
-
-    _default_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
-    _plugin_filter_locator = (By.CSS_SELECTOR, '.tc-duration-type.tc-filter > li:nth-child(4) > a')
-
-    _signature_table_locator = (By.CSS_SELECTOR, '#signatureList .signature')
-    _data_table = (By.ID, 'signatureList')
-
-    def click_signature(self, index):
-        signatures = self.selenium.find_elements(*self._signature_text_locator)
-        signatures[index].click()
-        return self.CrashReport(self.testsetup)
-
-    def click_first_valid_signature(self):
-        for i in self.selenium.find_elements(*self._signature_locator):
-            if i.text != 'empty signature':
-                i.click()
-                return CrashReport(self.testsetup)
-
-    @property
-    def first_valid_signature(self):
-        for i in self.selenium.find_elements(*self._signature_locator):
-            if i.text != 'empty signature':
-                    return i.text
-
-    @property
-    def reports_count(self):
-        return len(self.selenium.find_elements(*self._reports_list_locator))
-
-    @property
-    def get_default_filter_text(self):
-        return self.selenium.find_element(*self._default_filter_type_locator).text
-
-    def click_plugin_filter(self):
-        self.selenium.find_element(*self._plugin_filter_locator).click()
-
-    @property
-    def signature_list_count(self):
-        return len(self.selenium.find_elements(*self._signature_table_locator))
-
-    @property
-    def signature_list_items(self):
-        return [self.TableRegion(self.testsetup, i) for i in range(self.signature_list_count)]
-
-    class TableRegion(Page):
-        _data_table_signature_locator = (By.CSS_SELECTOR, 'table#signatureList > tbody > tr > td:nth-child(4)')
-        _data_table_browser_icon_locator = (By.CSS_SELECTOR, 'div > img.browser')
-        _data_table_plugin_icon_locator = (By.CSS_SELECTOR, 'div > img.plugin')
-
-        def __init__(self, testsetup, signature):
-                Page.__init__(self, testsetup)
-                self._signature = signature
-
-        @property
-        def is_plugin_icon_visible(self):
-            return self.selenium.find_element(*self._data_table_signature_locator).find_element(*self._data_table_plugin_icon_locator).is_displayed()
-
-        @property
-        def is_plugin_icon_present(self):
-            return self.is_element_present(*self._data_table_plugin_icon_locator)
-
-        @property
-        def is_browser_icon_visible(self):
-            return self.selenium.find_element(*self._data_table_signature_locator).find_element(*self._data_table_browser_icon_locator).is_displayed()
-
-        @property
-        def is_browser_icon_present(self):
-            return self.is_element_present(*self._data_table_browser_icon_locator)
-
-
 class CrashReport(Page):
+
+    _reports_tab_locator = (By.ID, 'reports')
     _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
-    _report_locator = (By.CSS_SELECTOR, '.ui-state-default.ui-corner-top:nth-of-type(4)')
+    _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
 
     @property
     def reports(self):
         return [self.Report(self.testsetup, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
 
     def click_reports(self):
-        self.selenium.find_element(*self._report_locator).click()
+        self.selenium.find_element(*self._report_tab_button_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(None, *self._reports_tab_locator))
 
     class Report(Page):
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
@@ -327,7 +256,7 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     @property
     def is_table_visible(self):
-        return self.is_element_visible(*self._table_locator)
+        return self.is_element_visible(None, *self._table_locator)
 
     @property
     def table_row_count(self):
@@ -345,9 +274,11 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _filter_by_locator = (By.CSS_SELECTOR, '.tc-duration-type.tc-filter > li > a')
     _filter_days_by_locator = (By.CSS_SELECTOR, '.tc-duration-days.tc-filter > li > a')
-
-    _result_rows_locator = (By.CSS_SELECTOR, 'table#signatureList > tbody > tr')
     _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
+    _current_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
+
+    _data_table = (By.ID, 'signatureList')
+    _signature_table_row_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
 
     @property
     def page_heading_product(self):
@@ -358,8 +289,15 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.selenium.find_element(*self._page_heading_version_locator).text
 
     @property
-    def count_results(self):
-        return len(self.selenium.find_elements(*self._result_rows_locator))
+    def results_count(self):
+        return len(self.selenium.find_elements(*self._signature_table_row_locator))
+
+    @property
+    def results_found(self):
+        try:
+            return self.results_count > 0
+        except NoSuchElementException:
+            return False
 
     def click_filter_by(self, option):
         for element in self.selenium.find_elements(*self._filter_by_locator):
@@ -377,15 +315,52 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
                 return CrashStatsTopCrashers(self.testsetup)
 
     @property
-    def table_results_found(self):
-        try:
-            return len(self.selenium.find_elements(*self._result_rows_locator)) > 0
-        except NoSuchElementException:
-            return False
-
-    @property
     def current_days_filter(self):
         return self.selenium.find_element(*self._current_days_filter_locator).text
+
+    @property
+    def current_filter_type(self):
+        return self.selenium.find_element(*self._current_filter_type_locator).text
+
+    @property
+    def signature_items(self):
+        return [self.SignatureItem(self.testsetup, i) for i in self.selenium.find_elements(*self._signature_table_row_locator)]
+
+    @property
+    def valid_signature_items(self):
+        return [self.SignatureItem(self.testsetup, i) for i in self.selenium.find_elements(*self._signature_table_row_locator) if i.text != 'empty signature']
+
+    def click_first_valid_signature(self):
+        return self.valid_signature_items[0].click()
+
+    @property
+    def first_valid_signature_text(self):
+        return self.valid_signature_items[0].text
+
+    class SignatureItem(Page):
+        _signature_link_locator = (By.CSS_SELECTOR, 'a.signature')
+        _browser_icon_locator = (By.CSS_SELECTOR, 'div img.browser')
+        _plugin_icon_locator = (By.CSS_SELECTOR, 'div img.plugin')
+
+        def __init__(self, testsetup, element):
+                Page.__init__(self, testsetup)
+                self._root_element = element
+
+        def click(self):
+            self._root_element.find_element(*self._signature_link_locator).click()
+            return CrashReport(self.testsetup)
+
+        @property
+        def text(self):
+            return self._root_element.find_element(*self._signature_link_locator).text
+
+        @property
+        def is_plugin_icon_visible(self):
+            return self.is_element_visible(self._root_element, *self._plugin_icon_locator)
+
+        @property
+        def is_browser_icon_visible(self):
+            return self.is_element_visible(self._root_element, *self._browser_icon_locator)
 
 
 class CrashStatsTopCrashersBySite(CrashStatsBasePage):
