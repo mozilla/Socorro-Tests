@@ -15,11 +15,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     '''
-    _first_product_top_crashers_link_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(1) > a')
-    _top_crashers_regions_locator = (By.CSS_SELECTOR, '.release_channel')
-    _top_crashers_elements_locator = (By.CSS_SELECTOR, 'ul > li:nth-of-type(1) > a')
-    _top_changers_elements_locator = (By.CSS_SELECTOR, '.release_channel > ul > li:nth-of-type(2) > a')
-    _top_selected_locator = (By.CSS_SELECTOR, '.selected')
+    _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
 
     def __init__(self, testsetup, product=None):
         '''
@@ -30,37 +26,28 @@ class CrashStatsHomePage(CrashStatsBasePage):
         if product is None:
             self.selenium.get(self.base_url)
 
-    def click_on_top_(self, element):
-        topElement = self.selenium.find_element(*getattr(self, 'link=Top %s' % element))
-        topElement.click()
-        if element == 'Changers':
-            self.find_element(*self._top_changers_elements_locator).find_element(*self._top_selected_locator).is_displayed()
-        else:
-            self.find_element(*self._top_crashers_regions_locator).find_element(*self._top_crashers_elements_locator).find_element(*self._top_selected_locator).is_displayed()
-
     def click_first_product_top_crashers_link(self):
-        self.selenium.find_element(*self._first_product_top_crashers_link_locator).click()
-        return CrashReportList(self.testsetup)
+        return self.release_channels[0].click_top_crasher()
 
     @property
-    def top_crashers(self):
-        return [self.CrashReportsRegion(self.testsetup, element) for element in self.selenium.find_elements(*self._top_crashers_regions_locator)]
+    def release_channels(self):
+        return [self.ReleaseChannels(self.testsetup, element) for element in self.selenium.find_elements(*self._release_channels_locator)]
 
-    class CrashReportsRegion(CrashStatsBasePage):
+    class ReleaseChannels(CrashStatsBasePage):
 
-        _elements_locator = (By.CSS_SELECTOR, 'li:nth-of-type(1) > a')
-        _header_release_channel_locator = (By.CSS_SELECTOR, 'h4')
+        _release_channel_header_locator = (By.TAG_NAME, 'h4')
+        _top_crashers_link_locator = (By.LINK_TEXT, 'Top Crashers')
 
         def __init__(self, testsetup, element):
             CrashStatsBasePage.__init__(self, testsetup)
             self._root_element = element
 
         @property
-        def version_name(self):
-            return self._root_element.find_element(*self._header_release_channel_locator).text
+        def product_version_label(self):
+            return self._root_element.find_element(*self._release_channel_header_locator).text
 
         def click_top_crasher(self):
-            self._root_element.find_element(*self._elements_locator).click()
+            self._root_element.find_element(*self._top_crashers_link_locator).click()
             return CrashStatsTopCrashers(self.testsetup)
 
 
