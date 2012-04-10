@@ -24,6 +24,7 @@ class TestSmokeTests:
         Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
     @xfail(reason='Disabled till Bug 612679 is fixed')
+    @pytest.mark.nondestructive
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cssearch = csp.header.click_advanced_search()
@@ -34,6 +35,7 @@ class TestSmokeTests:
             Assert.equal(prod_item, search_product_list[i])
 
     @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.nondestructive
     def test_that_advanced_search_has_product_highlighted_in_multiselect(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
@@ -41,6 +43,7 @@ class TestSmokeTests:
         Assert.equal(product, cs_advanced.currently_selected_product)
 
     @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.nondestructive
     def test_that_advanced_search_view_signature_for_product_crash(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
