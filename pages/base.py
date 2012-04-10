@@ -40,7 +40,7 @@ class CrashStatsBasePage(Page):
 
     @property
     def header(self):
-        return self.Header(self)
+        return self.Header(self.testsetup)
 
     class Header(Page):
         _find_crash_id_or_signature = (By.ID, 'q')
