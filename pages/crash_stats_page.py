@@ -410,23 +410,19 @@ class CrashStatsStatus(CrashStatsBasePage):
 
 class ProductsLinksPage(CrashStatsBasePage):
 
-    _products_locator = (By.CSS_SELECTOR, '.body li a')
-    _name_page_locator = (By.CSS_SELECTOR, '#mainbody h2')
+    _heading_locator = (By.CSS_SELECTOR, '.title h2')
 
     def __init__(self, testsetup):
         CrashStatsBasePage.__init__(self, testsetup)
         self.selenium.get(self.base_url + '/products/')
 
     @property
-    def get_products_page_name(self):
-        return self.selenium.find_element(*self._name_page_locator).text
+    def page_heading(self):
+        return self.selenium.find_element(*self._heading_locator).text
 
     def click_product(self, product):
-        for element in self.selenium.find_elements(*self._products_locator):
-            if element.text == product:
-                element.click()
-                return CrashStatsHomePage(self.testsetup, product)
-
+        self.selenium.find_element(By.LINK_TEXT, product).click()
+        return CrashStatsHomePage(self.testsetup, product)
 
 class CrashStatsTopChangers(CrashStatsBasePage):
 
