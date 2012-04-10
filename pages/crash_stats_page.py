@@ -384,7 +384,7 @@ class CrashStatsStatus(CrashStatsBasePage):
 
     @property
     def is_at_a_glance_present(self):
-        return self.is_element_present(*self._at_a_glance_locator)
+        return self.is_element_visible(None, *self._at_a_glance_locator)
 
     @property
     def are_graphs_present(self):
@@ -392,7 +392,7 @@ class CrashStatsStatus(CrashStatsBasePage):
 
     @property
     def is_latest_raw_stats_present(self):
-        return self.is_element_present(*self._latest_raw_stats_locator)
+        return self.is_element_visible(None, *self._latest_raw_stats_locator)
 
 
 class ProductsLinksPage(CrashStatsBasePage):
