@@ -106,7 +106,7 @@ class TestCrashReports:
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
 
-    @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
+    @pytest.mark.xfail(run=False, reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17141439
