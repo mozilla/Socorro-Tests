@@ -105,7 +105,7 @@ class TestCrashReports:
             csp.header.select_version(str(version))
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
-    
+
     @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
@@ -117,7 +117,7 @@ class TestCrashReports:
         crash_per_user.click_generate_button()
         Assert.true(crash_per_user.is_table_visible)
         Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
-    
+
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         """
@@ -168,8 +168,8 @@ class TestCrashReports:
         Assert.equal(reports_page.current_filter_type, 'Browser')
 
         for signature_item in reports_page.signature_items:
-            Assert.true(signature_item.is_browser_icon_visible)
-            Assert.false(signature_item.is_plugin_icon_visible)
+            Assert.true(signature_item.is_browser_icon_visible, "Signature %s did not have a browser icon" % signature_item.text)
+            Assert.false(signature_item.is_plugin_icon_visible, "Signature %s unexpextedly had a plugin icon" % signature_item.text)
 
     def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
         """
@@ -181,8 +181,8 @@ class TestCrashReports:
         signature_list_items = reports_page.signature_items
 
         for signature_item in signature_list_items:
-            Assert.true(signature_item.is_plugin_icon_visible)
-            Assert.false(signature_item.is_browser_icon_visible)
+            Assert.true(signature_item.is_plugin_icon_visible, "Signature %s did not have a plugin icon" % signature_item.text)
+            Assert.false(signature_item.is_browser_icon_visible, "Signature %s unexpextedly had a browser icon" % signature_item.text)
 
     @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
     def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):

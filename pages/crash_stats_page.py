@@ -64,8 +64,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
             self._root_element.find_element(*self._elements_locator).click()
             return CrashStatsTopCrashers(self.testsetup)
 
+
 class CrashReport(Page):
-    
+
     _reports_tab_locator = (By.ID, 'reports')
     _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
@@ -338,8 +339,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     class SignatureItem(Page):
         _signature_link_locator = (By.CSS_SELECTOR, 'a.signature')
-        _browser_icon_locator = (By.CSS_SELECTOR, 'div > img.browser')
-        _plugin_icon_locator = (By.CSS_SELECTOR, 'div > img.plugin')
+        _browser_icon_locator = (By.CSS_SELECTOR, 'div img.browser')
+        _plugin_icon_locator = (By.CSS_SELECTOR, 'div img.plugin')
 
         def __init__(self, testsetup, element):
                 Page.__init__(self, testsetup)
@@ -360,6 +361,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         @property
         def is_browser_icon_visible(self):
             return self.is_element_visible(self._root_element, *self._browser_icon_locator)
+
 
 class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 
