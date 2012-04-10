@@ -77,7 +77,7 @@ class CrashReport(Page):
 
     def click_reports(self):
         self.selenium.find_element(*self._report_tab_button_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(*self._reports_tab_locator))
+        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(None, *self._reports_tab_locator))
 
     class Report(Page):
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
@@ -256,7 +256,7 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
 
     @property
     def is_table_visible(self):
-        return self.is_element_visible(*self._table_locator)
+        return self.is_element_visible(None, *self._table_locator)
 
     @property
     def table_row_count(self):

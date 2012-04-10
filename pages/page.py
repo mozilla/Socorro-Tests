@@ -50,7 +50,7 @@ class Page(object):
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
-    def is_element_visible(self, parent_element=None, *locator):
+    def is_element_visible(self, parent_element, *locator):
         self.selenium.implicitly_wait(0)
         try:
             if parent_element is not None:
