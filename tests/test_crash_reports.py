@@ -41,11 +41,11 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
 
-        if cstc.table_results_found:
+        if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('All')
-        Assert.greater(cstc.count_results, 0)
+        Assert.greater(cstc.results_count, 0)
 
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -76,11 +76,11 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
 
-        if cstc.table_results_found:
+        if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Browser')
-        Assert.greater(cstc.count_results, 0)
+        Assert.greater(cstc.results_count, 0)
 
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
@@ -88,11 +88,11 @@ class TestCrashReports:
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
 
-        if cstc.table_results_found:
+        if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
         cstc.click_filter_by('Plugin')
-        Assert.greater(cstc.count_results, 0)
+        Assert.greater(cstc.results_count, 0)
 
     @xfail(reason='Disabled until Bug 603561 is fixed')
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
@@ -106,7 +106,7 @@ class TestCrashReports:
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
 
-    @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
+    @pytest.mark.xfail(run=False, reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17141439
@@ -145,7 +145,7 @@ class TestCrashReports:
 
         for idx in range(len(top_crashers)):
             top_crasher_page = top_crashers[idx].click_top_crasher()
-            Assert.true(top_crasher_page.table_results_found, 'No results found')
+            Assert.true(top_crasher_page.results_found, 'No results found')
             top_crasher_page.return_to_previous_page()
             top_crashers = csp.release_channels
 
@@ -165,11 +165,11 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
-        Assert.equal(reports_page.get_default_filter_text, 'Browser')
+        Assert.equal(reports_page.current_filter_type, 'Browser')
 
-        for signature_item in reports_page.signature_list_items:
-            Assert.true(signature_item.is_browser_icon_visible)
-            Assert.false(signature_item.is_plugin_icon_present)
+        for signature_item in reports_page.signature_items:
+            Assert.true(signature_item.is_browser_icon_visible, "Signature %s did not have a browser icon" % signature_item.text)
+            Assert.false(signature_item.is_plugin_icon_visible, "Signature %s unexpextedly had a plugin icon" % signature_item.text)
 
     def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
         """
@@ -177,12 +177,12 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
-        reports_page.click_plugin_filter()
-        signature_list_items = reports_page.signature_list_items
+        reports_page.click_filter_by('Plugin')
+        signature_list_items = reports_page.signature_items
 
         for signature_item in signature_list_items:
-            Assert.true(signature_item.is_plugin_icon_visible)
-            Assert.false(signature_item.is_browser_icon_present)
+            Assert.true(signature_item.is_plugin_icon_visible, "Signature %s did not have a plugin icon" % signature_item.text)
+            Assert.false(signature_item.is_browser_icon_visible, "Signature %s unexpextedly had a browser icon" % signature_item.text)
 
     @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
     def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
