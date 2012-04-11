@@ -5,10 +5,11 @@
 
 from pages.crash_stats_page import CrashStatsHomePage
 from unittestzero import Assert
-
+import pytest
 
 class TestSpecificVersions:
 
+    @pytest.mark.nondestructive
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 

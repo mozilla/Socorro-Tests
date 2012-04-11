@@ -15,6 +15,7 @@ class TestSmokeTests:
 
     _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid']
 
+    @pytest.mark.nondestructive
     def test_that_server_status_page_loads(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csstat = csp.click_server_status()
@@ -23,7 +24,7 @@ class TestSmokeTests:
         Assert.true(csstat.are_graphs_present, '4 graphs not found')
         Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
-    @xfail(reason='Disabled till Bug 612679 is fixed')
+    @pytest.mark.xfail(reason='Disabled till Bug 612679 is fixed')
     @pytest.mark.nondestructive
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -55,11 +56,13 @@ class TestSmokeTests:
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
+    @pytest.mark.nondestructive
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
         Assert.equal(404, response.getcode())
 
-    @xfail(reason='Bug 631737')
+    @pytest.mark.xfail(reason='Bug 631737')
+    @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         """
         Bug 631737

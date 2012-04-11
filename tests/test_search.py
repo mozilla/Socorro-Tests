@@ -12,12 +12,14 @@ prod = pytest.mark.prod
 
 class TestSearchForIdOrSignature:
 
+    @pytest.mark.nondestructive
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
         results = csp.header.search_for_crash("this won't exist")
         Assert.false(results.results_found)
 
+    @pytest.mark.nondestructive
     def test_that_search_for_valid_signature(self, mozwebqa):
         """.....
             This is a test for
@@ -30,12 +32,14 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.results_found)
 
+    @pytest.mark.nondestructive
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.filter_reports()
         Assert.contains('product is one of Firefox', cs_advanced.query_results_text(0))
 
+    @pytest.mark.nondestructive
     def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Thunderbird')
@@ -43,6 +47,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of Thunderbird', cs_advanced.query_results_text(0))
 
+    @pytest.mark.nondestructive
     def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Fennec')
@@ -50,6 +55,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of Fennec', cs_advanced.query_results_text(0))
 
+    @pytest.mark.nondestructive
     def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Camino')
@@ -57,6 +63,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of Camino', cs_advanced.query_results_text(0))
 
+    @pytest.mark.nondestructive
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('SeaMonkey')
@@ -64,7 +71,8 @@ class TestSearchForIdOrSignature:
         cs_advanced.filter_reports()
         Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
 
-    @xfail(reason='Disabled until bug 688256 is fixed')
+    @pytest.mark.xfail(reason='Disabled until bug 688256 is fixed')
+    @pytest.mark.nondestructive
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
         csp = CrashStatsHomePage(mozwebqa)
@@ -79,7 +87,8 @@ class TestSearchForIdOrSignature:
         cssr.click_reports()
         Assert.equal(results_page_count, cssr.total_items_label)
 
-    @prod
+    @pytest.mark.prod
+    @pytest.mark.nondestructive
     def test_that_search_for_a_given_build_id_works(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17368401
@@ -96,8 +105,9 @@ class TestSearchForIdOrSignature:
         else:
             Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')
 
-    @prod
-    @xfail(reason='Disabled until bug 720037 is fixed')
+    @pytest.mark.prod
+    @pytest.mark.xfail(reason='Disabled until bug 720037 is fixed')
+    @pytest.mark.nondestructive
     def test_that_filter_for_browser_results(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
@@ -116,7 +126,8 @@ class TestSearchForIdOrSignature:
 
         Assert.true(cs_advanced.is_browser_icon_visible)
 
-    @prod
+    @pytest.mark.prod
+    @pytest.mark.nondestructive
     def test_that_plugin_filters_result(self, mozwebqa):
         #https://www.pivotaltracker.com/story/show/17769047
         csp = CrashStatsHomePage(mozwebqa)
@@ -134,7 +145,8 @@ class TestSearchForIdOrSignature:
 
         Assert.true(cs_advanced.is_plugin_icon_visible)
 
-    @prod
+    @pytest.mark.prod
+    @pytest.mark.nondestructive
     def test_that_plugin_filename_column_sorts(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=562380
