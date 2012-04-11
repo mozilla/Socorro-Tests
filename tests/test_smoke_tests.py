@@ -65,6 +65,6 @@ class TestSmokeTests:
         Bug 631737
         """
         csp = CrashStatsHomePage(mozwebqa)
-        path = '/invaliddomain'
-        csp.get_url_path(path)
+        path = '/invalidpath'
+        csp.selenium.get(mozwebqa.base_url + path)
         Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
