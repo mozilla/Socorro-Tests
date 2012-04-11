@@ -27,7 +27,7 @@ class CrashStatsBasePage(Page):
         return self.selenium.find_element(*self._page_heading).text
 
     def get_url_path(self, path):
-        self.selenium.get(path)
+        self.selenium.get(self.base_url + path)
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
@@ -40,7 +40,7 @@ class CrashStatsBasePage(Page):
 
     @property
     def header(self):
-        return self.Header(self)
+        return self.Header(self.testsetup)
 
     class Header(Page):
         _find_crash_id_or_signature = (By.ID, 'q')

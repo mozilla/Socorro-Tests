@@ -64,7 +64,7 @@ class TestCrashReports:
     def test_that_products_page_links_work(self, mozwebqa, product):
         products_page = ProductsLinksPage(mozwebqa)
         #An extra check that products page is loaded
-        Assert.equal(products_page.get_products_page_name, 'Mozilla Products in Crash Reporter')
+        Assert.equal(products_page.page_heading, 'Mozilla Products in Crash Reporter')
 
         csp = products_page.click_product(product)
         Assert.true(csp.get_url_current_page().endswith(product))
@@ -106,7 +106,7 @@ class TestCrashReports:
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
 
-    @pytest.mark.xfail(reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
+    @pytest.mark.xfail(run=False, reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17141439
@@ -125,14 +125,14 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-        top_crashers = csp.top_crashers
+        top_crashers = csp.release_channels
 
-        for idx in range(len(csp.top_crashers)):
-            top_crasher_name = top_crashers[idx].version_name
+        for idx in range(len(top_crashers)):
+            top_crasher_name = top_crashers[idx].product_version_label
             top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             top_crasher_page.return_to_previous_page()
-            top_crashers = csp.top_crashers
+            top_crashers = csp.release_channels
 
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
@@ -141,20 +141,20 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-        top_crashers = csp.top_crashers
+        top_crashers = csp.release_channels
 
         for idx in range(len(top_crashers)):
             top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.true(top_crasher_page.results_found, 'No results found')
             top_crasher_page.return_to_previous_page()
-            top_crashers = csp.top_crashers
+            top_crashers = csp.release_channels
 
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17088605
         """
         csp = CrashStatsHomePage(mozwebqa)
-        top_crashers = csp.top_crashers
+        top_crashers = csp.release_channels
         tc_page = top_crashers[3].click_top_crasher()
 
         Assert.equal(tc_page.current_days_filter, '7')

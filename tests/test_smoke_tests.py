@@ -13,6 +13,8 @@ xfail = pytest.mark.xfail
 
 class TestSmokeTests:
 
+    _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid']
+
     def test_that_server_status_page_loads(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csstat = csp.click_server_status()
@@ -22,6 +24,7 @@ class TestSmokeTests:
         Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
     @xfail(reason='Disabled till Bug 612679 is fixed')
+    @pytest.mark.nondestructive
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cssearch = csp.header.click_advanced_search()
@@ -31,81 +34,19 @@ class TestSmokeTests:
         for i, prod_item in range(0, len(nav_product_list)):
             Assert.equal(prod_item, search_product_list[i])
 
-    def test_that_advanced_search_has_firefox_highlighted_in_multiselect(self, mozwebqa):
+    @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.nondestructive
+    def test_that_advanced_search_has_product_highlighted_in_multiselect(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
+        csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
-        Assert.equal('Firefox', cs_advanced.currently_selected_product)
+        Assert.equal(product, cs_advanced.currently_selected_product)
 
-    def test_that_advanced_search_has_thunderbird_highlighted_in_multiselect(self, mozwebqa):
+    @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.nondestructive
+    def test_that_advanced_search_view_signature_for_product_crash(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Thunderbird')
-        cs_advanced = csp.header.click_advanced_search()
-        Assert.equal('Thunderbird', cs_advanced.currently_selected_product)
-
-    def test_that_advanced_search_has_fennec_highlighted_in_multiselect(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Fennec')
-        cs_advanced = csp.header.click_advanced_search()
-        Assert.equal('Fennec', cs_advanced.currently_selected_product)
-
-    def test_that_advanced_search_has_camino_highlighted_in_multiselect(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Camino')
-        cs_advanced = csp.header.click_advanced_search()
-        Assert.equal('Camino', cs_advanced.currently_selected_product)
-
-    def test_that_advanced_search_has_seamonkey_highlighted_in_multiselect(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('SeaMonkey')
-        cs_advanced = csp.header.click_advanced_search()
-        Assert.equal('SeaMonkey', cs_advanced.currently_selected_product)
-
-    def test_that_advanced_search_view_signature_for_firefox_crash(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-
-        if cs_advanced.results_found:
-            signature = cs_advanced.results[0].signature
-            cssr = cs_advanced.results[0].click_signature()
-            Assert.contains(signature, cssr.page_heading)
-
-    def test_that_advanced_search_view_signature_for_thunderbird_crash(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Thunderbird')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-
-        if cs_advanced.results_found:
-            signature = cs_advanced.results[0].signature
-            cssr = cs_advanced.results[0].click_signature()
-            Assert.contains(signature, cssr.page_heading)
-
-    def test_that_advanced_search_view_signature_for_fennec_crash(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Fennec')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-
-        if cs_advanced.results_found:
-            signature = cs_advanced.results[0].signature
-            cssr = cs_advanced.results[0].click_signature()
-            Assert.contains(signature, cssr.page_heading)
-
-    def test_that_advanced_search_view_signature_for_camino_crash(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Camino')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-
-        if cs_advanced.results_found:
-            signature = cs_advanced.results[0].signature
-            cssr = cs_advanced.results[0].click_signature()
-            Assert.contains(signature, cssr.page_heading)
-
-    def test_that_advanced_search_view_signature_for_seamonkey_crash(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('SeaMonkey')
+        csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.filter_reports()
 
