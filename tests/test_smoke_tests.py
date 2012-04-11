@@ -66,8 +66,8 @@ class TestSmokeTests:
         cs_advanced.filter_reports()
 
         if cs_advanced.results_found:
-            signature = cs_advanced.first_signature_name
-            cssr = cs_advanced.click_first_signature()
+            signature = cs_advanced.results[0].signature
+            cssr = cs_advanced.results[0].click_signature()
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_thunderbird_crash(self, mozwebqa):
@@ -77,8 +77,8 @@ class TestSmokeTests:
         cs_advanced.filter_reports()
 
         if cs_advanced.results_found:
-            signature = cs_advanced.first_signature_name
-            cssr = cs_advanced.click_first_signature()
+            signature = cs_advanced.results[0].signature
+            cssr = cs_advanced.results[0].click_signature()
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_fennec_crash(self, mozwebqa):
@@ -88,8 +88,8 @@ class TestSmokeTests:
         cs_advanced.filter_reports()
 
         if cs_advanced.results_found:
-            signature = cs_advanced.first_signature_name
-            cssr = cs_advanced.click_first_signature()
+            signature = cs_advanced.results[0].signature
+            cssr = cs_advanced.results[0].click_signature()
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_camino_crash(self, mozwebqa):
@@ -99,8 +99,8 @@ class TestSmokeTests:
         cs_advanced.filter_reports()
 
         if cs_advanced.results_found:
-            signature = cs_advanced.first_signature_name
-            cssr = cs_advanced.click_first_signature()
+            signature = cs_advanced.results[0].signature
+            cssr = cs_advanced.results[0].click_signature()
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_advanced_search_view_signature_for_seamonkey_crash(self, mozwebqa):
@@ -110,8 +110,8 @@ class TestSmokeTests:
         cs_advanced.filter_reports()
 
         if cs_advanced.results_found:
-            signature = cs_advanced.first_signature_name
-            cssr = cs_advanced.click_first_signature()
+            signature = cs_advanced.results[0].signature
+            cssr = cs_advanced.results[0].click_signature()
             Assert.contains(signature, cssr.page_heading)
 
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):

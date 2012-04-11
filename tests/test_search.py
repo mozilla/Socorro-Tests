@@ -15,11 +15,11 @@ class TestSearchForIdOrSignature:
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        results = csp.header.search_for_crash("this won't exist")
-        Assert.false(results.results_found)
+        cs_advanced = csp.header.search_for_crash("this won't exist")
+        Assert.false(cs_advanced.results_found)
 
     def test_that_search_for_valid_signature(self, mozwebqa):
-        """.....
+        """
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         """
@@ -129,16 +129,21 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.filter_reports()
 
-        while not cs_advanced.is_plugin_icon_visible:
-            cs_advanced.click_next()
+        plugin_icon = [result.is_plugin_icon_visible  for result in cs_advanced.results]
 
-        Assert.true(cs_advanced.is_plugin_icon_visible)
+        while not True in plugin_icon:
+            cs_advanced.click_next()
+            plugin_icon = [result.is_plugin_icon_visible  for result in cs_advanced.results]
+
+        Assert.contains(True, plugin_icon)
 
     @prod
     def test_that_plugin_filename_column_sorts(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=562380
         """
+        #Is sort order ok?
+
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
 
@@ -147,10 +152,15 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_radio_button(2)
         cs_advanced.filter_reports()
         if cs_advanced.results_found:
-            cs_advanced.click_plugin_filename_header()
-            Assert.is_sorted_ascending(cs_advanced.plugin_filename_results_list())
+            cs_advanced.results_table_header(2).click()
 
-            cs_advanced.click_plugin_filename_header()
-            Assert.is_sorted_descending(cs_advanced.plugin_filename_results_list())
+            plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+
+            Assert.is_sorted_ascending(plugin_filename_results_list)
+
+            cs_advanced.results_table_header(2).click()
+
+            plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+            Assert.is_sorted_descending(plugin_filename_results_list)
         else:
             Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')
