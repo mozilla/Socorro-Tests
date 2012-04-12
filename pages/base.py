@@ -26,9 +26,6 @@ class CrashStatsBasePage(Page):
     def page_heading(self):
         return self.selenium.find_element(*self._page_heading).text
 
-    def get_url_path(self, path):
-        self.selenium.get(self.base_url + path)
-
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
         from pages.crash_stats_page import CrashStatsStatus

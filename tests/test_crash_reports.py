@@ -16,6 +16,7 @@ class TestCrashReports:
 
     _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid']
 
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
@@ -26,6 +27,7 @@ class TestCrashReports:
         crash_adu = csp.header.select_report('Crashes per User')
         Assert.equal(crash_adu.header.current_product, crash_adu.product_select)
 
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
@@ -35,6 +37,7 @@ class TestCrashReports:
         Assert.equal(product, cstc.page_heading_product)
         Assert.equal(cstc.header.current_version, cstc.page_heading_version)
 
+    @pytest.mark.nondestructive
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -47,6 +50,7 @@ class TestCrashReports:
         cstc.click_filter_by('All')
         Assert.greater(cstc.results_count, 0)
 
+    @pytest.mark.nondestructive
     def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         nightly_builds_page = csp.header.select_report('Nightly Builds')
@@ -60,6 +64,7 @@ class TestCrashReports:
         nightly_builds_page.click_link_to_ftp()
         Assert.equal(website_link, nightly_builds_page.get_url_current_page())
 
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_products_page_links_work(self, mozwebqa, product):
         products_page = ProductsLinksPage(mozwebqa)
@@ -70,6 +75,7 @@ class TestCrashReports:
         Assert.true(csp.get_url_current_page().endswith(product))
         Assert.contains(product, csp.page_heading)
 
+    @pytest.mark.nondestructive
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -82,6 +88,7 @@ class TestCrashReports:
         cstc.click_filter_by('Browser')
         Assert.greater(cstc.results_count, 0)
 
+    @pytest.mark.nondestructive
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
@@ -94,7 +101,8 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.results_count, 0)
 
-    @xfail(reason='Disabled until Bug 603561 is fixed')
+    @pytest.mark.xfail(reason='Disabled until Bug 603561 is fixed')
+    @pytest.mark.nondestructive
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """
         Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229
@@ -107,6 +115,7 @@ class TestCrashReports:
             Assert.equal(cstc.header.current_report, 'Top Changers')
 
     @pytest.mark.xfail(run=False, reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
+    @pytest.mark.nondestructive
     def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17141439
@@ -118,6 +127,7 @@ class TestCrashReports:
         Assert.true(crash_per_user.is_table_visible)
         Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
 
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         """
@@ -134,11 +144,15 @@ class TestCrashReports:
             top_crasher_page.return_to_previous_page()
             top_crashers = csp.release_channels
 
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
+
+        if product == 'Fennec': pytest.xfail(reason='Lack of data on the staging server')
+
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
@@ -149,6 +163,7 @@ class TestCrashReports:
             top_crasher_page.return_to_previous_page()
             top_crashers = csp.release_channels
 
+    @pytest.mark.nondestructive
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17088605
@@ -159,6 +174,7 @@ class TestCrashReports:
 
         Assert.equal(tc_page.current_days_filter, '7')
 
+    @pytest.mark.nondestructive
     def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17099455
@@ -171,6 +187,7 @@ class TestCrashReports:
             Assert.true(signature_item.is_browser_icon_visible, "Signature %s did not have a browser icon" % signature_item.text)
             Assert.false(signature_item.is_plugin_icon_visible, "Signature %s unexpextedly had a plugin icon" % signature_item.text)
 
+    @pytest.mark.nondestructive
     def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17099455
@@ -184,6 +201,7 @@ class TestCrashReports:
             Assert.true(signature_item.is_plugin_icon_visible, "Signature %s did not have a plugin icon" % signature_item.text)
             Assert.false(signature_item.is_browser_icon_visible, "Signature %s unexpextedly had a browser icon" % signature_item.text)
 
+    @pytest.mark.nondestructive
     @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
     def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
         """
@@ -196,6 +214,7 @@ class TestCrashReports:
         Assert.true(cpu.is_the_current_page)
         Assert.false(cpu.is_mixed_content_warning_shown)
 
+    @pytest.mark.nondestructive
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=655506
@@ -208,6 +227,7 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
+    @pytest.mark.nondestructive
     def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/18059001
@@ -220,6 +240,7 @@ class TestCrashReports:
         csas.filter_reports()
         Assert.equal('No results were found.', csas.query_results_text(1))
 
+    @pytest.mark.nondestructive
     def test_that_top_changers_data_is_available(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/18059119
