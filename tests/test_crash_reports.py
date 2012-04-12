@@ -237,8 +237,8 @@ class TestCrashReports:
         csas = csp.header.click_advanced_search()
         Assert.true(csas.is_the_current_page)
         csas.build_id_field_input('http://www.google.com')
-        csas.filter_reports()
-        Assert.equal('No results were found.', csas.query_results_text(1))
+        csas.click_filter_reports()
+        Assert.equal('No results were found.', csas.no_results_text)
 
     @pytest.mark.nondestructive
     def test_that_top_changers_data_is_available(self, mozwebqa):

@@ -92,10 +92,13 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _version_multiple_select = (By.ID, 'version')
     _os_multiple_select = (By.ID, 'platform')
     _filter_crash_reports_button = (By.ID, 'query_submit')
-    _query_results_text = (By.CSS_SELECTOR, '.body.notitle p')
+    _query_results_text = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(1)')
+    _no_results_text = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(2)')
     _build_id_locator = (By.ID, 'build_id')
-    _radio_items_locator = (By.CSS_SELECTOR, '.radio-item > label > input')
-    _next_locator = (By.CSS_SELECTOR, '.pagination>a:contains("Next")')
+    _report_process_base_locator = (By.XPATH, "//p[span[preceding-sibling::span[text()='Report Process:']]]")
+    _report_type_base_locator = (By.XPATH, "//p[span[preceding-sibling::span[text()='Report Type:']]]")
+
+    _next_locator = (By.XPATH, "//div[@class='pagination']/a[contains(text(), 'Next')]")
     _table_row_locator = (By.CSS_SELECTOR, '#signatureList > tbody > tr')
 
     def adv_select_product(self, product):
@@ -108,17 +111,21 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         select = Select(element)
         select.select_by_visible_text(version)
 
+    def deselect_version(self):
+        element = self.selenium.find_element(*self._version_multiple_select)
+        select = Select(element)
+        select.deselect_all()
+
     def adv_select_os(self, os):
         element = self.selenium.find_element(*self._os_multiple_select)
         select = Select(element)
         select.select_by_visible_text(os)
 
-    def filter_reports(self):
+    def click_filter_reports(self):
         self.selenium.find_element(*self._filter_crash_reports_button).click()
 
     def click_first_signature(self):
-        self.selenium.find_element(*self._data_table_first_signature).click()
-        return CrashStatsSignatureReport(self.testsetup)
+        return self.results[0].click_signature()
 
     def build_id_field_input(self, value):
         self.selenium.find_element(*self._build_id_locator).send_keys(value)
@@ -133,17 +140,19 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         select = Select(element)
         return select.first_selected_option.text
 
-    def select_radio_button(self, lookup):
-        radio_buttons = self.selenium.find_elements(*self._radio_items_locator)
-        radio_buttons[lookup].click()
+    def select_report_process(self, lookup):
+        base = self.selenium.find_element(*self._report_process_base_locator)
+        input_element = base.find_element(By.XPATH, "//label[normalize-space(text())='%s']/input" % lookup)
+        input_element.click()
+
+    def select_report_type(self, lookup):
+        base = self.selenium.find_element(*self._report_type_base_locator)
+        input_element = base.find_element(By.XPATH, "//label[normalize-space(text())='%s']/input" % lookup)
+        input_element.click()
 
     @property
-    def product_list(self):
-        return [element.text for element in self.selenium.find_elements(*self._product_multiple_select)]
-
-    def query_results_text(self, index):
-        result = self.selenium.find_elements(*self._query_results_text)
-        return result[index].text
+    def results_lead_in_text(self):
+        return self.selenium.find_element(*self._query_results_text).text
 
     @property
     def results_found(self):
@@ -154,47 +163,49 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
             return False
 
     @property
+    def no_results_text(self):
+        return self.selenium.find_element(*self._no_results_text).text
+
+    def click_next(self):
+        self.selenium.find_element(*self._next_locator).click()
+        
+    @property
+    def is_next_visible(self):
+        return self.is_element_visible(None, *self._next_locator)
+
+    @property
     def results(self):
         return [self.Result(self.testsetup, row) for row in self.selenium.find_elements(*self._table_row_locator)]
 
+    @property
+    def results_table_header(self):
+        return self.ResultHeader(self.testsetup)
+
     class Result(Page):
         _columns_locator = (By.CSS_SELECTOR, 'td')
-        _data_table_signature_browser_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.browser')
-        _data_table_signature_plugin_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.plugin')
-        _link_locaor = (By.TAG_NAME, 'a')
-        _bug_link_locator = (By.CSS_SELECTOR, 'a.bug-link')
-        _bug_more_link_locator = (By.CSS_SELECTOR, 'a.bug_ids_more')
-
+        _browser_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.browser')
+        _plugin_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.plugin')
+        _link_locator = (By.TAG_NAME, 'a')
+        
         def __init__(self, testsetup, row):
             Page.__init__(self, testsetup)
             self._columns = row.find_elements(*self._columns_locator)
-
-        @property
-        def is_plugin_filename_present(self):
-            if self.results_table_header(2).text == 'Plugin Filename':
-                return True
-            else:
-                return False
-
-        @property
-        def rank(self):
-            return self._columns[0].text
 
         @property
         def signature(self):
             return self._columns[1].text
 
         def click_signature(self):
-            self._columns[1].find_element(*self._link_locaor).click()
+            self._columns[1].find_element(*self._link_locator).click()
             return CrashStatsSignatureReport(self.testsetup)
 
         @property
         def is_plugin_icon_visible(self):
-            return self._columns[1].find_element(*self._data_table_signature_plugin_icon_locator).is_displayed()
+            return self.is_element_visible(self._columns[1], *self._plugin_icon_locator)
 
         @property
         def is_browser_icon_visible(self):
-            return self._columns[1].find_element(*self._data_table_signature_browser_icon_locator).is_displayed()
+            return self.is_element_visible(self._columns[1], *self._browser_icon_locator)
 
         @property
         def plugin_filename(self):
@@ -202,72 +213,28 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
         @property
         def number_of_crashes(self):
-            if self.is_plugin_filename_present:
-                return self._columns[2].text
-            else:
-                return self._columns[3].text
-
-        @property
-        def win(self):
-            if self.is_plugin_filename_present:
-                return self._columns[3].text
-            else:
-                return self._columns[4].text
-
-        @property
-        def mac(self):
-            if self.is_plugin_filename_present:
-                return self._columns[4].text
-            else:
-                return self._columns[5].text
-        @property
-        def lin(self):
-            if self.is_plugin_filename_present:
-                return self._columns[5].text
-            else:
-                return self._columns[6].text
-
-        @property
-        def bugzilla_ids(self):
-            if self.is_plugin_filename_present:
-                return self._columns[6].text
-            else:
-                return self._columns[7].text
-
-        def click_bugzilla_more(self):
-            if self.is_plugin_filename_present:
-                self._columns[6].find_element(*self._bug_more_link_locator).click()
-            else:
-                self._columns[7].find_element(*self._bug_more_link_locator).click()
-
-    def results_table_header(self, column):
-        return self.ResultHeader(self.testsetup, column)
+            return self._columns[-4].text
 
     class ResultHeader(Page):
-        _root_locator = (By.CSS_SELECTOR, '#signatureList > thead > tr > th')
+        
+        _root_locator = (By.CSS_SELECTOR, '#signatureList thead')
+        _sort_by_filename_locator = (By.XPATH, "//th[text()='Plugin Filename']")
+        _sorted_column_locator = (By.CSS_SELECTOR, "th[class*='headerSort']")
 
-        def __init__(self, testsetup, column):
+        def __init__(self, testsetup):
             Page.__init__(self, testsetup)
-            self.root = self.selenium.find_elements(*self._root_locator)[column]
+            self._root_element = self.selenium.find_element(*self._root_locator)
+
+        def click_sort_by_plugin_filename(self):
+            self._root_element.find_element(*self._sort_by_filename_locator).click()
 
         @property
-        def text(self):
-            return self.root.text
-
-        def click(self):
-            self.root.click()
+        def sort_order(self):
+            return self._root_element.find_element(*self._sorted_column_locator).get_attribute('class').split()[1]
 
         @property
-        def sort_type(self):
-            sort_text = self.root.get_attribute('class')
-
-            if 'headerSortDown'in sort_text:
-                return 'ascending'
-            elif 'headerSortUp'in sort_text:
-                return 'descending'
-            elif 'Sort' in sort_text == False:
-                return 'unsorted'
-
+        def sorted_column(self):
+            return self._root_element.find_element(*self._sorted_column_locator).text
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 

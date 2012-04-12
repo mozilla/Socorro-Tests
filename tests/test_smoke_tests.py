@@ -52,7 +52,7 @@ class TestSmokeTests:
 
         if cs_advanced.results_found:
             signature = cs_advanced.results[0].signature
-            cssr = cs_advanced.results[0].click_signature()
+            cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
 
     @pytest.mark.nondestructive
