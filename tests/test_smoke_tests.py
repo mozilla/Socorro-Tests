@@ -31,8 +31,9 @@ class TestSmokeTests:
         nav_product_list = csp.header.product_list
         search_product_list = cssearch.product_list
         Assert.equal(len(nav_product_list), len(search_product_list))
-        for i, prod_item in range(0, len(nav_product_list)):
-            Assert.equal(prod_item, search_product_list[i])
+
+        for i, prod_item in enumerate(nav_product_list):
+            Assert.equal(prod_item.text, search_product_list[i].text)
 
     @pytest.mark.parametrize(('product'), _expected_products)
     @pytest.mark.nondestructive
@@ -48,7 +49,7 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
+        cs_advanced.click_filter_reports()
 
         if cs_advanced.results_found:
             signature = cs_advanced.results[0].signature

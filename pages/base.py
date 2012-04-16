@@ -86,7 +86,8 @@ class CrashStatsBasePage(Page):
 
         @property
         def product_list(self):
-            return self.selenium.find_element(*self._product_select_locator).find_elements(By.CSS_SELECTOR, 'option')
+            element = self.selenium.find_element(*self._product_select_locator)
+            return Select(element).options
 
         def select_product(self, application):
             '''
