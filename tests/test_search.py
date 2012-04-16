@@ -16,12 +16,12 @@ class TestSearchForIdOrSignature:
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        results = csp.header.search_for_crash("this won't exist")
-        Assert.false(results.results_found)
+        cs_advanced = csp.header.search_for_crash("this won't exist")
+        Assert.false(cs_advanced.results_found)
 
     @pytest.mark.nondestructive
     def test_that_search_for_valid_signature(self, mozwebqa):
-        """.....
+        """
             This is a test for
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         """
@@ -36,40 +36,40 @@ class TestSearchForIdOrSignature:
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-        Assert.contains('product is one of Firefox', cs_advanced.query_results_text(0))
+        cs_advanced.click_filter_reports()
+        Assert.contains('product is one of Firefox', cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Thunderbird')
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-        Assert.contains('product is one of Thunderbird', cs_advanced.query_results_text(0))
+        cs_advanced.click_filter_reports()
+        Assert.contains('product is one of Thunderbird', cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Fennec')
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-        Assert.contains('product is one of Fennec', cs_advanced.query_results_text(0))
+        cs_advanced.click_filter_reports()
+        Assert.contains('product is one of Fennec', cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('Camino')
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-        Assert.contains('product is one of Camino', cs_advanced.query_results_text(0))
+        cs_advanced.click_filter_reports()
+        Assert.contains('product is one of Camino', cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product('SeaMonkey')
         cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.filter_reports()
-        Assert.contains('product is one of SeaMonkey', cs_advanced.query_results_text(0))
+        cs_advanced.click_filter_reports()
+        Assert.contains('product is one of SeaMonkey', cs_advanced.results_lead_in_text)
 
     @pytest.mark.xfail(reason='Disabled until bug 688256 is fixed')
     @pytest.mark.nondestructive
@@ -80,9 +80,9 @@ class TestSearchForIdOrSignature:
 
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.filter_reports()
+        cs_advanced.click_filter_reports()
 
-        results_page_count = cs_advanced.first_signature_number_of_results
+        results_page_count = cs_advanced.results[0].number_of_crashes
         cssr = cs_advanced.click_first_signature()
         cssr.click_reports()
         Assert.equal(results_page_count, cssr.total_items_label)
@@ -99,11 +99,11 @@ class TestSearchForIdOrSignature:
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
         cs_advanced.build_id_field_input(cs_advanced.build_id)
-        cs_advanced.filter_reports()
+        cs_advanced.click_filter_reports()
         if cs_advanced.results_found:
-            Assert.true(cs_advanced.first_signature_number_of_results > 0)
+            Assert.true(cs_advanced.results[0].number_of_crashes > 0)
         else:
-            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')
+            Assert.equal(cs_advanced.no_results_text, 'No results were found.')
 
     @pytest.mark.prod
     @pytest.mark.xfail(reason='Disabled until bug 720037 is fixed')
@@ -113,18 +113,22 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
+        cs_advanced.deselect_version()
         cs_advanced.adv_select_version('Firefox 13.0a2')
         cs_advanced.adv_select_os('Windows')
-        cs_advanced.select_radio_button(1)
-        cs_advanced.filter_reports()
+        cs_advanced.select_report_process('Browser')
 
-        while not cs_advanced.is_browser_icon_visible:
-            try:
-                cs_advanced.click_next()
-            except:
-                Assert.fail('reached the last page and no data was found')
+        cs_advanced.click_filter_reports()
 
-        Assert.true(cs_advanced.is_browser_icon_visible)
+        browser_icon = [True]
+
+        while True in browser_icon:
+            browser_icon = [result.is_browser_icon_visible for result in cs_advanced.results]
+            if False in browser_icon:
+                Assert.fail("Browser icon not visible for result")
+
+            if cs_advanced.is_next_visible == False: break
+            else: cs_advanced.click_next()
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
@@ -133,17 +137,23 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
+        cs_advanced.deselect_version()
         cs_advanced.adv_select_version('Firefox 13.0a2')
         cs_advanced.adv_select_os('Windows')
 
-        cs_advanced.select_radio_button(2)
+        cs_advanced.select_report_process('Plugins')
 
-        cs_advanced.filter_reports()
+        cs_advanced.click_filter_reports()
 
-        while not cs_advanced.is_plugin_icon_visible:
-            cs_advanced.click_next()
+        plugin_icon = [True]
 
-        Assert.true(cs_advanced.is_plugin_icon_visible)
+        while True in plugin_icon:
+            plugin_icon = [result.is_plugin_icon_visible for result in cs_advanced.results]
+            if False in plugin_icon:
+                Assert.fail("Plugin icon not visible for result")
+
+            if cs_advanced.is_next_visible == False: break
+            else: cs_advanced.click_next()
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
@@ -151,18 +161,23 @@ class TestSearchForIdOrSignature:
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=562380
         """
+        #Is sort order ok?
+
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
 
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.select_radio_button(2)
-        cs_advanced.filter_reports()
-        if cs_advanced.results_found:
-            cs_advanced.click_plugin_filename_header()
-            Assert.is_sorted_ascending(cs_advanced.plugin_filename_results_list())
+        cs_advanced.select_report_process('Plugins')
+        cs_advanced.click_filter_reports()
 
-            cs_advanced.click_plugin_filename_header()
-            Assert.is_sorted_descending(cs_advanced.plugin_filename_results_list())
-        else:
-            Assert.equal(cs_advanced.query_results_text(1), 'No results were found.')
+        cs_advanced.results_table_header.click_sort_by_plugin_filename()
+
+        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+
+        Assert.is_sorted_ascending(plugin_filename_results_list)
+
+        cs_advanced.results_table_header.click_sort_by_plugin_filename()
+
+        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+        Assert.is_sorted_descending(plugin_filename_results_list)
