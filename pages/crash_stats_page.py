@@ -124,7 +124,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     @property
     def product_list(self):
         element = self.selenium.find_element(*self._product_multiple_select)
-        return Select(element).options
+        return [option.text for option in Select(element).options]
 
     def click_filter_reports(self):
         self.selenium.find_element(*self._filter_crash_reports_button).click()
