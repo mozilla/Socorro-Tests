@@ -33,7 +33,7 @@ class TestSmokeTests:
         Assert.equal(len(nav_product_list), len(search_product_list))
 
         for i, prod_item in enumerate(nav_product_list):
-            Assert.equal(prod_item.text, search_product_list[i].text)
+            Assert.equal(prod_item, search_product_list[i])
 
     @pytest.mark.parametrize(('product'), _expected_products)
     @pytest.mark.nondestructive
