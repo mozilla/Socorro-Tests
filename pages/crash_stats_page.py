@@ -173,7 +173,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def click_next(self):
         self.selenium.find_element(*self._next_locator).click()
-        
+
     @property
     def is_next_visible(self):
         return self.is_element_visible(None, *self._next_locator)
@@ -191,7 +191,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         _browser_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.browser')
         _plugin_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.plugin')
         _link_locator = (By.TAG_NAME, 'a')
-        
+
         def __init__(self, testsetup, row):
             Page.__init__(self, testsetup)
             self._columns = row.find_elements(*self._columns_locator)
@@ -221,7 +221,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
             return self._columns[-4].text
 
     class ResultHeader(Page):
-        
+
         _root_locator = (By.CSS_SELECTOR, '#signatureList thead')
         _sort_by_filename_locator = (By.XPATH, "//th[text()='Plugin Filename']")
         _sorted_column_locator = (By.CSS_SELECTOR, "th[class*='headerSort']")
@@ -240,6 +240,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         @property
         def sorted_column(self):
             return self._root_element.find_element(*self._sorted_column_locator).text
+
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 
@@ -365,8 +366,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.valid_signature_items[0].click()
 
     @property
-    def first_valid_signature_text(self):
-        return self.valid_signature_items[0].text
+    def first_valid_signature_title(self):
+        return self.valid_signature_items[0].title
 
     class SignatureItem(Page):
         _signature_link_locator = (By.CSS_SELECTOR, 'a.signature')
@@ -382,8 +383,8 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
             return CrashReport(self.testsetup)
 
         @property
-        def text(self):
-            return self._root_element.find_element(*self._signature_link_locator).text
+        def title(self):
+            return self._root_element.find_element(*self._signature_link_locator).get_attribute('title')
 
         @property
         def is_plugin_icon_visible(self):
@@ -454,6 +455,7 @@ class ProductsLinksPage(CrashStatsBasePage):
     def click_product(self, product):
         self.selenium.find_element(By.LINK_TEXT, product).click()
         return CrashStatsHomePage(self.testsetup, product)
+
 
 class CrashStatsTopChangers(CrashStatsBasePage):
 
