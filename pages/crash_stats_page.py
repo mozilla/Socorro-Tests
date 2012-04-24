@@ -194,7 +194,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
         def __init__(self, testsetup, row):
             Page.__init__(self, testsetup)
-            self._columns = row.find_elements(*self._columns_locator)
+            self._root_element = row
+
+        @property
+        def _columns(self):
+            return self._root_element.find_elements(*self._columns_locator)
 
         @property
         def signature(self):
