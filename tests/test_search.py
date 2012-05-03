@@ -3,9 +3,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from pages.crash_stats_page import CrashStatsHomePage
+from pages.home_page import CrashStatsHomePage
 from unittestzero import Assert
 import pytest
+
 xfail = pytest.mark.xfail
 prod = pytest.mark.prod
 

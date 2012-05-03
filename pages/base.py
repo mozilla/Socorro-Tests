@@ -28,7 +28,7 @@ class CrashStatsBasePage(Page):
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
-        from pages.crash_stats_page import CrashStatsStatus
+        from pages.status_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
 
     @property
@@ -115,19 +115,19 @@ class CrashStatsBasePage(Page):
             select.select_by_visible_text(report_name)
 
             if 'Top Crashers' == report_name:
-                from pages.crash_stats_page import CrashStatsTopCrashers
+                from pages.crash_stats_by import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
             elif 'Top Crashers by TopSite' == report_name:
-                from pages.crash_stats_page import CrashStatsTopCrashersBySite
+                from pages.crash_stats_by import CrashStatsTopCrashersBySite
                 return CrashStatsTopCrashersBySite(self.testsetup)
             elif 'Crashes per User' == report_name:
-                from pages.crash_stats_page import CrashStatsPerActiveDailyUser
+                from pages.crash_stats_by import CrashStatsPerActiveDailyUser
                 return CrashStatsPerActiveDailyUser(self.testsetup)
             elif 'Nightly Builds' == report_name:
-                from pages.crash_stats_page import CrashStatsNightlyBuilds
+                from pages.crash_stats_by import CrashStatsNightlyBuilds
                 return CrashStatsNightlyBuilds(self.testsetup)
             elif 'Top Changers' == report_name:
-                from pages.crash_stats_page import CrashStatsTopChangers
+                from pages.crash_stats_by import CrashStatsTopChangers
                 return CrashStatsTopChangers(self.testsetup)
 
         def search_for_crash(self, crash_id_or_signature):
@@ -137,10 +137,10 @@ class CrashStatsBasePage(Page):
             serch_box = self.selenium.find_element(*self._find_crash_id_or_signature)
             serch_box.send_keys(crash_id_or_signature)
             serch_box.send_keys(Keys.RETURN)
-            from pages.crash_stats_page import CrashStatsAdvancedSearch
+            from pages.advanced_search_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
 
         def click_advanced_search(self):
             self.selenium.find_element(*self._advanced_search_locator).click()
-            from crash_stats_page import CrashStatsAdvancedSearch
+            from pages.advanced_search_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
