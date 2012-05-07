@@ -4,10 +4,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from pages.home_page import CrashStatsHomePage
-from unittestzero import Assert
 import pytest
 import urllib
+
+from unittestzero import Assert
+
+from pages.home_page import CrashStatsHomePage
 
 
 class TestSmokeTests:
@@ -51,7 +53,7 @@ class TestSmokeTests:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.click_filter_reports()
 
-        if cs_advanced.results_found:
+        if cs_advanced.are_results_found:
             signature = cs_advanced.results[0].signature
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)

@@ -4,6 +4,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+
 from pages.base import CrashStatsBasePage
 
 
@@ -23,4 +24,3 @@ class ProductsLinksPage(CrashStatsBasePage):
         self.selenium.find_element(By.LINK_TEXT, product).click()
         from pages.home_page import CrashStatsHomePage
         return CrashStatsHomePage(self.testsetup, product)
-

@@ -4,6 +4,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+
 from pages.base import CrashStatsBasePage
 
 
@@ -24,4 +25,3 @@ class CrashStatsStatus(CrashStatsBasePage):
     @property
     def is_latest_raw_stats_present(self):
         return self.is_element_visible(None, *self._latest_raw_stats_locator)
-

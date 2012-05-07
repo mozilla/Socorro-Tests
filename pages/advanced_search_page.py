@@ -6,17 +6,21 @@
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
+
 from pages.base import CrashStatsBasePage
 from pages.page import Page
 
 
 class CrashStatsAdvancedSearch(CrashStatsBasePage):
-    #https://crash-stats.allizom.org/query/query
-    # This po covers both initial adv search page and also results
+    """
+    https://crash-stats.allizom.org/query/query
+    This po covers both initial adv search page and also results
+    """
+
     _page_title = 'Query Results - Mozilla Crash Reports'
 
-    _product_multiple_select = (By.ID, 'product')
-    _version_multiple_select = (By.ID, 'version')
+    _product_multiple_select_locator = (By.ID, 'product')
+    _version_multiple_select_locator = (By.ID, 'version')
     _os_multiple_select = (By.ID, 'platform')
     _filter_crash_reports_button = (By.ID, 'query_submit')
     _query_results_text = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(1)')
@@ -25,21 +29,21 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _report_process_base_locator = (By.XPATH, "//p[span[preceding-sibling::span[text()='Report Process:']]]")
     _report_type_base_locator = (By.XPATH, "//p[span[preceding-sibling::span[text()='Report Type:']]]")
 
-    _next_locator = (By.XPATH, "//div[@class='pagination']/a[contains(text(), 'Next')]")
+    _next_locator = (By.CSS_SELECTOR, "div.pagination a:last-child")
     _table_row_locator = (By.CSS_SELECTOR, '#signatureList > tbody > tr')
 
     def adv_select_product(self, product):
-        element = self.selenium.find_element(*self._product_multiple_select)
+        element = self.selenium.find_element(*self._product_multiple_select_locator)
         select = Select(element)
         select.select_by_visible_text(product)
 
     def adv_select_version(self, version):
-        element = self.selenium.find_element(*self._version_multiple_select)
+        element = self.selenium.find_element(*self._version_multiple_select_locator)
         select = Select(element)
         select.select_by_visible_text(version)
 
     def deselect_version(self):
-        element = self.selenium.find_element(*self._version_multiple_select)
+        element = self.selenium.find_element(*self._version_multiple_select_locator)
         select = Select(element)
         select.deselect_all()
 
@@ -50,7 +54,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def product_list(self):
-        element = self.selenium.find_element(*self._product_multiple_select)
+        element = self.selenium.find_element(*self._product_multiple_select_locator)
         return [option.text for option in Select(element).options]
 
     def click_filter_reports(self):
@@ -68,7 +72,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def currently_selected_product(self):
-        element = self.selenium.find_element(*self._product_multiple_select)
+        element = self.selenium.find_element(*self._product_multiple_select_locator)
         select = Select(element)
         return select.first_selected_option.text
 
@@ -87,7 +91,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return self.selenium.find_element(*self._query_results_text).text
 
     @property
-    def results_found(self):
+    def are_results_found(self):
         try:
             self.selenium.find_element(*self._table_row_locator)
             return True

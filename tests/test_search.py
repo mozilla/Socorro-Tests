@@ -3,9 +3,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from pages.home_page import CrashStatsHomePage
-from unittestzero import Assert
 import pytest
+
+from unittestzero import Assert
+
+from pages.home_page import CrashStatsHomePage
 
 xfail = pytest.mark.xfail
 prod = pytest.mark.prod
@@ -18,7 +20,7 @@ class TestSearchForIdOrSignature:
         csp = CrashStatsHomePage(mozwebqa)
 
         cs_advanced = csp.header.search_for_crash("this won't exist")
-        Assert.false(cs_advanced.results_found)
+        Assert.false(cs_advanced.are_results_found)
 
     @pytest.mark.nondestructive
     def test_that_search_for_valid_signature(self, mozwebqa):
@@ -31,7 +33,7 @@ class TestSearchForIdOrSignature:
         signature = report_list.first_valid_signature_title
 
         result = csp.header.search_for_crash(signature)
-        Assert.true(result.results_found)
+        Assert.true(result.are_results_found)
 
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
@@ -101,7 +103,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.adv_select_version('All')
         cs_advanced.build_id_field_input(cs_advanced.build_id)
         cs_advanced.click_filter_reports()
-        if cs_advanced.results_found:
+        if cs_advanced.are_results_found:
             Assert.true(cs_advanced.results[0].number_of_crashes > 0)
         else:
             Assert.equal(cs_advanced.no_results_text, 'No results were found.')

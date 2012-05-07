@@ -6,8 +6,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
+
 from pages.base import CrashStatsBasePage
 from pages.page import Page
+
 
 class CrashStatsSignatureReport(CrashStatsBasePage):
 

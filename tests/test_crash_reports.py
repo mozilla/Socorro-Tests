@@ -5,6 +5,7 @@
 
 import pytest
 import re
+
 from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage

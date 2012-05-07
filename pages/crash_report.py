@@ -5,7 +5,9 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+
 from pages.page import Page
+
 
 class CrashReport(Page):
 
@@ -36,4 +38,3 @@ class CrashReport(Page):
         @property
         def version(self):
             return self._root_element.find_element(*self._version_locator).text
-

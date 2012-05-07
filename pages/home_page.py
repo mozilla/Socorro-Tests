@@ -4,14 +4,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+
 from pages.base import CrashStatsBasePage
 
 
 class CrashStatsHomePage(CrashStatsBasePage):
-    '''
+    """
         Page Object for Socorro
         https://crash-stats.allizom.org/
-    '''
+    """
     _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
 
     def __init__(self, testsetup, product=None):
