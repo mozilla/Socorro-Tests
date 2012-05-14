@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,7 +22,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     _product_multiple_select_locator = (By.ID, 'product')
     _version_multiple_select_locator = (By.ID, 'version')
-    _os_multiple_select = (By.ID, 'platform')
+    _os_multiple_select_locator = (By.ID, 'platform')
     _filter_crash_reports_button = (By.ID, 'query_submit')
     _query_results_text = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(1)')
     _no_results_text = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(2)')
@@ -48,7 +49,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         select.deselect_all()
 
     def adv_select_os(self, os):
-        element = self.selenium.find_element(*self._os_multiple_select)
+        element = self.selenium.find_element(*self._os_multiple_select_locator)
         select = Select(element)
         select.select_by_visible_text(os)
 

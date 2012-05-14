@@ -15,7 +15,7 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 
     # https://crash-stats.allizom.org/report/list?
 
-    _total_items = (By.CSS_SELECTOR, 'span.totalItems')
+    _total_items_locator = (By.CSS_SELECTOR, 'span.totalItems')
     _reports_page_locator = (By.CSS_SELECTOR, '.ui-state-default.ui-corner-top:nth-of-type(4) > a > span')
 
     def click_reports(self):
@@ -23,7 +23,7 @@ class CrashStatsSignatureReport(CrashStatsBasePage):
 
     @property
     def total_items_label(self):
-        return self.selenium.find_element(*self._total_items).text.replace(",", "")
+        return self.selenium.find_element(*self._total_items_locator).text.replace(",", "")
 
 
 class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
