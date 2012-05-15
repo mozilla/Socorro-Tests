@@ -109,7 +109,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def adv_select_version(self, version):
         element = self.selenium.find_element(*self._version_multiple_select)
         select = Select(element)
-        select.select_by_visible_text(version)
+        select.select_by_value(version.replace(' ',':'))
 
     def deselect_version(self):
         element = self.selenium.find_element(*self._version_multiple_select)
