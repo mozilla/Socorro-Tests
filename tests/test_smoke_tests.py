@@ -23,7 +23,6 @@ class TestSmokeTests:
         Assert.true(csstat.are_graphs_present, '4 graphs not found')
         Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
-    @pytest.mark.xfail(reason='Disabled till Bug 612679 is fixed')
     @pytest.mark.nondestructive
     def test_that_options_are_sorted_the_same(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
