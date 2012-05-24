@@ -117,7 +117,7 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.deselect_version()
-        cs_advanced.adv_select_version('Firefox 13.0a2')
+        cs_advanced.adv_select_version('Firefox 15.0a1')
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_report_process('Browser')
 
@@ -141,7 +141,7 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.deselect_version()
-        cs_advanced.adv_select_version('Firefox 13.0a2')
+        cs_advanced.adv_select_version('Firefox 15.0a1')
         cs_advanced.adv_select_os('Windows')
 
         cs_advanced.select_report_process('Plugins')
