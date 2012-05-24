@@ -40,6 +40,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def adv_select_version(self, version):
         element = self.selenium.find_element(*self._version_multiple_select_locator)
+        # Before trying to select the option we'll try and find it.
+        # If it doesn't exist we'll gladly take an exception. Se issue 3910
+        element.find_element(By.XPATH, ".//option[normalize-space(.) = '%s']" % version)
         select = Select(element)
         select.select_by_visible_text(version)
 
