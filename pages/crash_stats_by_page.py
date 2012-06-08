@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 
-from pages.base import CrashStatsBasePage
+from pages.base_page import CrashStatsBasePage
 from pages.page import Page
 
 
@@ -78,7 +78,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
     _current_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
 
-    _data_table = (By.ID, 'signatureList')
     _signature_table_row_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
 
     @property
@@ -149,7 +148,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
         def click(self):
             self._root_element.find_element(*self._signature_link_locator).click()
-            from pages.crash_report import CrashReport
+            from pages.crash_report_page import CrashReport
             return CrashReport(self.testsetup)
 
         @property

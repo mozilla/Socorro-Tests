@@ -13,7 +13,7 @@ from pages.page import Page
 
 class CrashStatsBasePage(Page):
 
-    _page_heading = (By.CSS_SELECTOR, 'div.page-heading > h2')
+    _page_heading_locator = (By.CSS_SELECTOR, 'div.page-heading > h2')
     _server_status_locator = (By.LINK_TEXT, 'Server Status')
     _link_to_bugzilla_locator = (By.CSS_SELECTOR, '.panel a')
 
@@ -24,7 +24,7 @@ class CrashStatsBasePage(Page):
 
     @property
     def page_heading(self):
-        return self.selenium.find_element(*self._page_heading).text
+        return self.selenium.find_element(*self._page_heading_locator).text
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
@@ -46,7 +46,6 @@ class CrashStatsBasePage(Page):
         _all_versions_locator = (By.ID, 'product_version_select')
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
-        _report_select = (By.ID, 'report_select')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
 
@@ -115,19 +114,19 @@ class CrashStatsBasePage(Page):
             select.select_by_visible_text(report_name)
 
             if 'Top Crashers' == report_name:
-                from pages.crash_stats_by import CrashStatsTopCrashers
+                from pages.crash_stats_by_page import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
             elif 'Top Crashers by TopSite' == report_name:
-                from pages.crash_stats_by import CrashStatsTopCrashersBySite
+                from pages.crash_stats_by_page import CrashStatsTopCrashersBySite
                 return CrashStatsTopCrashersBySite(self.testsetup)
             elif 'Crashes per User' == report_name:
-                from pages.crash_stats_by import CrashStatsPerActiveDailyUser
+                from pages.crash_stats_by_page import CrashStatsPerActiveDailyUser
                 return CrashStatsPerActiveDailyUser(self.testsetup)
             elif 'Nightly Builds' == report_name:
-                from pages.crash_stats_by import CrashStatsNightlyBuilds
+                from pages.crash_stats_by_page import CrashStatsNightlyBuilds
                 return CrashStatsNightlyBuilds(self.testsetup)
             elif 'Top Changers' == report_name:
-                from pages.crash_stats_by import CrashStatsTopChangers
+                from pages.crash_stats_by_page import CrashStatsTopChangers
                 return CrashStatsTopChangers(self.testsetup)
 
         def search_for_crash(self, crash_id_or_signature):

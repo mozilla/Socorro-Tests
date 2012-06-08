@@ -130,8 +130,10 @@ class TestSearchForIdOrSignature:
             if False in browser_icon:
                 Assert.fail("Browser icon not visible for result")
 
-            if cs_advanced.is_next_visible == False: break
-            else: cs_advanced.click_next()
+            if cs_advanced.is_next_visible == False:
+                break
+            else:
+                cs_advanced.click_next()
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
@@ -155,8 +157,10 @@ class TestSearchForIdOrSignature:
             if False in plugin_icon:
                 Assert.fail("Plugin icon not visible for result")
 
-            if cs_advanced.is_next_visible == False: break
-            else: cs_advanced.click_next()
+            if cs_advanced.is_next_visible == False:
+                break
+            else:
+                cs_advanced.click_next()
 
     @pytest.mark.prod
     @pytest.mark.nondestructive

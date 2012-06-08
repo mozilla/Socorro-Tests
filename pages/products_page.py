@@ -5,7 +5,7 @@
 
 from selenium.webdriver.common.by import By
 
-from pages.base import CrashStatsBasePage
+from pages.base_page import CrashStatsBasePage
 
 
 class ProductsLinksPage(CrashStatsBasePage):
