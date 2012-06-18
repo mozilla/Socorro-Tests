@@ -5,9 +5,12 @@
 
 import pytest
 import re
-from pages.crash_stats_page import CrashStatsHomePage
-from pages.crash_stats_page import ProductsLinksPage
+
 from unittestzero import Assert
+
+from pages.home_page import CrashStatsHomePage
+from pages.products_page import ProductsLinksPage
+
 
 xfail = pytest.mark.xfail
 

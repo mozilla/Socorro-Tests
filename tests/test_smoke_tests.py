@@ -4,10 +4,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from pages.crash_stats_page import CrashStatsHomePage
-from unittestzero import Assert
 import pytest
 import urllib
+
+from unittestzero import Assert
+
+from pages.home_page import CrashStatsHomePage
 
 
 class TestSmokeTests:
@@ -50,7 +52,7 @@ class TestSmokeTests:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.click_filter_reports()
 
-        if cs_advanced.results_found:
+        if cs_advanced.are_results_found:
             signature = cs_advanced.results[0].signature
             cssr = cs_advanced.click_first_signature()
             Assert.contains(signature, cssr.page_heading)
@@ -60,7 +62,6 @@ class TestSmokeTests:
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
         Assert.equal(404, response.getcode())
 
-    @pytest.mark.xfail(reason='Bug 631737')
     @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         """
@@ -69,4 +70,4 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
-        Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
+        Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url.replace('https', 'http'), path), urllib.unquote(csp.link_to_bugzilla))
