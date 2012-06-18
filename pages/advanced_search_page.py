@@ -141,8 +141,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
         def click_signature(self):
             self._columns[1].find_element(*self._link_locator).click()
-            from pages.crash_stats_by_page import CrashStatsSignatureReport
-            return CrashStatsSignatureReport(self.testsetup)
+            from pages.signature_report_page import SignatureReport
+            return SignatureReport(self.testsetup)
 
         @property
         def is_plugin_icon_visible(self):

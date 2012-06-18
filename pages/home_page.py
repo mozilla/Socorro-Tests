@@ -46,5 +46,5 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
         def click_top_crasher(self):
             self._root_element.find_element(*self._top_crashers_link_locator).click()
-            from pages.crash_stats_by_page import CrashStatsTopCrashers
+            from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
             return CrashStatsTopCrashers(self.testsetup)

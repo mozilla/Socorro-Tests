@@ -8,7 +8,7 @@ import pytest
 from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
-from pages.crash_stats_by_page import CrashStatsTopCrashers
+from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
 
 xfail = pytest.mark.xfail
 

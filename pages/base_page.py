@@ -114,19 +114,19 @@ class CrashStatsBasePage(Page):
             select.select_by_visible_text(report_name)
 
             if 'Top Crashers' == report_name:
-                from pages.crash_stats_by_page import CrashStatsTopCrashers
+                from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
             elif 'Top Crashers by TopSite' == report_name:
-                from pages.crash_stats_by_page import CrashStatsTopCrashersBySite
+                from pages.crash_stats_top_crashers_by_site_page import CrashStatsTopCrashersBySite
                 return CrashStatsTopCrashersBySite(self.testsetup)
             elif 'Crashes per User' == report_name:
-                from pages.crash_stats_by_page import CrashStatsPerActiveDailyUser
+                from pages.crash_stats_per_active_daily_user_page import CrashStatsPerActiveDailyUser
                 return CrashStatsPerActiveDailyUser(self.testsetup)
             elif 'Nightly Builds' == report_name:
-                from pages.crash_stats_by_page import CrashStatsNightlyBuilds
+                from pages.crash_stats_nightly_builds_page import CrashStatsNightlyBuilds
                 return CrashStatsNightlyBuilds(self.testsetup)
             elif 'Top Changers' == report_name:
-                from pages.crash_stats_by_page import CrashStatsTopChangers
+                from pages.crash_stats_top_changers_page import CrashStatsTopChangers
                 return CrashStatsTopChangers(self.testsetup)
 
         def search_for_crash(self, crash_id_or_signature):
