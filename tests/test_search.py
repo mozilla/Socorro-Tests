@@ -35,6 +35,7 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.are_results_found)
 
+    @pytest.mark.xfail(reason='Disabled until bug 768260 is fixed')
     @pytest.mark.nondestructive
     def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
