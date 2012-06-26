@@ -118,7 +118,7 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.deselect_version()
-        cs_advanced.adv_select_version('Firefox 15.0a1')
+        cs_advanced.adv_select_version('Firefox 16.0a1')
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_report_process('Browser')
 
