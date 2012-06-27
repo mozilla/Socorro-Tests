@@ -20,7 +20,7 @@ class TestLayout:
 
         csp = CrashStatsHomePage(mozwebqa)
 
-        product_list = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid']
+        product_list = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid', 'WebappRuntime']
         products = csp.header.product_list
         Assert.equal(product_list, products)
 
