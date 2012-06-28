@@ -26,6 +26,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _filter_crash_reports_button = (By.ID, 'query_submit')
     _query_results_text_locator = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(1)')
     _no_results_text_locator = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(2)')
+    _range_value_locator = (By.ID, 'range_value')
+    _range_unit_selector_locator = (By.ID, 'range_unit')
     _build_id_locator = (By.ID, 'build_id')
     _report_process_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
     _report_type_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
@@ -55,6 +57,14 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         element = self.selenium.find_element(*self._multiple_os_select_locator)
         select = Select(element)
         select.select_by_visible_text(os)
+
+    def set_period_value_field_input(self, value):
+        self.selenium.find_element(*self._range_value_locator).send_keys(value)
+
+    def select_period_units(self, time_unit):
+        element = self.selenium.find_element(*self._range_unit_selector_locator)
+        select = Select(element)
+        select.select_by_visible_text(time_unit)
 
     @property
     def product_list(self):
