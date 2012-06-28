@@ -83,12 +83,10 @@ class TestSearchForIdOrSignature:
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
-
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
         cs_advanced.set_period_value_field_input('\b3')
         cs_advanced.select_period_units('Days')
-        
         cs_advanced.click_filter_reports()
 
         results_page_count = cs_advanced.results[0].number_of_crashes
