@@ -54,7 +54,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.set_period_value_field_input('\b3')
         cs_advanced.select_period_units('Days')
         cs_advanced.click_filter_reports()
-        Assert.contains(('product is one of %s' % product), cs_advanced.results_lead_in_text)
+        Assert.contains('product is one of %s' % product, cs_advanced.results_lead_in_text)
 
     @pytest.mark.xfail(reason='Disabled until bug 688256 is fixed')
     @pytest.mark.nondestructive
