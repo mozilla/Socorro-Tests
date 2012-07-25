@@ -15,7 +15,14 @@ prod = pytest.mark.prod
 
 class TestSearchForIdOrSignature:
 
-    _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid', 'WebappRuntime']
+    _expected_products = [
+        'Firefox',
+        'Thunderbird',
+        'SeaMonkey',
+        'Camino',
+        'Fennec',
+        'FennecAndroid', 
+        'WebappRuntime']
 
     @pytest.mark.nondestructive
     def test_that_when_item_not_available(self, mozwebqa):
