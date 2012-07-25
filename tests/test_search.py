@@ -15,6 +15,8 @@ prod = pytest.mark.prod
 
 class TestSearchForIdOrSignature:
 
+    _expected_products = ['Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid', 'WebappRuntime']
+
     @pytest.mark.nondestructive
     def test_that_when_item_not_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -46,36 +48,13 @@ class TestSearchForIdOrSignature:
         Assert.contains('product is one of Firefox', cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
-    def test_that_advanced_search_for_thunderbird_can_be_filtered(self, mozwebqa):
+    @pytest.mark.parametrize(('product'), _expected_products)
+    def test_that_advanced_search_for_product_can_be_filtered(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Thunderbird')
+        csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.click_filter_reports()
-        Assert.contains('product is one of Thunderbird', cs_advanced.results_lead_in_text)
-
-    @pytest.mark.nondestructive
-    def test_that_advanced_search_for_fennec_can_be_filtered(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Fennec')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.click_filter_reports()
-        Assert.contains('product is one of Fennec', cs_advanced.results_lead_in_text)
-
-    @pytest.mark.nondestructive
-    def test_that_advanced_search_for_camino_can_be_filtered(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('Camino')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.click_filter_reports()
-        Assert.contains('product is one of Camino', cs_advanced.results_lead_in_text)
-
-    @pytest.mark.nondestructive
-    def test_that_advanced_search_for_seamonkey_can_be_filtered(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product('SeaMonkey')
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.click_filter_reports()
-        Assert.contains('product is one of SeaMonkey', cs_advanced.results_lead_in_text)
+        Assert.contains(('product is one of %s' % product), cs_advanced.results_lead_in_text)
 
     @pytest.mark.xfail(reason='Disabled until bug 688256 is fixed')
     @pytest.mark.nondestructive
