@@ -15,7 +15,7 @@ prod = pytest.mark.prod
 
 class TestSearchForIdOrSignature:
 
-    _expected_products = ['Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid', 'WebappRuntime']
+    _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid', 'WebappRuntime']
 
     @pytest.mark.nondestructive
     def test_that_when_item_not_available(self, mozwebqa):
@@ -37,22 +37,15 @@ class TestSearchForIdOrSignature:
         result = csp.header.search_for_crash(signature)
         Assert.true(result.are_results_found)
 
-    @pytest.mark.xfail(reason='Disabled until bug 768260 is fixed')
-    @pytest.mark.nondestructive
-    def test_that_advanced_search_for_firefox_can_be_filtered(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.set_period_value_field_input('\b3')
-        cs_advanced.select_period_units('Days')
-        cs_advanced.click_filter_reports()
-        Assert.contains('product is one of Firefox', cs_advanced.results_lead_in_text)
-
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_advanced_search_for_product_can_be_filtered(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
+        # filter on 3 days worth of data
+        cs_advanced.set_period_value_field_input('\b3')
+        cs_advanced.select_period_units('Days')
         cs_advanced.click_filter_reports()
         Assert.contains(('product is one of %s' % product), cs_advanced.results_lead_in_text)
 
