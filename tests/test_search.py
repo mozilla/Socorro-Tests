@@ -56,7 +56,6 @@ class TestSearchForIdOrSignature:
         cs_advanced.click_filter_reports()
         Assert.contains('product is one of %s' % product, cs_advanced.results_lead_in_text)
 
-    @pytest.mark.xfail(reason='Disabled until bug 688256 is fixed')
     @pytest.mark.nondestructive
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
