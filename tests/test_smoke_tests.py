@@ -14,7 +14,13 @@ from pages.home_page import CrashStatsHomePage
 
 class TestSmokeTests:
 
-    _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid']
+    _expected_products = [
+        'Firefox',
+        'Thunderbird',
+        'SeaMonkey',
+        'Camino',
+        'Fennec', 
+        'FennecAndroid']
 
     @pytest.mark.nondestructive
     def test_that_server_status_page_loads(self, mozwebqa):
@@ -37,16 +43,16 @@ class TestSmokeTests:
         for i, prod_item in enumerate(nav_product_list):
             Assert.equal(prod_item, search_product_list[i])
 
-    @pytest.mark.parametrize(('product'), _expected_products)
     @pytest.mark.nondestructive
+    @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_advanced_search_has_product_highlighted_in_multiselect(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
         Assert.equal(product, cs_advanced.currently_selected_product)
 
-    @pytest.mark.parametrize(('product'), _expected_products)
     @pytest.mark.nondestructive
+    @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_advanced_search_view_signature_for_product_crash(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
