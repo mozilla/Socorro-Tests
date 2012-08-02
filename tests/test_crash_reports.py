@@ -17,11 +17,18 @@ xfail = pytest.mark.xfail
 
 class TestCrashReports:
 
-    _expected_products = ['Firefox', 'Thunderbird', 'SeaMonkey', 'Camino', 'Fennec', 'FennecAndroid']
+    _expected_products = [
+        'Firefox',
+        'Thunderbird',
+        'SeaMonkey',
+        'Camino',
+        'Fennec',
+        'FennecAndroid']
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
+        if product == 'Camino': pytest.xfail(reason='bug 775254 - No data currently available for Camino')
         csp = CrashStatsHomePage(mozwebqa)
 
         csp.header.select_product(product)
@@ -33,6 +40,7 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
+        if product == 'Camino': pytest.xfail(reason='bug 775254 - No data currently available for Camino')
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
 
@@ -70,6 +78,7 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_products_page_links_work(self, mozwebqa, product):
+        if product == 'Camino': pytest.xfail(reason='bug 775254 - No data currently available for Camino')
         products_page = ProductsLinksPage(mozwebqa)
         #An extra check that products page is loaded
         Assert.equal(products_page.page_heading, 'Mozilla Products in Crash Reporter')
