@@ -104,18 +104,10 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_report_process('Browser')
 
         cs_advanced.click_filter_reports()
+        cs_advanced.go_to_random_result_page()
 
-        browser_icon = [True]
-
-        while True in browser_icon:
-            browser_icon = [result.is_browser_icon_visible for result in cs_advanced.results]
-            if False in browser_icon:
-                Assert.fail("Browser icon not visible for result")
-
-            if cs_advanced.is_next_visible == False:
-                break
-            else:
-                cs_advanced.click_next()
+        for result in cs_advanced.results:
+            Assert.True(result.is_browser_icon_visible)
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
@@ -127,22 +119,13 @@ class TestSearchForIdOrSignature:
         cs_advanced.deselect_version()
         cs_advanced.adv_select_version('Firefox 16.0a2')
         cs_advanced.adv_select_os('Windows')
-
         cs_advanced.select_report_process('Plugins')
 
         cs_advanced.click_filter_reports()
+        cs_advanced.go_to_random_result_page()
 
-        plugin_icon = [True]
-
-        while True in plugin_icon:
-            plugin_icon = [result.is_plugin_icon_visible for result in cs_advanced.results]
-            if False in plugin_icon:
-                Assert.fail("Plugin icon not visible for result")
-
-            if cs_advanced.is_next_visible == False:
-                break
-            else:
-                cs_advanced.click_next()
+        for result in cs_advanced.results:
+            Assert.true(result.is_plugin_icon_visible)
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
