@@ -104,69 +104,39 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_report_process('Browser')
 
         cs_advanced.click_filter_reports()
+        cs_advanced.go_to_random_result_page()
 
-        browser_icon = [True]
-
-        while True in browser_icon:
-            browser_icon = [result.is_browser_icon_visible for result in cs_advanced.results]
-            if False in browser_icon:
-                Assert.fail("Browser icon not visible for result")
-
-            if cs_advanced.is_next_visible == False:
-                break
-            else:
-                cs_advanced.click_next()
+        for result in cs_advanced.results:
+            Assert.True(result.is_browser_icon_visible)
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
     def test_that_plugin_filters_result(self, mozwebqa):
-        #https://www.pivotaltracker.com/story/show/17769047
+        """
+        https://www.pivotaltracker.com/story/show/17769047
+        https://bugzilla.mozilla.org/show_bug.cgi?id=562380
+        """
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.deselect_version()
         cs_advanced.adv_select_version('Firefox 16.0a2')
         cs_advanced.adv_select_os('Windows')
-
         cs_advanced.select_report_process('Plugins')
 
         cs_advanced.click_filter_reports()
+        cs_advanced.go_to_random_result_page()
 
-        plugin_icon = [True]
+        # verify the plugin icon is visible
+        for result in cs_advanced.results:
+            Assert.true(result.is_plugin_icon_visible)
 
-        while True in plugin_icon:
-            plugin_icon = [result.is_plugin_icon_visible for result in cs_advanced.results]
-            if False in plugin_icon:
-                Assert.fail("Plugin icon not visible for result")
-
-            if cs_advanced.is_next_visible == False:
-                break
-            else:
-                cs_advanced.click_next()
-
-    @pytest.mark.prod
-    @pytest.mark.nondestructive
-    def test_that_plugin_filename_column_sorts(self, mozwebqa):
-        """
-        https://bugzilla.mozilla.org/show_bug.cgi?id=562380
-        """
-        #Is sort order ok?
-
-        csp = CrashStatsHomePage(mozwebqa)
-        cs_advanced = csp.header.click_advanced_search()
-
-        cs_advanced.adv_select_product('Firefox')
-        cs_advanced.adv_select_version('All')
-        cs_advanced.select_report_process('Plugins')
-        cs_advanced.click_filter_reports()
-
+        # verify ascending & descending sort
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
-
         plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
-
         Assert.is_sorted_ascending(plugin_filename_results_list)
 
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
-
         plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
         Assert.is_sorted_descending(plugin_filename_results_list)
+
