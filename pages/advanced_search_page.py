@@ -31,7 +31,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _build_id_locator = (By.ID, 'build_id')
     _report_process_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
     _report_type_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
-
+    _pagination_locator = (By.CSS_SELECTOR, 'div.pagination > a[href]')
     _next_locator = (By.CSS_SELECTOR, 'div.pagination a:last-child')
     _table_row_locator = (By.CSS_SELECTOR, '#signatureList > tbody > tr')
 
@@ -115,6 +115,10 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     @property
     def no_results_text(self):
         return self.selenium.find_element(*self._no_results_text_locator).text
+
+    def go_to_random_result_page(self):
+        import random
+        random.choice(self.selenium.find_elements(*self._pagination_locator)).click()
 
     def click_next(self):
         self.selenium.find_element(*self._next_locator).click()
