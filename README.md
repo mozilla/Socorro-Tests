@@ -47,7 +47,7 @@ Change the path/name to the downloaded Selenium-server file.
 1. To run tests locally, simply call py.test from the Socorro-tests directory
 2. The base URL should be a valid instance of crash-stats-dev: --baseurl=http://crash-stats-dev.allizom.org
 
-    py.test --api=rc --baseurl=http://example.com
+    py.test --baseurl=http://example.com
 
 For other instructions, type py.test --help.
 
