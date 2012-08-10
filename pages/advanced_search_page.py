@@ -40,11 +40,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         select = Select(element)
         select.select_by_visible_text(product)
 
-    def deselect_product(self):
-        element = self.selenium.find_element(*self._multiple_product_select_locator)
-        select = Select(element)
-        select.deselect_all()
-
     def adv_select_version(self, version):
         element = self.selenium.find_element(*self._multiple_version_select_locator)
         # Before trying to select the option we'll try and find it.
