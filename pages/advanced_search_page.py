@@ -172,7 +172,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
         @property
         def number_of_crashes(self):
-            return self._columns[-4].text
+            return self._columns[-5].text
 
     class ResultHeader(Page):
 
