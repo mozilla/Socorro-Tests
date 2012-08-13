@@ -198,11 +198,7 @@ class TestCrashReports:
         signature_list_items = reports_page.signature_items
         Assert.true(len(signature_list_items)>0, "Signature list items not found")
 
-        # check a random selection on the page
-        import random
-        index_limit = len(signature_list_items)
-        random_indexes = [ random.randrange(0, index_limit)
-                           for _ in range(0, min(maximum_checks, index_limit)) ]
+        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
         for idx in random_indexes:
             signature_item = signature_list_items[idx]
             Assert.true(signature_item.is_browser_icon_visible,
@@ -222,11 +218,7 @@ class TestCrashReports:
         signature_list_items = reports_page.signature_items
         Assert.true(len(signature_list_items)>0, "Signature list items not found")
 
-        # check a random selection on the page
-        import random
-        index_limit = len(signature_list_items)
-        random_indexes = [ random.randrange(0, index_limit)
-                           for _ in range(0, min(maximum_checks, index_limit)) ]
+        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
         for idx in random_indexes:
             signature_item = signature_list_items[idx]
             Assert.true(signature_item.is_plugin_icon_visible,
@@ -281,3 +273,12 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
+
+    def _random_indexes(self, item_list, max_indexes):
+        """
+            Return a list of random indexes for item_list
+            max_indexes is maximum # of indexes to return
+        """
+        import random
+        index_limit = len(item_list)
+        return [ random.randrange(0, index_limit) for _ in range(0, min(max_indexes, index_limit)) ]
