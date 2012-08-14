@@ -133,9 +133,10 @@ class CrashStatsBasePage(Page):
             '''
                 Type the signature or the id of a bug into the search bar and submit the form
             '''
-            serch_box = self.selenium.find_element(*self._find_crash_id_or_signature)
-            serch_box.send_keys(crash_id_or_signature)
-            serch_box.send_keys(Keys.RETURN)
+            search_box = self.selenium.find_element(*self._find_crash_id_or_signature)
+            search_box.clear()
+            search_box.send_keys(crash_id_or_signature)
+            search_box.send_keys(Keys.RETURN)
             from pages.advanced_search_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
 
