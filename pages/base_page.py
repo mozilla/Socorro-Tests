@@ -134,6 +134,8 @@ class CrashStatsBasePage(Page):
                 Type the signature or the id of a bug into the search bar and submit the form
             '''
             search_box = self.selenium.find_element(*self._find_crash_id_or_signature)
+            # explicitly only testing search and not the onfocus event which clears the 
+            # search field
             search_box.clear()
             search_box.send_keys(crash_id_or_signature)
             search_box.send_keys(Keys.RETURN)
