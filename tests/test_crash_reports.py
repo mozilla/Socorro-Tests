@@ -191,27 +191,40 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17099455
         """
+        maximum_checks = 20  # The maximum number of rows to check
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
         Assert.equal(reports_page.current_filter_type, 'Browser')
+        signature_list_items = reports_page.signature_items
+        Assert.true(len(signature_list_items)>0, "Signature list items not found")
 
-        for signature_item in reports_page.signature_items:
-            Assert.true(signature_item.is_browser_icon_visible, "Signature %s did not have a browser icon" % signature_item.title)
-            Assert.false(signature_item.is_plugin_icon_visible, "Signature %s unexpextedly had a plugin icon" % signature_item.title)
+        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
+        for idx in random_indexes:
+            signature_item = signature_list_items[idx]
+            Assert.true(signature_item.is_browser_icon_visible,
+                        "Signature %s did not have a browser icon" % signature_item.title)
+            Assert.false(signature_item.is_plugin_icon_visible,
+                         "Signature %s unexpectedly had a plugin icon" % signature_item.title)
 
     @pytest.mark.nondestructive
     def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/17099455
         """
+        maximum_checks = 20  # The maximum number of rows to check
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
         reports_page.click_filter_by('Plugin')
         signature_list_items = reports_page.signature_items
+        Assert.true(len(signature_list_items)>0, "Signature list items not found")
 
-        for signature_item in signature_list_items:
-            Assert.true(signature_item.is_plugin_icon_visible, "Signature %s did not have a plugin icon" % signature_item.title)
-            Assert.false(signature_item.is_browser_icon_visible, "Signature %s unexpextedly had a browser icon" % signature_item.title)
+        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
+        for idx in random_indexes:
+            signature_item = signature_list_items[idx]
+            Assert.true(signature_item.is_plugin_icon_visible,
+                        "Signature %s did not have a plugin icon" % signature_item.title)
+            Assert.false(signature_item.is_browser_icon_visible,
+                         "Signature %s unexpectedly had a browser icon" % signature_item.title)
 
     @pytest.mark.nondestructive
     @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
@@ -260,3 +273,12 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
+
+    def _random_indexes(self, item_list, max_indexes):
+        """
+            Return a list of random indexes for item_list
+            max_indexes is maximum # of indexes to return
+        """
+        import random
+        index_limit = len(item_list)
+        return [ random.randrange(0, index_limit) for _ in range(0, min(max_indexes, index_limit)) ]
