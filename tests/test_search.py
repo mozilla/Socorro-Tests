@@ -57,6 +57,24 @@ class TestSearchForIdOrSignature:
         Assert.contains('product is one of %s' % product, cs_advanced.results_lead_in_text)
 
     @pytest.mark.nondestructive
+    def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+
+        product = csp.header.current_product
+        versions = csp.header.current_versions
+
+        if len(versions) > 0:
+            csp.header.select_version(str(versions[1]))
+
+        report_list = csp.click_first_product_top_crashers_link()
+        crash_report_page = report_list.click_first_valid_signature()
+        crash_report_page.click_reports()
+
+        for report in crash_report_page.reports:
+            Assert.equal(report.product, product)
+            Assert.contains(report.version, str(versions[1]))
+
+    @pytest.mark.nondestructive
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=679310
         csp = CrashStatsHomePage(mozwebqa)
