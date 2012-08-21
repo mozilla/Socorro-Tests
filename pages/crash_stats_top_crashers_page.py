@@ -22,6 +22,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _current_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
 
     _signature_table_row_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
+    _empty_signature_title = 'empty signature'
 
     @property
     def page_heading_product(self):
@@ -66,15 +67,32 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.selenium.find_element(*self._current_filter_type_locator).text
 
     @property
+    def current_days_filter(self):
+        return self.selenium.find_element(*self._current_days_filter_locator).text
+
+    @property
     def signature_items(self):
-        return [self.SignatureItem(self.testsetup, i) for i in self.selenium.find_elements(*self._signature_table_row_locator)]
+        return [self.SignatureItem(self.testsetup, i)
+                    for i in self.selenium.find_elements(*self._signature_table_row_locator)]
 
     @property
     def valid_signature_items(self):
-        return [self.SignatureItem(self.testsetup, i) for i in self.selenium.find_elements(*self._signature_table_row_locator) if i.text != 'empty signature']
+        return [self.SignatureItem(self.testsetup, i)
+                    for i in self.selenium.find_elements(*self._signature_table_row_locator)
+                        if i.text != self._empty_signature_title]
 
     def click_first_valid_signature(self):
-        return self.valid_signature_items[0].click()
+        sigs = self.signature_items
+        idx = 0
+        # find the index of the first valid signature
+        while idx < len(sigs) and sigs[idx].title == self._empty_signature_title:
+            idx += 1
+        # click on the valid signature, if one was found
+        if idx < len(sigs) and sigs[idx].title != self._empty_signature_title:
+            return sigs[idx].click()
+
+    def click_first_signature(self):
+        return self.signature_items[0].click()
 
     @property
     def first_valid_signature_title(self):
