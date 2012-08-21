@@ -31,6 +31,18 @@ class CrashStatsBasePage(Page):
         from pages.status_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
 
+    def random_indexes(self, item_list, max_indexes, start=0, end=-1):
+        """
+            Return a list of random indexes for any list of items
+            max_indexes is maximum # of indexes to return
+            'start' is start of index range, defaults to zero
+            'end' is end of index range, as used by range( ), defaults to length of item_list
+        """
+        import random
+        if end < 0:
+            end = len(item_list)
+        return [ random.randrange(start, end) for _ in range(0, min(max_indexes, len(item_list))) ]
+
     @property
     def link_to_bugzilla(self):
         return self.selenium.find_element(*self._link_to_bugzilla_locator).get_attribute('href')
@@ -103,6 +115,18 @@ class CrashStatsBasePage(Page):
             version_dropdown = self.selenium.find_element(*self._all_versions_locator)
             select = Select(version_dropdown)
             select.select_by_visible_text(str(version))
+
+        def select_random_current_version(self, start=0):
+            '''
+                Select from Current Versions selector.
+                'start' is first version in the range to select (optional).
+            '''
+            versions = self.current_versions
+            if len(versions) > start:
+                import random
+                random_version = str(versions[random.randrange(start, len(versions))])
+                self.select_version(random_version)
+                return random_version
 
         def select_report(self, report_name):
             '''
