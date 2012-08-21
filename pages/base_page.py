@@ -33,7 +33,7 @@ class CrashStatsBasePage(Page):
 
     def random_indexes(self, item_list, max_indexes, start=0, end=-1):
         """
-            Return a list of random indexes for any list of items
+            Return a list of random indexes for a list of items
             max_indexes is maximum # of indexes to return
             'start' is start of index range, defaults to zero
             'end' is end of index range, as used by range( ), defaults to length of item_list
