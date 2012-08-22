@@ -201,7 +201,7 @@ class TestCrashReports:
                                         reports_page.current_days_filter,
                                         reports_page.current_os_filter))
         signature_list_items = reports_page.signature_items
-        Assert.true(len(signature_list_items)>0, "Signature list items not found")
+        Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
         for signature_item in signature_list_items:
             Assert.true(signature_item.is_browser_icon_visible,
