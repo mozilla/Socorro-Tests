@@ -39,7 +39,7 @@ class TestSearchForIdOrSignature:
         """
         csp = CrashStatsHomePage(mozwebqa)
         report_list = csp.click_first_product_top_crashers_link()
-        signature = report_list.first_valid_signature_title
+        signature = report_list.first_signature_title
 
         result = csp.header.search_for_crash(signature)
         Assert.true(result.are_results_found)
@@ -67,7 +67,7 @@ class TestSearchForIdOrSignature:
             csp.header.select_version(str(versions[1]))
 
         report_list = csp.click_first_product_top_crashers_link()
-        crash_report_page = report_list.click_first_valid_signature()
+        crash_report_page = report_list.click_first_signature()
         crash_report_page.click_reports()
 
         for report in crash_report_page.reports:
