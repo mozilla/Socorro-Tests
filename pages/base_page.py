@@ -31,7 +31,7 @@ class CrashStatsBasePage(Page):
         from pages.status_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
 
-    def random_indexes(self, item_list, max_indexes, start=0, end=-1):
+    def get_random_indexes(self, item_list, max_indexes, start=0, end=-1):
         """
             Return a list of random indexes for a list of items
             max_indexes is maximum # of indexes to return
