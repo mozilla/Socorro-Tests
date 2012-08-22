@@ -68,12 +68,12 @@ class TestSearchForIdOrSignature:
         error_suffix = " (version %s)" % version
 
         report_list = csp.click_first_product_top_crashers_link()
-        crash_report_page = report_list.click_first_valid_signature()
+        crash_report_page = report_list.click_first_non_empty_signature()
         crash_report_page.click_reports()
         reports = crash_report_page.reports
         Assert.true(len(reports) > 0, "reports not found for signature" + error_suffix)
 
-        random_indexes = csp.random_indexes(reports, maximum_checks)
+        random_indexes = csp.get_random_indexes(reports, maximum_checks)
         for idx in random_indexes:
             report = reports[idx]
             Assert.equal(report.product, product, "unexpected product" + error_suffix)
