@@ -233,19 +233,6 @@ class TestCrashReports:
                          "Signature %s unexpectedly had a browser icon" % signature_item.title)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
-    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18049001
-        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        cpu = csp.header.select_report('Crashes per User')
-        cpu.click_generate_button()
-        Assert.true(cpu.is_the_current_page)
-        Assert.false(cpu.is_mixed_content_warning_shown)
-
-    @pytest.mark.nondestructive
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=655506
