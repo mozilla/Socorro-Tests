@@ -125,7 +125,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.go_to_random_result_page()
 
         for result in cs_advanced.results:
-            Assert.True(result.is_browser_icon_visible)
+            Assert.true(result.is_browser_icon_visible)
 
     @pytest.mark.prod
     @pytest.mark.nondestructive
