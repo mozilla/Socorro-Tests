@@ -114,6 +114,7 @@ class CrashStatsBasePage(Page):
             select.select_by_visible_text(report_name)
 
             if 'Top Crashers' == report_name:
+                self.wait_for_ajax()
                 from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
                 return CrashStatsTopCrashers(self.testsetup)
             elif 'Top Crashers by TopSite' == report_name:
