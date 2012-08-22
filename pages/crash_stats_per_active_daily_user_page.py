@@ -37,10 +37,6 @@ class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
         self.selenium.find_element(*self._generate_button_locator).click()
 
     @property
-    def is_mixed_content_warning_shown(self):
-        return self.is_alert_present()
-
-    @property
     def is_table_visible(self):
         return self.is_element_visible(None, *self._table_locator)
 
