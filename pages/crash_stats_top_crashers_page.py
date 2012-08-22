@@ -18,10 +18,17 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     _filter_by_locator = (By.CSS_SELECTOR, '.tc-duration-type.tc-filter > li > a')
     _filter_days_by_locator = (By.CSS_SELECTOR, '.tc-duration-days.tc-filter > li > a')
-    _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
+    _filter_os_by_locator = (By.CSS_SELECTOR, '.tc-per-platform.tc-filter > li > a')
     _current_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
+    _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
+    _current_os_filter_locator = (By.CSS_SELECTOR, 'ul.tc-per-platform li a.selected')
 
-    _signature_table_row_locator = (By.CSS_SELECTOR, '#signatureList tbody tr')
+    @property
+    def _signature_table_row_locator(self):
+        if self.current_os_filter == "All":
+            return (By.CSS_SELECTOR, '#signatureList tbody tr')
+        else:
+            return (By.CSS_SELECTOR, '#peros-tbl tbody tr')
 
     @property
     def page_heading_product(self):
@@ -57,13 +64,26 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
                 element.click()
                 return CrashStatsTopCrashers(self.testsetup)
 
+    def click_filter_os_by(self, os):
+        '''
+            Click on the link with the OS you want to filter by
+        '''
+        for element in self.selenium.find_elements(*self._filter_os_by_locator):
+            if element.text == os:
+                element.click()
+                return CrashStatsTopCrashers(self.testsetup)
+
+    @property
+    def current_filter_type(self):
+        return self.selenium.find_element(*self._current_filter_type_locator).text
+
     @property
     def current_days_filter(self):
         return self.selenium.find_element(*self._current_days_filter_locator).text
 
     @property
-    def current_filter_type(self):
-        return self.selenium.find_element(*self._current_filter_type_locator).text
+    def current_os_filter(self):
+        return self.selenium.find_element(*self._current_os_filter_locator).text
 
     @property
     def signature_items(self):
