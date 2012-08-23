@@ -86,10 +86,6 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         return self.selenium.find_element(*self._current_os_filter_locator).text
 
     @property
-    def current_days_filter(self):
-        return self.selenium.find_element(*self._current_days_filter_locator).text
-
-    @property
     def signature_items(self):
         return [self.SignatureItem(self.testsetup, i)
                     for i in self.selenium.find_elements(*self._signature_table_row_locator)]
