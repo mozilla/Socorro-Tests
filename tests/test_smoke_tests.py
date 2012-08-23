@@ -19,7 +19,7 @@ class TestSmokeTests:
         'Thunderbird',
         'SeaMonkey',
         'Camino',
-        'Fennec', 
+        'Fennec',
         'FennecAndroid']
 
     @pytest.mark.nondestructive

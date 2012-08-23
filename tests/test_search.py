@@ -21,7 +21,7 @@ class TestSearchForIdOrSignature:
         'SeaMonkey',
         'Camino',
         'Fennec',
-        'FennecAndroid', 
+        'FennecAndroid',
         'WebappRuntime']
 
     @pytest.mark.nondestructive
@@ -157,4 +157,3 @@ class TestSearchForIdOrSignature:
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
         plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
         Assert.is_sorted_descending(plugin_filename_results_list)
-
