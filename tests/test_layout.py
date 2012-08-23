@@ -22,7 +22,10 @@ class TestLayout:
 
         product_list = ['Firefox', 'Thunderbird', 'Camino', 'SeaMonkey', 'Fennec', 'FennecAndroid', 'WebappRuntime', 'B2G']
         products = csp.header.product_list
-        Assert.equal(product_list, products)
+        if 'B2G' in products:
+            Assert.equal(product_list, products)
+        else:
+            Assert.equal(product_list[0:-1], products)
 
     @pytest.mark.xfail(reason='Bug 687841 - Versions in Navigation Bar appear in wrong order')
     @pytest.mark.nondestructive
