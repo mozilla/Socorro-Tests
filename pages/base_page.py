@@ -116,18 +116,6 @@ class CrashStatsBasePage(Page):
             select = Select(version_dropdown)
             select.select_by_visible_text(str(version))
 
-        def select_random_current_version(self, start=0):
-            '''
-                Select from Current Versions selector.
-                'start' is first version in the range to select (optional).
-            '''
-            versions = self.current_versions
-            if len(versions) > start:
-                import random
-                random_version = str(versions[random.randrange(start, len(versions))])
-                self.select_version(random_version)
-                return random_version
-
         def select_report(self, report_name):
             '''
                 Select the report type from the drop down
