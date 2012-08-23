@@ -100,7 +100,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
                     for i in self.selenium.find_elements(*self._signature_table_row_locator)
                         if i.text != 'empty signature']
 
-    def click_valid_signature(self):
+    def click_first_valid_signature(self):
         return self.valid_signature_items[0].click()
 
     def click_first_signature(self):
