@@ -58,25 +58,24 @@ class TestSearchForIdOrSignature:
 
     @pytest.mark.nondestructive
     def test_that_selecting_exact_version_doesnt_show_other_versions(self, mozwebqa):
-        maximum_checks = 20
+        maximum_checks = 20  # limits the number of reports to check
         csp = CrashStatsHomePage(mozwebqa)
 
         product = csp.header.current_product
-        # randomly select a Current Version, except 1st version since it might not yet have data
-        version = csp.header.select_random_current_version(start=1)
-        Assert.equal(version, csp.header.current_version, "Version selection apparently failed")
-        error_suffix = " (version %s)" % version
+        versions = csp.header.current_versions
+        version = str(versions[1])
+        csp.header.select_version(version)
 
         report_list = csp.click_first_product_top_crashers_link()
         crash_report_page = report_list.click_first_signature()
         crash_report_page.click_reports()
         reports = crash_report_page.reports
-        Assert.true(len(reports) > 0, "reports not found for signature" + error_suffix)
+        Assert.true(len(reports) > 0, "reports not found for signature")
 
         random_indexes = csp.get_random_indexes(reports, maximum_checks)
-        for idx in random_indexes:
-            report = reports[idx]
-            Assert.equal(report.product, product, "unexpected product" + error_suffix)
+        for index in random_indexes:
+            report = reports[index]
+            Assert.equal(report.product, product)
             Assert.contains(report.version, version)
 
     @pytest.mark.nondestructive
