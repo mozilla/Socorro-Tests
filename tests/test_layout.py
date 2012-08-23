@@ -8,7 +8,6 @@ import pytest
 from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
-from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
 
 xfail = pytest.mark.xfail
 
@@ -31,23 +30,3 @@ class TestLayout:
 
         Assert.is_sorted_descending(csp.header.current_versions)
         Assert.is_sorted_descending(csp.header.other_versions)
-
-    @pytest.mark.nondestructive
-    def test_that_topcrasher_is_not_returning_http500(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.selenium.get(mozwebqa.base_url + '/topcrasher')
-        tc = CrashStatsTopCrashers(mozwebqa)
-        Assert.contains('Top Crashers', tc.page_heading)
-        Assert.true(tc.results_found, 'No results found!')
-
-    @pytest.mark.nondestructive
-    def test_that_report_is_not_returning_http500(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.selenium.get(mozwebqa.base_url + '/report')
-        Assert.contains('Page not Found', csp.page_heading)
-
-    @pytest.mark.nondestructive
-    def test_that_correlation_is_not_returning_http500(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.selenium.get(mozwebqa.base_url + '/correlation')
-        Assert.contains('Page not Found', csp.page_heading)
