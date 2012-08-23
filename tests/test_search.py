@@ -39,7 +39,7 @@ class TestSearchForIdOrSignature:
         """
         csp = CrashStatsHomePage(mozwebqa)
         report_list = csp.click_first_product_top_crashers_link()
-        signature = report_list.first_valid_signature_title
+        signature = report_list.first_signature_title
 
         result = csp.header.search_for_crash(signature)
         Assert.true(result.are_results_found)
@@ -68,7 +68,7 @@ class TestSearchForIdOrSignature:
         error_suffix = " (version %s)" % version
 
         report_list = csp.click_first_product_top_crashers_link()
-        crash_report_page = report_list.click_first_non_empty_signature()
+        crash_report_page = report_list.click_first_signature()
         crash_report_page.click_reports()
         reports = crash_report_page.reports
         Assert.true(len(reports) > 0, "reports not found for signature" + error_suffix)
@@ -130,7 +130,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.go_to_random_result_page()
 
         for result in cs_advanced.results:
-            Assert.True(result.is_browser_icon_visible)
+            Assert.true(result.is_browser_icon_visible)
 
     @pytest.mark.prod
     @pytest.mark.nondestructive

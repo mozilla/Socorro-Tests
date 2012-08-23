@@ -28,7 +28,7 @@ class FirefoxVersion(Version):
 
     """
 
-    version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))? ((a|b|pre|\(beta\))(\d*))?$', re.VERBOSE)
+    version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))? ((a|b|pre|\(beta\)|esr)(\d*))?$', re.VERBOSE)
 
     def parse(self, vstring):
         match = self.version_re.match(vstring)
@@ -88,7 +88,7 @@ class FirefoxVersion(Version):
             elif (not self.prerelease and other.prerelease):
                 return 1
             elif (self.prerelease and other.prerelease):
-                prereleases = ('a', '(beta)', 'b', 'pre')
+                prereleases = ('a', '(beta)', 'b', 'pre', 'esr')
                 prerelease_compare = cmp(prereleases.index(self.prerelease[0]), prereleases.index(other.prerelease[0]))
                 if (prerelease_compare == 0):
                     return cmp(self.prerelease[1], other.prerelease[1])

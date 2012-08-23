@@ -191,16 +191,19 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17099455
         """
-        maximum_checks = 20  # The maximum number of rows to check
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
-        Assert.equal(reports_page.current_filter_type, 'Browser')
+        type, days, os = 'Browser', '3', 'Linux'
+        Assert.equal(reports_page.current_filter_type, type)
+        reports_page.click_filter_days_by(days)
+        reports_page.click_filter_os_by(os)
+        Assert.equal((type, days, os), (reports_page.current_filter_type,
+                                        reports_page.current_days_filter,
+                                        reports_page.current_os_filter))
         signature_list_items = reports_page.signature_items
-        Assert.true(len(signature_list_items)>0, "Signature list items not found")
+        Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
-        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
-        for idx in random_indexes:
-            signature_item = signature_list_items[idx]
+        for signature_item in signature_list_items:
             Assert.true(signature_item.is_browser_icon_visible,
                         "Signature %s did not have a browser icon" % signature_item.title)
             Assert.false(signature_item.is_plugin_icon_visible,
@@ -211,33 +214,23 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17099455
         """
-        maximum_checks = 20  # The maximum number of rows to check
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_first_product_top_crashers_link()
-        reports_page.click_filter_by('Plugin')
+        type, days, os = 'Plugin', '28', 'Mac OS X'
+        reports_page.click_filter_by(type)
+        reports_page.click_filter_days_by(days)
+        reports_page.click_filter_os_by(os)
+        Assert.equal((type, days, os), (reports_page.current_filter_type,
+                                        reports_page.current_days_filter,
+                                        reports_page.current_os_filter))
         signature_list_items = reports_page.signature_items
-        Assert.true(len(signature_list_items)>0, "Signature list items not found")
+        Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
-        random_indexes = self._random_indexes(signature_list_items, maximum_checks)
-        for idx in random_indexes:
-            signature_item = signature_list_items[idx]
+        for signature_item in signature_list_items:
             Assert.true(signature_item.is_plugin_icon_visible,
                         "Signature %s did not have a plugin icon" % signature_item.title)
             Assert.false(signature_item.is_browser_icon_visible,
                          "Signature %s unexpectedly had a browser icon" % signature_item.title)
-
-    @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="haven't found a subtitution for the is_alert_present() method yet")
-    def test_that_no_mixed_content_warnings_are_displayed(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18049001
-        https://bugzilla.mozilla.org/show_bug.cgi?id=630991#c0
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        cpu = csp.header.select_report('Crashes per User')
-        cpu.click_generate_button()
-        Assert.true(cpu.is_the_current_page)
-        Assert.false(cpu.is_mixed_content_warning_shown)
 
     @pytest.mark.nondestructive
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
@@ -273,12 +266,3 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
-
-    def _random_indexes(self, item_list, max_indexes):
-        """
-            Return a list of random indexes for item_list
-            max_indexes is maximum # of indexes to return
-        """
-        import random
-        index_limit = len(item_list)
-        return [ random.randrange(0, index_limit) for _ in range(0, min(max_indexes, index_limit)) ]
