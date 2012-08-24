@@ -28,6 +28,7 @@ class CrashStatsBasePage(Page):
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
+        self.wait_for_ajax()
         from pages.status_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
 
