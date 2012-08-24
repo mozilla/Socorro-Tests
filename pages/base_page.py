@@ -116,6 +116,14 @@ class CrashStatsBasePage(Page):
             select = Select(version_dropdown)
             select.select_by_visible_text(str(version))
 
+        def select_version_by_index(self, index):
+            '''
+                Select the version of the application you want to report on
+            '''
+            version_dropdown = self.selenium.find_element(*self._all_versions_locator)
+            select = Select(version_dropdown)
+            select.select_by_index(index)
+
         def select_report(self, report_name):
             '''
                 Select the report type from the drop down
