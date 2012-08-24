@@ -73,6 +73,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def click_filter_reports(self):
         self.selenium.find_element(*self._filter_crash_reports_button).click()
+        self.wait_for_ajax()
 
     def click_first_signature(self):
         return self.results[0].click_signature()
@@ -106,11 +107,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def are_results_found(self):
-        try:
-            self.selenium.find_element(*self._table_row_locator)
-            return True
-        except NoSuchElementException:
-            return False
+        self.is_element_present(*self._table_row_locator)
 
     @property
     def no_results_text(self):
