@@ -52,22 +52,6 @@ class TestSmokeTests:
         Assert.equal(product, cs_advanced.currently_selected_product)
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
-    def test_that_advanced_search_view_signature_for_product_crash(self, mozwebqa, product):
-        if product == 'Camino': pytest.xfail(reason='bug 775254 - No data currently available for Camino')
-
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product(product)
-        # Pick the version by index rather than string
-        csp.header.select_version_by_index(1)
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.click_filter_reports()
-
-        signature = cs_advanced.results[0].signature
-        cssr = cs_advanced.click_first_signature()
-        Assert.contains(signature, cssr.page_heading)
-
-    @pytest.mark.nondestructive
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
         Assert.equal(404, response.getcode())
