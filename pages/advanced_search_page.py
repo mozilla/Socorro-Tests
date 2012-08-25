@@ -107,7 +107,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def are_results_found(self):
-        self.is_element_present(*self._table_row_locator)
+        return self.is_element_present(*self._table_row_locator)
 
     @property
     def no_results_text(self):
