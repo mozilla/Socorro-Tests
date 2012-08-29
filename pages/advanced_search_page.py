@@ -48,6 +48,11 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         select = Select(element)
         select.select_by_visible_text(version)
 
+    def adv_select_version_by_index(self, index):
+        element = self.selenium.find_element(*self._multiple_version_select_locator)
+        select = Select(element)
+        select.select_by_index(index)
+        
     def deselect_version(self):
         element = self.selenium.find_element(*self._multiple_version_select_locator)
         select = Select(element)
