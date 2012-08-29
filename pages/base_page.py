@@ -94,7 +94,7 @@ class CrashStatsBasePage(Page):
         @property
         def version_select_text(self):
             '''
-                Return the text from Version selector
+                Return the text in the Version selector
             '''
             versions = []
             for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._versions_locator):
