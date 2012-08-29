@@ -238,7 +238,8 @@ class TestCrashReports:
         https://bugzilla.mozilla.org/show_bug.cgi?id=655506
         """
         csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_version('10.0.5esr')
+        lowest_version = len(csp.header.version_select_text) - 1
+        csp.header.select_version_by_index(lowest_version)
         cstc = csp.header.select_report('Top Crashers')
         cstc.click_filter_days_by('14')
         Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
