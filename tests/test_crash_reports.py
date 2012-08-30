@@ -192,7 +192,7 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/17099455
         """
         csp = CrashStatsHomePage(mozwebqa)
-        reports_page = csp.click_first_product_top_crashers_link()
+        reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Browser', '3', 'Linux'
         Assert.equal(reports_page.current_filter_type, type)
         reports_page.click_filter_days_by(days)
@@ -215,7 +215,7 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/17099455
         """
         csp = CrashStatsHomePage(mozwebqa)
-        reports_page = csp.click_first_product_top_crashers_link()
+        reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Plugin', '28', 'Mac OS X'
         reports_page.click_filter_by(type)
         reports_page.click_filter_days_by(days)

@@ -38,7 +38,7 @@ class TestSearchForIdOrSignature:
                 https://bugzilla.mozilla.org/show_bug.cgi?id=609070
         """
         csp = CrashStatsHomePage(mozwebqa)
-        report_list = csp.click_first_product_top_crashers_link()
+        report_list = csp.click_last_product_top_crashers_link()
         signature = report_list.first_signature_title
 
         result = csp.header.search_for_crash(signature)
@@ -66,7 +66,7 @@ class TestSearchForIdOrSignature:
         version = str(versions[1])
         csp.header.select_version(version)
 
-        report_list = csp.click_first_product_top_crashers_link()
+        report_list = csp.click_last_product_top_crashers_link()
         crash_report_page = report_list.click_first_signature()
         crash_report_page.click_reports()
         reports = crash_report_page.reports
