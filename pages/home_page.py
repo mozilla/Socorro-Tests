@@ -24,8 +24,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
         if product is None:
             self.selenium.get(self.base_url)
 
-    def click_first_product_top_crashers_link(self):
-        return self.release_channels[0].click_top_crasher()
+    def click_last_product_top_crashers_link(self):
+        return self.release_channels[-1].click_top_crasher()
 
     @property
     def release_channels(self):
