@@ -59,6 +59,7 @@ class CrashStatsBasePage(Page):
         _all_versions_locator = (By.ID, 'product_version_select')
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
+        _versions_locator = (By.TAG_NAME, 'option')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
 
@@ -89,6 +90,16 @@ class CrashStatsBasePage(Page):
             for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._other_versions_locator):
                 str(other_versions.append(FirefoxVersion(element.text)))
             return other_versions
+
+        @property
+        def version_select_text(self):
+            '''
+                Return the text in the Version selector
+            '''
+            versions = []
+            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._versions_locator):
+                versions.append(element.text)
+            return versions
 
         @property
         def current_report(self):
