@@ -55,9 +55,11 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             if parent_element is not None:
-                return parent_element.find_element(*locator).is_displayed()
+                element = parent_element.find_element(*locator)
+                return element.is_displayed()
             else:
-                return self.selenium.find_element(*locator).is_displayed()
+                element = self.selenium.find_element(*locator)
+                return element.is_displayed()
         except NoSuchElementException, ElementNotVisibleException:
             return False
         finally:

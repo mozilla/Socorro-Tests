@@ -28,6 +28,7 @@ class CrashStatsBasePage(Page):
 
     def click_server_status(self):
         self.selenium.find_element(*self._server_status_locator).click()
+        self.wait_for_ajax()
         from pages.status_page import CrashStatsStatus
         return CrashStatsStatus(self.testsetup)
 
@@ -58,6 +59,7 @@ class CrashStatsBasePage(Page):
         _all_versions_locator = (By.ID, 'product_version_select')
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
+        _versions_locator = (By.TAG_NAME, 'option')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
 
@@ -90,6 +92,16 @@ class CrashStatsBasePage(Page):
             return other_versions
 
         @property
+        def version_select_text(self):
+            '''
+                Return the text in the Version selector
+            '''
+            versions = []
+            for element in self.selenium.find_element(*self._all_versions_locator).find_elements(*self._versions_locator):
+                versions.append(element.text)
+            return versions
+
+        @property
         def current_report(self):
             element = self.selenium.find_element(*self._report_select_locator)
             select = Select(element)
@@ -115,6 +127,14 @@ class CrashStatsBasePage(Page):
             version_dropdown = self.selenium.find_element(*self._all_versions_locator)
             select = Select(version_dropdown)
             select.select_by_visible_text(str(version))
+
+        def select_version_by_index(self, index):
+            '''
+                Select the version of the application you want to report on
+            '''
+            version_dropdown = self.selenium.find_element(*self._all_versions_locator)
+            select = Select(version_dropdown)
+            select.select_by_index(index)
 
         def select_report(self, report_name):
             '''
