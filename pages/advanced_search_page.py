@@ -119,8 +119,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return self.selenium.find_element(*self._no_results_text_locator).text
 
     def go_to_random_result_page(self):
-        import random
-        random.choice(self.selenium.find_elements(*self._pagination_locator)).click()
+        if self.is_element_visible(None, *self._pagination_locator):
+            import random
+            random.choice(self.selenium.find_elements(*self._pagination_locator)).click()
 
     def click_next(self):
         self.selenium.find_element(*self._next_locator).click()
