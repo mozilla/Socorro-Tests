@@ -152,7 +152,7 @@ class TestSearchForIdOrSignature:
         cs_advanced.go_to_random_result_page()
 
         # verify the plugin icon is visible
-        for result in cs_advanced.results:
+        for result in cs_advanced.random_results(19):
             Assert.true(result.is_plugin_icon_visible)
 
         # verify ascending & descending sort
