@@ -200,7 +200,7 @@ class TestCrashReports:
         Assert.equal((type, days, os), (reports_page.current_filter_type,
                                         reports_page.current_days_filter,
                                         reports_page.current_os_filter))
-        signature_list_items = reports_page.signature_items
+        signature_list_items = reports_page.random_signature_items(19)
         Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
         for signature_item in signature_list_items:
