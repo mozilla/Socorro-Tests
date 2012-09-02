@@ -142,6 +142,9 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
             random_results.append(random.choice(results))
         return random_results
 
+    def top_results(self, count):
+        return self.results[:count]
+
     @property
     def results_table_header(self):
         return self.ResultHeader(self.testsetup)
