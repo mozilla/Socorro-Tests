@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import random
+
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
@@ -120,7 +122,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     def go_to_random_result_page(self):
         if self.is_element_visible(None, *self._pagination_locator):
-            import random
             random.choice(self.selenium.find_elements(*self._pagination_locator)).click()
 
     def click_next(self):
@@ -133,6 +134,16 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     @property
     def results(self):
         return [self.Result(self.testsetup, row) for row in self.selenium.find_elements(*self._table_row_locator)]
+
+    def random_results(self, count):
+        results = self.results
+        random_results = []
+        for i in range(0, count):
+            random_results.append(random.choice(results))
+        return random_results
+
+    def top_results(self, count):
+        return self.results[:count]
 
     @property
     def results_table_header(self):

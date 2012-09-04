@@ -149,17 +149,16 @@ class TestSearchForIdOrSignature:
         cs_advanced.select_report_process('Plugins')
 
         cs_advanced.click_filter_reports()
-        cs_advanced.go_to_random_result_page()
 
         # verify the plugin icon is visible
-        for result in cs_advanced.results:
+        for result in cs_advanced.random_results(19):
             Assert.true(result.is_plugin_icon_visible)
 
         # verify ascending & descending sort
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
-        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.top_results(19)]
         Assert.is_sorted_ascending(plugin_filename_results_list)
 
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
-        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.results]
+        plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.top_results(19)]
         Assert.is_sorted_descending(plugin_filename_results_list)
