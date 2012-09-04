@@ -229,7 +229,7 @@ class TestCrashReports:
         signature_list_items = reports_page.signature_items
         Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
-        for signature_item in signature_list_items:
+        for signature_item in signature_list_items[:min(signature_list_items,24)]:
             Assert.true(signature_item.is_plugin_icon_visible,
                         "Signature %s did not have a plugin icon" % signature_item.title)
             Assert.false(signature_item.is_browser_icon_visible,
