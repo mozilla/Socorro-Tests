@@ -14,6 +14,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         https://crash-stats.allizom.org/
     """
     _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
+    _last_release_channel_locator = (By.CSS_SELECTOR, '#release_channels .release_channel:last-child')
 
     def __init__(self, testsetup, product=None):
         '''
@@ -25,7 +26,9 @@ class CrashStatsHomePage(CrashStatsBasePage):
             self.selenium.get(self.base_url)
 
     def click_last_product_top_crashers_link(self):
-        return self.release_channels[-1].click_top_crasher()
+        return self.ReleaseChannels(
+            self.testsetup, self.selenium.find_element(*self._last_release_channel_locator)
+        ).click_top_crasher()
 
     @property
     def release_channels(self):

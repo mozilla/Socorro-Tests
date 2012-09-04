@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import random
+
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -89,6 +91,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     def signature_items(self):
         return [self.SignatureItem(self.testsetup, i)
                     for i in self.selenium.find_elements(*self._signature_table_row_locator)]
+
+    def random_signature_items(self, count):
+        signature_items = self.signature_items
+        random_signature_items = []
+        for i in range(0, count):
+            random_signature_items.append(random.choice(signature_items))
+        return random_signature_items
 
     def click_first_signature(self):
         return self.signature_items[0].click()
