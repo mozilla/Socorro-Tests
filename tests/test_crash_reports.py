@@ -20,10 +20,12 @@ class TestCrashReports:
     _expected_products = [
         'Firefox',
         'Thunderbird',
-        'SeaMonkey',
         'Camino',
+        'SeaMonkey',
         'Fennec',
-        'FennecAndroid']
+        'FennecAndroid',
+        'WebappRuntime',
+        'B2G']
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
@@ -163,7 +165,8 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/20145655
         """
 
-        if product == 'Fennec': pytest.xfail(reason='Lack of data on the staging server')
+        if product in ['Fennec', 'B2G', 'WebappRuntime']:
+            pytest.xfail(reason='Lack of data on the staging server')
 
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
