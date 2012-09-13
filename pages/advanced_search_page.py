@@ -54,7 +54,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         element = self.selenium.find_element(*self._multiple_version_select_locator)
         select = Select(element)
         select.select_by_index(index)
-        
+
     def deselect_version(self):
         element = self.selenium.find_element(*self._multiple_version_select_locator)
         select = Select(element)
@@ -138,12 +138,13 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     def random_results(self, count):
         results = self.results
         random_results = []
-        for i in range(0, count):
+        for i in range(0, min(len(results), count)):
             random_results.append(random.choice(results))
         return random_results
 
     def top_results(self, count):
-        return self.results[:count]
+        results = self.results
+        return results[:min(len(results), count)]
 
     @property
     def results_table_header(self):
