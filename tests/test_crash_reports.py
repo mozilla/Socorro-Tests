@@ -248,7 +248,7 @@ class TestCrashReports:
         Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
-
+    @pytest.mark.xfail(reason='Bug 792096 - slight, malformed-URL regression we took in 19; fix me in 20')
     @pytest.mark.nondestructive
     def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
         """
