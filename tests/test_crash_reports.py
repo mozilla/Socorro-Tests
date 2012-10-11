@@ -174,7 +174,10 @@ class TestCrashReports:
 
         for idx in range(len(top_crashers)):
             top_crasher_page = top_crashers[idx].click_top_crasher()
-            Assert.true(top_crasher_page.results_found, 'No results found')
+            if top_crasher_page.no_results_text != False:
+                Assert.contains("No crashing signatures found for the period", top_crasher_page.no_results_text)
+            else:
+                Assert.true(top_crasher_page.results_found, 'No results found')
             top_crasher_page.return_to_previous_page()
             top_crashers = csp.release_channels
 
@@ -229,7 +232,7 @@ class TestCrashReports:
         signature_list_items = reports_page.signature_items
         Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
-        for signature_item in signature_list_items[:min(signature_list_items,24)]:
+        for signature_item in signature_list_items[:min(signature_list_items, 24)]:
             Assert.true(signature_item.is_plugin_icon_visible,
                         "Signature %s did not have a plugin icon" % signature_item.title)
             Assert.false(signature_item.is_browser_icon_visible,
@@ -248,6 +251,7 @@ class TestCrashReports:
         Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+
     @pytest.mark.xfail(reason='Bug 792096 - slight, malformed-URL regression we took in 19; fix me in 20')
     @pytest.mark.nondestructive
     def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):

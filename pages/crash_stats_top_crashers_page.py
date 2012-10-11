@@ -24,6 +24,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     _current_filter_type_locator = (By.CSS_SELECTOR, 'ul.tc-duration-type li a.selected')
     _current_days_filter_locator = (By.CSS_SELECTOR, 'ul.tc-duration-days li a.selected')
     _current_os_filter_locator = (By.CSS_SELECTOR, 'ul.tc-per-platform li a.selected')
+    _no_results_locator = (By.CSS_SELECTOR, 'p.no-results')
 
     @property
     def _signature_table_row_locator(self):
@@ -49,6 +50,13 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         try:
             return self.results_count > 0
         except NoSuchElementException:
+            return False
+
+    @property
+    def no_results_text(self):
+        if self.is_element_present(*self._no_results_locator):
+            return self.selenium.find_element(*self._no_results_locator).text
+        else:
             return False
 
     def click_filter_by(self, option):
