@@ -45,6 +45,7 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             self.selenium.find_element(*locator)
+            return True
         except NoSuchElementException:
             return False
         finally:
