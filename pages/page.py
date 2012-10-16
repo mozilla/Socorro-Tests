@@ -71,4 +71,4 @@ class Page(object):
         self.selenium.back()
 
     def wait_for_ajax(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.execute_script('return jQuery.active == 0'))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.execute_script('return (typeof jQuery !== "undefined" && jQuery.active == 0)'))
