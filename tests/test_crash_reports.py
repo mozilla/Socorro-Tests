@@ -202,6 +202,7 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/17099455
         """
         csp = CrashStatsHomePage(mozwebqa)
+        csp.wait_for_ajax()
         reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Browser', '3', 'Linux'
         Assert.equal(reports_page.current_filter_type, type)
