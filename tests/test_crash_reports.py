@@ -149,6 +149,10 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
+        # Because the frontpage is now largely Ajax driven,
+        # we need to add this wait before proceeding with the
+        # next step.
+        csp.wait_for_ajax()
         top_crashers = csp.release_channels
 
         for idx in range(len(top_crashers)):
