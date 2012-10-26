@@ -124,7 +124,7 @@ class TestSearchForIdOrSignature:
         # Select 2nd Featured Version (3rd selection in dropdown)
         cs_advanced.adv_select_version_by_index(2)
         cs_advanced.adv_select_os('Windows')
-        cs_advanced.select_report_process('Browser')
+        cs_advanced.select_report_process('browser')
 
         cs_advanced.click_filter_reports()
         cs_advanced.go_to_random_result_page()
@@ -146,7 +146,7 @@ class TestSearchForIdOrSignature:
         # Select 2nd Featured Version (3rd selection in dropdown)
         cs_advanced.adv_select_version_by_index(2)
         cs_advanced.adv_select_os('Windows')
-        cs_advanced.select_report_process('Plugins')
+        cs_advanced.select_report_process('plugin')
 
         cs_advanced.click_filter_reports()
 
