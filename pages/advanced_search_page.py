@@ -31,7 +31,6 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _range_value_locator = (By.ID, 'range_value')
     _range_unit_selector_locator = (By.ID, 'range_unit')
     _build_id_locator = (By.ID, 'build_id')
-    _report_process_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
     _report_type_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
     _pagination_locator = (By.CSS_SELECTOR, 'div.pagination > a[href]')
     _next_locator = (By.CSS_SELECTOR, 'div.pagination a:last-child')
@@ -99,8 +98,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return select.first_selected_option.text
 
     def select_report_process(self, lookup):
-        base = self.selenium.find_element(*self._report_process_base_locator)
-        input_element = base.find_element(By.XPATH, "//label[normalize-space(text())='%s']/input" % lookup)
+        input_element = self.selenium.find_element(By.XPATH, '//input[@name="process_type" and @value="%s"]' % lookup)
         input_element.click()
 
     def select_report_type(self, lookup):
