@@ -17,7 +17,6 @@ class TestSearchForIdOrSignature:
 
     _expected_products = ['Firefox',
         'Thunderbird',
-        'Camino',
         'SeaMonkey',
         'Fennec',
         'FennecAndroid',
