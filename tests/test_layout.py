@@ -26,7 +26,6 @@ class TestLayout:
                         'Thunderbird',
                         'Fennec',
                         'FennecAndroid',
-                        'Camino',
                         'SeaMonkey',
                         'WebappRuntime',
                         'B2G']
