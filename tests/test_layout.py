@@ -16,6 +16,7 @@ class TestLayout:
 
     @pytest.mark.nondestructive
     # xfail - bug 802479 - adjust sort order to use what is set in the db 
+    @pytest.mark.xfail("'crash-stats-dev.allizom.org' in config.getvalue('base_url')")
     @pytest.mark.xfail("'crash-stats.allizom.org' in config.getvalue('base_url')")
     @pytest.mark.xfail("'crash-stats.mozilla.com' in config.getvalue('base_url')")
     def test_that_products_are_sorted_correctly(self, mozwebqa):
