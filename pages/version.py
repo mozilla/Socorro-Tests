@@ -105,7 +105,7 @@ class FirefoxVersion(Version):
         elif not self.prerelease and other.prerelease:
             return 1
         else:
-            prereleases = ('a', '(beta)', 'b', 'pre', 'esr')
+            prereleases = ('a', '(beta)', 'b', 'pre')
             prerelease_compare = cmp(prereleases.index(self.prerelease[0]),
                                      prereleases.index(other.prerelease[0]))
             if not prerelease_compare:
