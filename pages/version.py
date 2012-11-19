@@ -23,10 +23,14 @@ class FirefoxVersion(Version):
     5.0pre
     5.0
     6.0.1
+    17.0
+    17.0esr (newer than 17.0)
 
     """
 
-    version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))? ((a|b|pre|\(beta\)|esr)(\d*))?$', re.VERBOSE)
+    version_re = re.compile(r'^(\d+) \. (\d+) (\. (\d+))?'
+                            r'((a|b|pre|\(beta\)|esr)(\d*))?$',
+                            re.VERBOSE)
 
     def parse(self, vstring):
         match = self.version_re.match(vstring)
@@ -52,7 +56,7 @@ class FirefoxVersion(Version):
 
     def __str__(self):
         if self.version[2] == 0:
-            vstring = '.'.join(map(str, self.version[0:2])
+            vstring = '.'.join(map(str, self.version[0:2]))
         else:
             vstring = '.'.join(map(str, self.version))
 
@@ -75,7 +79,7 @@ class FirefoxVersion(Version):
         compare = cmp(self.version, other.version)
 
         # Numeric versions don't match, so just return the cmp() result.
-        if compare != 0:
+        if compare:
             return compare
 
         # The versions are the same, so compare the "postreleases".
@@ -104,7 +108,7 @@ class FirefoxVersion(Version):
             prereleases = ('a', '(beta)', 'b', 'pre', 'esr')
             prerelease_compare = cmp(prereleases.index(self.prerelease[0]),
                                      prereleases.index(other.prerelease[0]))
-            if prerelease_compare == 0:
+            if not prerelease_compare:
                 return cmp(self.prerelease[1], other.prerelease[1])
             else:
                 return prerelease_compare
