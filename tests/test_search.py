@@ -76,7 +76,7 @@ class TestSearchForIdOrSignature:
             report = reports[index]
             Assert.equal(report.product, product)
             Assert.contains(report.version, version)
-
+    @pytest.mark.xfail(reason='Disabled until bug 788601 is fixed')
     @pytest.mark.nondestructive
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         # https://bugzilla.mozilla.org/show_bug.cgi?id=788601
