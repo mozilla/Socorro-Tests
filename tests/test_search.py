@@ -24,13 +24,6 @@ class TestSearchForIdOrSignature:
         'B2G']
 
     @pytest.mark.nondestructive
-    def test_that_when_item_not_available(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-
-        cs_advanced = csp.header.search_for_crash("this won't exist")
-        Assert.false(cs_advanced.are_results_found)
-
-    @pytest.mark.nondestructive
     def test_that_search_for_valid_signature(self, mozwebqa):
         """
             This is a test for
