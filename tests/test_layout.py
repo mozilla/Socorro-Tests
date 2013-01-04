@@ -29,7 +29,8 @@ class TestLayout:
                         'FennecAndroid',
                         'SeaMonkey',
                         'WebappRuntime',
-                        'B2G']
+                        'B2G'
+                        'WebappRuntimeMobile']
         products = csp.header.product_list
         Assert.equal(product_list, products)
 
