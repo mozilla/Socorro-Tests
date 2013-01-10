@@ -188,7 +188,7 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         top_crashers = csp.release_channels
-        tc_page = top_crashers[3].click_top_crasher()
+        tc_page = top_crashers[1].click_top_crasher()
 
         Assert.equal(tc_page.current_days_filter, '7')
 
