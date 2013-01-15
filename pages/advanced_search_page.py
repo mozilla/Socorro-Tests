@@ -190,7 +190,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     class ResultHeader(Page):
 
         _root_locator = (By.CSS_SELECTOR, '#signatureList thead')
-        _sort_by_filename_locator = (By.XPATH, "//th[text()='Plugin Filename']")
+        _sort_by_filename_locator = (By.CSS_SELECTOR, "th:nth-child(3)")
         _sorted_column_locator = (By.CSS_SELECTOR, "th[class*='headerSort']")
 
         def __init__(self, testsetup):
