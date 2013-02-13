@@ -61,7 +61,7 @@ class Page(object):
             else:
                 element = self.selenium.find_element(*locator)
                 return element.is_displayed()
-        except NoSuchElementException, ElementNotVisibleException:
+        except (NoSuchElementException, ElementNotVisibleException):
             return False
         finally:
             # set back to where you once belonged
