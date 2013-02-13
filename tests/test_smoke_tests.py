@@ -15,12 +15,12 @@ from pages.home_page import CrashStatsHomePage
 class TestSmokeTests:
 
     _expected_products = ['Firefox',
-        'Thunderbird',
-        'SeaMonkey',
-        'Fennec',
-        'FennecAndroid',
-        'WebappRuntime',
-        'B2G']
+                          'Thunderbird',
+                          'SeaMonkey',
+                          'Fennec',
+                          'FennecAndroid',
+                          'WebappRuntime',
+                          'B2G']
 
     @pytest.mark.nondestructive
     def test_that_server_status_page_loads(self, mozwebqa):

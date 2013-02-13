@@ -34,7 +34,7 @@ class Page(object):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.title)
 
         Assert.equal(self.selenium.title, self._page_title,
-            "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))
+                     "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))
         return True
 
     def get_url_current_page(self):

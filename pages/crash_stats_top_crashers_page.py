@@ -98,7 +98,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def signature_items(self):
         return [self.SignatureItem(self.testsetup, i)
-                    for i in self.selenium.find_elements(*self._signature_table_row_locator)]
+                for i in self.selenium.find_elements(*self._signature_table_row_locator)]
 
     def random_signature_items(self, count):
         signature_items = self.signature_items

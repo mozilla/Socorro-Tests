@@ -16,12 +16,12 @@ prod = pytest.mark.prod
 class TestSearchForIdOrSignature:
 
     _expected_products = ['Firefox',
-        'Thunderbird',
-        'SeaMonkey',
-        'Fennec',
-        'FennecAndroid',
-        'WebappRuntime',
-        'B2G']
+                          'Thunderbird',
+                          'SeaMonkey',
+                          'Fennec',
+                          'FennecAndroid',
+                          'WebappRuntime',
+                          'B2G']
 
     @pytest.mark.nondestructive
     def test_that_search_for_valid_signature(self, mozwebqa):
