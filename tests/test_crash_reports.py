@@ -174,7 +174,7 @@ class TestCrashReports:
 
         for idx in range(len(top_crashers)):
             top_crasher_page = top_crashers[idx].click_top_crasher()
-            if top_crasher_page.no_results_text != False:
+            if top_crasher_page.no_results_text is not False:
                 Assert.contains("No crashing signatures found for the period", top_crasher_page.no_results_text)
             else:
                 Assert.true(top_crasher_page.results_found, 'No results found')

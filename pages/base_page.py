@@ -42,7 +42,7 @@ class CrashStatsBasePage(Page):
         import random
         if end < 0:
             end = len(item_list)
-        return [ random.randrange(start, end) for _ in range(0, min(max_indexes, len(item_list))) ]
+        return [random.randrange(start, end) for _ in range(0, min(max_indexes, len(item_list)))]
 
     @property
     def link_to_bugzilla(self):
