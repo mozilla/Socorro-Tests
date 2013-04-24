@@ -31,6 +31,9 @@ class TestLayout:
                         'WebappRuntime',
                         'B2G',
                         'WebappRuntimeMobile',
+                        'MetroFirefox']
+                        'B2G',
+                        'WebappRuntimeMobile',
 			'MetroFirefox']
         products = csp.header.product_list
         Assert.equal(product_list, products)
