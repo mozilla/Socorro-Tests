@@ -29,8 +29,9 @@ class TestLayout:
                         'FennecAndroid',
                         'SeaMonkey',
                         'WebappRuntime',
-                        'B2G'
-                        'WebappRuntimeMobile']
+                        'B2G',
+                        'WebappRuntimeMobile',
+			'MetroFirefox']
         products = csp.header.product_list
         Assert.equal(product_list, products)
 
@@ -39,5 +40,5 @@ class TestLayout:
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        Assert.is_sorted_descending(csp.header.current_versions)
-        Assert.is_sorted_descending(csp.header.other_versions)
+        Assert.is_sorted_ascending(csp.header.current_versions)
+        Assert.is_sorted_ascending(csp.header.other_versions)
