@@ -111,7 +111,9 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.results_count, 0)
 
-    @pytest.mark.xfail(reason='Disabled until Bug 603561 is fixed')
+    @pytest.mark.xfail("'crash-stats-dev.allizom.org' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
+    @pytest.mark.xfail("'crash-stats.allizom.org' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
+    @pytest.mark.xfail("'crash-stats.mozilla.com' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
     @pytest.mark.nondestructive
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """
