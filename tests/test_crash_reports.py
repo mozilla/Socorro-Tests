@@ -202,7 +202,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.wait_for_ajax()
         reports_page = csp.click_last_product_top_crashers_link()
-        type, days, os = 'Browser', '7', 'Linux'
+        type, days, os = 'Browser', '7', 'Windows'
         Assert.equal(reports_page.current_filter_type, type)
         reports_page.click_filter_days_by(days)
         reports_page.click_filter_os_by(os)
