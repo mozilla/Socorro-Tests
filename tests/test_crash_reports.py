@@ -225,7 +225,7 @@ class TestCrashReports:
         """
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_last_product_top_crashers_link()
-        type, days, os = 'Plugin', '28', 'Mac OS X'
+        type, days, os = 'Plugin', '28', 'Windows'
         reports_page.click_filter_by(type)
         reports_page.click_filter_days_by(days)
         reports_page.click_filter_os_by(os)
