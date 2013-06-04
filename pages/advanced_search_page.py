@@ -89,7 +89,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
 
     @property
     def build_id(self):
-        return str(self.selenium.execute_script('navigator.buildID'))
+        return str(self.selenium.execute_script('return navigator.buildID'))
 
     @property
     def currently_selected_product(self):
