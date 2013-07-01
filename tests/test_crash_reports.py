@@ -150,7 +150,6 @@ class TestCrashReports:
         # Because the frontpage is now largely Ajax driven,
         # we need to add this wait before proceeding with the
         # next step.
-        csp.wait_for_ajax()
         top_crashers = csp.release_channels
 
         for idx in range(len(top_crashers)):
@@ -200,7 +199,6 @@ class TestCrashReports:
         https://www.pivotaltracker.com/story/show/17099455
         """
         csp = CrashStatsHomePage(mozwebqa)
-        csp.wait_for_ajax()
         reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Browser', '7', 'Windows'
         Assert.equal(reports_page.current_filter_type, type)
