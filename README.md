@@ -43,7 +43,7 @@ the Socorro project and about contributing to Mozilla.
 
 How to setup and run Socorro tests locally
 ---------------------------------------------
-This repository contains Selenium tests used to test:
+This repository contains Selenium tests for the following environments:
 
 * development: https://crash-stats-dev.allizom.org
 * staging: https://crash-stats.allizom.org
@@ -146,14 +146,14 @@ version may not be compatible. Upgrading each of them to latest should fix it.
 Writing Tests
 -------------
 
-If you want to get involved and add more tests, then there's just a few things
+If you want to get involved and add more tests, then there are just a few things
 we'd like to ask you to do:
 
 1. Use the [template files][GitHub Templates] for all new tests and page objects
 2. Follow our simple [style guide][Style Guide]
 3. Fork this project with your own GitHub account
 4. Make sure all tests are passing, and submit a pull request with your changes
-5. Always feel free to reach out to us and ask questions. We'll do our best to help get you started and unstuck
+5. Always feel free to reach out to us and ask questions. We'll do our best to help get you started and unstuck.
 
 License
 -------
