@@ -19,6 +19,8 @@ class TestDownload(object):
     @pytest.mark.skip_selenium
     @pytest.mark.parametrize(('url'), _csv_urls)
     def test_that_csv_urls_are_valid(self, mozwebqa, url):
+        if mozwebqa.base_url == 'https://crash-stats-dev.allizom.org':
+            pytest.skip('Do not check csv urls on crash-stats-dev.allizom.org')
         url = mozwebqa.base_url + url
         request = requests.head(url)
         Assert.equal(requests.codes.ok, request.status_code,
