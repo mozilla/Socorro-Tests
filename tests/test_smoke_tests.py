@@ -60,6 +60,9 @@ class TestSmokeTests:
         """
         Bug 631737
         """
+        if 'crash-stats.mozilla.org' in mozwebqa.base_url:
+            pytest.skip('Link to bugzilla always has HTTP as protocol on prod. Bug 891203. #217')
+
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
