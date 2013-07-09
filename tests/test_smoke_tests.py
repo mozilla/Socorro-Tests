@@ -63,4 +63,4 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
-        Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url.replace('https', 'http'), path), urllib.unquote(csp.link_to_bugzilla))
+        Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
