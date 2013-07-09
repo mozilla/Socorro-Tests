@@ -55,14 +55,12 @@ class TestSmokeTests:
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
         Assert.equal(404, response.getcode())
 
+    @pytest.mark.xfail(reason='Disabled until bug 891203 is fixed.')
     @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         """
         Bug 631737
         """
-        if 'crash-stats.mozilla.org' in mozwebqa.base_url:
-            pytest.skip('Link to bugzilla always has HTTP as protocol on prod. Bug 891203. #217')
-
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
