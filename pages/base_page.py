@@ -61,6 +61,7 @@ class CrashStatsBasePage(Page):
         _versions_locator = (By.TAG_NAME, 'option')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
+        _exploitable_crash_report_locator = (By.CSS_SELECTOR, '#report_select option[value="/report/exploitability/"]')
 
         @property
         def current_product(self):
@@ -177,3 +178,13 @@ class CrashStatsBasePage(Page):
             self.selenium.find_element(*self._advanced_search_locator).click()
             from pages.advanced_search_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
+
+        @property
+        def report_list(self):
+            report_dropdown = self.selenium.find_element(*self._report_select_locator)
+            select = Select(report_dropdown)
+            return [opt.text for opt in select.options]
+
+        @property
+        def is_exploitable_crash_report_present(self):
+            return self.is_element_present(*self._exploitable_crash_report_locator)

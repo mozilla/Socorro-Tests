@@ -65,3 +65,11 @@ class TestSmokeTests:
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
         Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
+
+    @pytest.mark.nondestructive
+    def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, mozwebqa):
+        """https://github.com/mozilla/Socorro-Tests/issues/214"""
+
+        csp = CrashStatsHomePage(mozwebqa)
+        Assert.true('Exploitable Crashes' not in csp.header.report_list)
+        Assert.false(csp.header.is_exploitable_crash_report_present)
