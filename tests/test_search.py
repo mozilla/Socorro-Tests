@@ -126,7 +126,7 @@ class TestSearchForIdOrSignature:
             Assert.true(result.is_browser_icon_visible)
 
     @pytest.mark.prod
-    #xfailed - Bug 913126 is fixed - Advanced Search: No results returned for 24.0b
+    #xfailed - Bug 913126 - Advanced Search: No results returned for 24.0b
     @pytest.mark.xfail("'crash-stats.mozilla.com' in config.getvalue('base_url')")
     @pytest.mark.nondestructive
     def test_that_plugin_filters_result(self, mozwebqa):
