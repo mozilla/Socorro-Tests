@@ -106,26 +106,6 @@ class TestSearchForIdOrSignature:
             Assert.equal(cs_advanced.no_results_text, 'No results were found.')
 
     @pytest.mark.prod
-    @pytest.mark.xfail(reason='Disabled until bug 720037 is fixed')
-    @pytest.mark.nondestructive
-    def test_that_filter_for_browser_results(self, mozwebqa):
-        #https://www.pivotaltracker.com/story/show/17769047
-        csp = CrashStatsHomePage(mozwebqa)
-        cs_advanced = csp.header.click_advanced_search()
-        cs_advanced.adv_select_product('Firefox')
-        cs_advanced.deselect_version()
-        # Select 2nd Featured Version (3rd selection in dropdown)
-        cs_advanced.adv_select_version_by_index(2)
-        cs_advanced.adv_select_os('Windows')
-        cs_advanced.select_report_process('browser')
-
-        cs_advanced.click_filter_reports()
-        cs_advanced.go_to_random_result_page()
-
-        for result in cs_advanced.results:
-            Assert.true(result.is_browser_icon_visible)
-
-    @pytest.mark.prod
     @pytest.mark.nondestructive
     def test_that_plugin_filters_result(self, mozwebqa):
         """
