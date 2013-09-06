@@ -165,10 +165,6 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-
-        if product in ['Fennec', 'B2G', 'WebappRuntime']:
-            pytest.xfail(reason='Lack of data on the staging server')
-
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
