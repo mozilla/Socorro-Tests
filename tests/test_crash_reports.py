@@ -253,9 +253,9 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
-    @pytest.mark.xfail(reason='Bug 792096 - slight, malformed-URL regression we took in 19; fix me in 20')
+    @pytest.mark.xfail(reason='Bug 913549 - Malformed searches should return a no results returned message')
     @pytest.mark.nondestructive
-    def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
+    def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/18059001
         https://bugzilla.mozilla.org/show_bug.cgi?id=642580
