@@ -116,8 +116,8 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.deselect_version()
-        # Select 3rd Featured Version (3rd selection in dropdown)
-        cs_advanced.adv_select_version_by_index(3)
+        # Select 2nd Featured Version
+        cs_advanced.adv_select_version_by_index(2)
         cs_advanced.adv_select_os('Windows')
         cs_advanced.select_report_process('plugin')
 
