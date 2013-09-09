@@ -111,9 +111,6 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.greater(cstc.results_count, 0)
 
-    @pytest.mark.xfail("'crash-stats-dev.allizom.org' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
-    @pytest.mark.xfail("'crash-stats.allizom.org' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
-    @pytest.mark.xfail("'crash-stats-php.mozilla.org' in config.getvalue('base_url')", reason="Bug 603561 - Top Changers option isn't highlighted when chosen")
     @pytest.mark.nondestructive
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         """
@@ -125,19 +122,6 @@ class TestCrashReports:
             csp.header.select_version(str(version))
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
-
-    @pytest.mark.xfail(run=False, reason="Bug 721928 - We shouldn't let the user query /daily for dates past for which we don't have data")
-    @pytest.mark.nondestructive
-    def test_that_filtering_for_a_past_date_returns_results(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17141439
-        """
-        csp = CrashStatsHomePage(mozwebqa)
-        crash_per_user = csp.header.select_report('Crashes per User')
-        crash_per_user.type_start_date('1995-01-01')
-        crash_per_user.click_generate_button()
-        Assert.true(crash_per_user.is_table_visible)
-        Assert.equal('1995-01-01', crash_per_user.last_row_date_value)
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
@@ -165,10 +149,6 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-
-        if product in ['Fennec', 'B2G', 'WebappRuntime']:
-            pytest.xfail(reason='Lack of data on the staging server')
-
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
@@ -253,9 +233,9 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
-    @pytest.mark.xfail(reason='Bug 792096 - slight, malformed-URL regression we took in 19; fix me in 20')
+    @pytest.mark.xfail(reason='Bug 913549 - Malformed searches should return a no results returned message')
     @pytest.mark.nondestructive
-    def test_that_malformed_urls_on_query_do_not_return_500_error(self, mozwebqa):
+    def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
         """
         https://www.pivotaltracker.com/story/show/18059001
         https://bugzilla.mozilla.org/show_bug.cgi?id=642580
