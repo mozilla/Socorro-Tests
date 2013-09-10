@@ -9,8 +9,6 @@ from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
 
-xfail = pytest.mark.xfail
-
 
 class TestLayout:
 
@@ -31,10 +29,9 @@ class TestLayout:
         products = csp.header.product_list
         Assert.equal(product_list, products)
 
-    @pytest.mark.xfail(reason='Bug 687841 - Versions in Navigation Bar appear in wrong order')
     @pytest.mark.nondestructive
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
-        Assert.is_sorted_ascending(csp.header.current_versions)
-        Assert.is_sorted_ascending(csp.header.other_versions)
+        Assert.is_sorted_descending(csp.header.current_versions)
+        Assert.is_sorted_descending(csp.header.other_versions)
