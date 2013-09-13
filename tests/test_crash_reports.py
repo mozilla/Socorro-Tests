@@ -138,6 +138,10 @@ class TestCrashReports:
 
         for idx in range(len(top_crashers)):
             top_crasher_name = top_crashers[idx].product_version_label
+            if u'Firefox 24.0b' in top_crasher_name or \
+                            u'WebappRuntime 24.0b' in top_crasher_name:
+                pytest.xfail("Bug 913126 - Advanced Search: No results returned for 24.0b")
+
             top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             top_crasher_page.return_to_previous_page()
