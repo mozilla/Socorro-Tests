@@ -3,4 +3,5 @@
 *.tmproj
 *.komodoproject
 *.idea
+*.ini
 results/*
