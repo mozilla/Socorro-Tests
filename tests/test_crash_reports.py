@@ -153,6 +153,8 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
+        if product == 'WebappRuntime':
+            pytest.xfail(reason='Bug 918297 - [dev][stage]Nonexistent WebappRuntime version displayed on homepage')
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
