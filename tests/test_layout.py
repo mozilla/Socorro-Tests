@@ -30,7 +30,6 @@ class TestLayout:
         Assert.equal(product_list, products)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason='Disabled until https://github.com/mozilla/Socorro-Tests/issues/225 is resolved')
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 

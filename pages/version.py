@@ -4,8 +4,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import re
-import string
-from types import StringType
 from distutils.version import Version
 
 
@@ -73,7 +71,7 @@ class FirefoxVersion(Version):
         return 'FirefoxVersion ("%s")' % str(self)
 
     def __cmp__(self, other):
-        if isinstance(other, StringType):
+        if isinstance(other, basestring):
             other = FirefoxVersion(other)
 
         compare = cmp(self.version, other.version)
@@ -109,6 +107,11 @@ class FirefoxVersion(Version):
             prerelease_compare = cmp(prereleases.index(self.prerelease[0]),
                                      prereleases.index(other.prerelease[0]))
             if not prerelease_compare:
-                return cmp(self.prerelease[1], other.prerelease[1])
+                if self.prerelease[1] is None and other.prerelease[1] is not None:
+                    return 1
+                elif self.prerelease[1] is not None and other.prerelease[1] is None:
+                    return -1
+                else:
+                    return cmp(self.prerelease[1], other.prerelease[1])
             else:
                 return prerelease_compare
