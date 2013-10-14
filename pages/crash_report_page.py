@@ -12,6 +12,7 @@ from pages.page import Page
 class CrashReport(Page):
 
     _reports_tab_locator = (By.ID, 'reports')
+    _reports_loading_locator = (By.CSS_SELECTOR, '#reports p.loading-placeholder')
     _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
 
@@ -21,7 +22,7 @@ class CrashReport(Page):
 
     def click_reports(self):
         self.selenium.find_element(*self._report_tab_button_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(None, *self._reports_tab_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(None, *self._reports_tab_locator) and self.is_element_visible(None, *self._reports_loading_locator))
 
     class Report(Page):
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
