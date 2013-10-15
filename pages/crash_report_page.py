@@ -22,7 +22,7 @@ class CrashReport(Page):
 
     def click_reports(self):
         self.selenium.find_element(*self._report_tab_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(None, *self._reports_tab_locator) and self.is_element_visible(None, *self._reports_loading_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(None, *self._reports_loading_locator))
 
     class Report(Page):
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
