@@ -19,6 +19,7 @@ class TestLayout:
 
         product_list = ['Firefox',
                         'Thunderbird',
+                        'Fennec',
                         'FennecAndroid',
                         'SeaMonkey',
                         'WebappRuntime',
