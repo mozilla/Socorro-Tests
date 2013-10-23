@@ -17,7 +17,6 @@ class TestSmokeTests:
     _expected_products = ['Firefox',
                           'Thunderbird',
                           'SeaMonkey',
-                          'Fennec',
                           'FennecAndroid',
                           'WebappRuntime',
                           'B2G']
