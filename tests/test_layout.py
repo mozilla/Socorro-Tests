@@ -29,6 +29,7 @@ class TestLayout:
         products = csp.header.product_list
         Assert.equal(product_list, products)
 
+    @pytest.mark.xfail(reason='Bug 934910 - [stage][prod] Current versions are not listed in the right order')
     @pytest.mark.nondestructive
     def test_that_product_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
