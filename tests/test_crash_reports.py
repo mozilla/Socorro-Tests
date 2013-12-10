@@ -128,8 +128,6 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
-        if product == 'WebappRuntime':
-            pytest.xfail(reason='Bug 918297 - [dev][stage]Nonexistent WebappRuntime version displayed on homepage')
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         # Because the frontpage is now largely Ajax driven,
@@ -139,10 +137,6 @@ class TestCrashReports:
 
         for idx in range(len(top_crashers)):
             top_crasher_name = top_crashers[idx].product_version_label
-            if u'Firefox 24.0b' in top_crasher_name or \
-               u'WebappRuntime 24.0b' in top_crasher_name:
-                pytest.xfail("Bug 913126 - Advanced Search: No results returned for 24.0b")
-
             top_crasher_page = top_crashers[idx].click_top_crasher()
             Assert.contains(top_crasher_name, top_crasher_page.page_heading)
             top_crasher_page.return_to_previous_page()
@@ -154,8 +148,6 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
-        if product == 'WebappRuntime':
-            pytest.xfail(reason='Bug 918297 - [dev][stage]Nonexistent WebappRuntime version displayed on homepage')
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
@@ -240,7 +232,6 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
-    @pytest.mark.xfail(reason='Bug 913549 - Malformed searches should return a no results returned message')
     @pytest.mark.nondestructive
     def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
         """
