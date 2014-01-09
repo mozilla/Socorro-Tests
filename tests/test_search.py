@@ -75,7 +75,7 @@ class TestSearchForIdOrSignature:
         cs_advanced = csp.header.click_advanced_search()
         cs_advanced.adv_select_product('Firefox')
         cs_advanced.adv_select_version('All')
-        cs_advanced.set_period_value_field_input('\b3')
+        cs_advanced.set_period_value_field_input('\b4')
         cs_advanced.select_period_units('Days')
         cs_advanced.click_filter_reports()
 
