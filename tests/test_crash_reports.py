@@ -27,6 +27,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
+    @xfail("'-dev' in config.getvalue('base_url')",
+           reason="Bug 962056 - [dev] Internal server error returned when selecting 'Crashes per User' report for any product")
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
 
