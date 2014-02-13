@@ -70,8 +70,7 @@ class TestSearchForIdOrSignature:
             Assert.contains(report.version, version)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail('config.getvalue("base_url") == "https://crash-stats.allizom.org"',
-                       reason='Bug 968476 - [stage][regression] crash counts appear to be different in query/ tab-summary / tab-reports')
+    @pytest.mark.xfail(reason='Bug 968476 - crash counts appear to be different')
     def test_that_advanced_search_drilldown_results_are_correct(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
