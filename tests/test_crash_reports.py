@@ -130,6 +130,10 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/17086667
         """
+
+        if product == 'Thunderbird':
+            pytest.xfail(reason='Bug 977406 - featured versions that have aged out still display on the homepage')
+
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         # Because the frontpage is now largely Ajax driven,
@@ -150,6 +154,10 @@ class TestCrashReports:
         """
         https://www.pivotaltracker.com/story/show/20145655
         """
+
+        if product == 'Thunderbird':
+            pytest.xfail(reason='Bug 977406 - featured versions that have aged out still display on the homepage')
+
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
