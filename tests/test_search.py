@@ -89,7 +89,6 @@ class TestSearchForIdOrSignature:
     @pytest.mark.nondestructive
     def test_that_search_for_a_given_build_id_works(self, mozwebqa):
         """
-        https://www.pivotaltracker.com/story/show/17368401
         """
         csp = CrashStatsHomePage(mozwebqa)
         cs_advanced = csp.header.click_advanced_search()
@@ -107,7 +106,6 @@ class TestSearchForIdOrSignature:
     @pytest.mark.nondestructive
     def test_that_plugin_filters_result(self, mozwebqa):
         """
-        https://www.pivotaltracker.com/story/show/17769047
         https://bugzilla.mozilla.org/show_bug.cgi?id=562380
         """
         csp = CrashStatsHomePage(mozwebqa)

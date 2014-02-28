@@ -128,7 +128,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         """
-        https://www.pivotaltracker.com/story/show/17086667
+        Test for the options in the various top crashers channels.  
         """
 
         if product == 'Thunderbird':
@@ -152,7 +152,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
         """
-        https://www.pivotaltracker.com/story/show/20145655
+        Test for the current product releases.  
         """
 
         if product == 'Thunderbird':
@@ -173,9 +173,6 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17088605
-        """
         csp = CrashStatsHomePage(mozwebqa)
         top_crashers = csp.release_channels
         tc_page = top_crashers[1].click_top_crasher()
@@ -184,9 +181,6 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17099455
-        """
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Browser', '7', 'Windows'
@@ -207,9 +201,6 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/17099455
-        """
         csp = CrashStatsHomePage(mozwebqa)
         reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Plugin', '28', 'Windows'
@@ -246,7 +237,6 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
         """
-        https://www.pivotaltracker.com/story/show/18059001
         https://bugzilla.mozilla.org/show_bug.cgi?id=642580
         """
         csp = CrashStatsHomePage(mozwebqa)
@@ -258,9 +248,6 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_changers_data_is_available(self, mozwebqa):
-        """
-        https://www.pivotaltracker.com/story/show/18059119
-        """
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
