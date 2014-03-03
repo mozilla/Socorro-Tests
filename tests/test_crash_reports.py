@@ -127,10 +127,6 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
-        """
-        Test for the options in the various top crashers channels.  
-        """
-
         if product == 'Thunderbird':
             pytest.xfail(reason='Bug 977406 - featured versions that have aged out still display on the homepage')
 
@@ -151,10 +147,6 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
-        """
-        Test for the current product releases.  
-        """
-
         if product == 'Thunderbird':
             pytest.xfail(reason='Bug 977406 - featured versions that have aged out still display on the homepage')
 
