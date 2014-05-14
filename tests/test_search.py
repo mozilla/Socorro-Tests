@@ -4,7 +4,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
-
 from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
@@ -131,3 +130,83 @@ class TestSearchForIdOrSignature:
         cs_advanced.results_table_header.click_sort_by_plugin_filename()
         plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.top_results(19)]
         Assert.is_sorted_descending(plugin_filename_results_list)
+
+    def test_super_search_page_is_loaded(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        Assert.true(cs_super.is_the_current_page)
+
+    def test_default_fields_for_firefox(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.open_url('/search/?product=Firefox')
+        Assert.equal(cs_super.field('0'), 'product')
+        Assert.equal(cs_super.operator('0'), 'has terms')
+        Assert.equal(cs_super.match('0'), 'Firefox')
+
+    def test_search_for_unrealistic_data(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.open_url('/search/?date=>2000:01:01 00-00')
+        Assert.equal(cs_super.error, 'Enter a valid date/time.')
+
+    def test_search_change_column(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.select_field('product')
+        cs_super.select_operator('has terms')
+        cs_super.select_match('0', 'Firefox')
+        cs_super.click_search()
+        Assert.true(cs_super.are_search_results_found)
+        cs_super.click_more_options()
+        for column in cs_super.columns[1:]:
+            current_column = cs_super.columns[0].column_name
+            Assert.true(current_column in cs_super.search_results_table_header.table_column_names)
+            cs_super.columns[0].delete_column()
+            cs_super.wait_for_column_deleted(current_column)
+            Assert.not_equal(current_column, cs_super.columns[0].column_name)
+            cs_super.click_search()
+            if len(cs_super.columns) > 1:
+                Assert.true(cs_super.are_search_results_found)
+                Assert.false(current_column in cs_super.search_results_table_header.table_column_names)
+        Assert.true(cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names)
+
+    def test_search_change_facet(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.select_field('product')
+        cs_super.select_operator('has terms')
+        cs_super.select_match('0', 'Firefox')
+        cs_super.click_search()
+        Assert.true(cs_super.facet in cs_super.results_facet.lower())
+        cs_super.click_more_options()
+        cs_super.delete_facet()
+        cs_super.type_facet('address')
+        Assert.equal(cs_super.facet, 'address')
+        cs_super.click_search()
+        Assert.true(cs_super.facet in cs_super.results_facet.lower())
+
+    def test_search_with_one_line(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.select_field('product')
+        cs_super.select_operator('has terms')
+        cs_super.select_match('0', 'Firefox')
+        cs_super.click_search()
+        Assert.true(cs_super.are_search_results_found)
+        Assert.equal(cs_super.field('0'), 'product')
+        Assert.equal(cs_super.operator('0'), 'has terms')
+        Assert.equal(cs_super.match('0'), 'Firefox')
+
+    def test_search_with_multiple_lines(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        cs_super = csp.header.click_super_search()
+        cs_super.select_field('product')
+        cs_super.select_operator('has terms')
+        cs_super.select_match('0', 'Firefox')
+        cs_super.click_new_line()
+        cs_super.select_field('release channel')
+        cs_super.select_operator('has terms')
+        cs_super.select_match('1', 'nightly')
+        cs_super.click_search()
+        Assert.true(cs_super.are_search_results_found)

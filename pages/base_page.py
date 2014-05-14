@@ -62,6 +62,7 @@ class CrashStatsBasePage(Page):
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
         _exploitable_crash_report_locator = (By.CSS_SELECTOR, '#report_select option[value="/report/exploitability/"]')
+        _super_search_locator = (By.LINK_TEXT, 'Super Search')
 
         @property
         def current_product(self):
@@ -188,3 +189,8 @@ class CrashStatsBasePage(Page):
         @property
         def is_exploitable_crash_report_present(self):
             return self.is_element_present(*self._exploitable_crash_report_locator)
+
+        def click_super_search(self):
+            self.selenium.find_element(*self._super_search_locator).click()
+            from pages.super_search_page import CrashStatsSuperSearch
+            return CrashStatsSuperSearch(self.testsetup)
