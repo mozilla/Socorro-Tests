@@ -131,11 +131,13 @@ class TestSearchForIdOrSignature:
         plugin_filename_results_list = [row.plugin_filename.lower() for row in cs_advanced.top_results(19)]
         Assert.is_sorted_descending(plugin_filename_results_list)
 
+    @pytest.mark.nondestructive
     def test_super_search_page_is_loaded(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
         Assert.true(cs_super.is_the_current_page)
 
+    @pytest.mark.nondestructive
     def test_default_fields_for_firefox(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -144,12 +146,14 @@ class TestSearchForIdOrSignature:
         Assert.equal(cs_super.operator('0'), 'has terms')
         Assert.equal(cs_super.match('0'), 'Firefox')
 
+    @pytest.mark.nondestructive
     def test_search_for_unrealistic_data(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
         cs_super.open_url('/search/?date=>2000:01:01 00-00')
         Assert.equal(cs_super.error, 'Enter a valid date/time.')
 
+    @pytest.mark.nondestructive
     def test_search_change_column(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -171,6 +175,7 @@ class TestSearchForIdOrSignature:
                 Assert.false(current_column in cs_super.search_results_table_header.table_column_names)
         Assert.true(cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names)
 
+    @pytest.mark.nondestructive
     def test_search_change_facet(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -186,6 +191,7 @@ class TestSearchForIdOrSignature:
         cs_super.click_search()
         Assert.true(cs_super.facet in cs_super.results_facet.lower())
 
+    @pytest.mark.nondestructive
     def test_search_with_one_line(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -198,6 +204,7 @@ class TestSearchForIdOrSignature:
         Assert.equal(cs_super.operator('0'), 'has terms')
         Assert.equal(cs_super.match('0'), 'Firefox')
 
+    @pytest.mark.nondestructive
     def test_search_with_multiple_lines(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
