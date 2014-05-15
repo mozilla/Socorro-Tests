@@ -163,16 +163,20 @@ class TestSearchForIdOrSignature:
         cs_super.click_search()
         Assert.true(cs_super.are_search_results_found)
         cs_super.click_more_options()
-        for column in cs_super.columns[1:]:
-            current_column = cs_super.columns[0].column_name
+
+        # Delete all columns except the last one
+        for column in cs_super.columns[:-1]:
+            current_column = column.column_name
             Assert.true(current_column in cs_super.search_results_table_header.table_column_names)
-            cs_super.columns[0].delete_column()
-            cs_super.wait_for_column_deleted(current_column)
-            Assert.not_equal(current_column, cs_super.columns[0].column_name)
+            number_of_columns = len(cs_super.columns)
+            column.delete_column()
+            cs_super.wait_for_column_deleted(number_of_columns - 1)
+            Assert.false(cs_super.is_column_in_list(current_column))
             cs_super.click_search()
             if len(cs_super.columns) > 1:
                 Assert.true(cs_super.are_search_results_found)
                 Assert.false(current_column in cs_super.search_results_table_header.table_column_names)
+
         Assert.true(cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names)
 
     @pytest.mark.nondestructive
