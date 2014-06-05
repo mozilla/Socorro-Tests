@@ -38,7 +38,6 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
-    @xfail(reason="Bug 1013916 - [prod][stage]Top Crashers for B2G selects the wrong version and returns Page not found")
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
