@@ -60,20 +60,6 @@ class TestCrashReports:
         Assert.greater(cstc.results_count, 0)
 
     @pytest.mark.nondestructive
-    def test_that_selecting_nightly_builds_loads_page_and_link_to_ftp_works(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        nightly_builds_page = csp.header.select_report('Nightly Builds')
-        Assert.equal(nightly_builds_page.page_heading, 'Nightly Builds for Firefox')
-
-        website_link = nightly_builds_page.link_to_ftp
-        #check that the link is valid
-        Assert.not_none(re.match('(\w+\W+)', website_link))
-
-        #test external link works
-        nightly_builds_page.click_link_to_ftp()
-        Assert.equal(website_link, nightly_builds_page.get_url_current_page())
-
-    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_products_page_links_work(self, mozwebqa, product):
         products_page = ProductsLinksPage(mozwebqa)
