@@ -14,9 +14,7 @@ class TestLayout:
 
     @pytest.mark.nondestructive
     def test_that_products_are_sorted_correctly(self, mozwebqa):
-
         csp = CrashStatsHomePage(mozwebqa)
-
         product_list = ['Firefox',
                         'Thunderbird',
                         'Fennec',
@@ -27,6 +25,7 @@ class TestLayout:
                         'WebappRuntimeMobile',
                         'MetroFirefox']
         products = csp.header.product_list
+
         Assert.equal(product_list, products)
 
     @pytest.mark.nondestructive

@@ -47,28 +47,27 @@ class TestSmokeTests:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         cs_advanced = csp.header.click_advanced_search()
+
         Assert.equal(product, cs_advanced.currently_selected_product)
 
     @pytest.mark.nondestructive
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
+
         Assert.equal(404, response.getcode())
 
     @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
-        """
-        Bug 631737
-        """
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
         csp.selenium.get(mozwebqa.base_url + path)
+
         Assert.contains('bug_file_loc=%s%s' % (mozwebqa.base_url, path), urllib.unquote(csp.link_to_bugzilla))
 
     @pytest.mark.nondestructive
     def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, mozwebqa):
-        """https://github.com/mozilla/Socorro-Tests/issues/214"""
-
         csp = CrashStatsHomePage(mozwebqa)
+
         Assert.true('Exploitable Crashes' not in csp.header.report_list)
         Assert.false(csp.header.is_exploitable_crash_report_present)
 
@@ -77,7 +76,9 @@ class TestSmokeTests:
     def test_login_logout(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         Assert.true(csp.is_logged_out)
+
         csp.login()
         Assert.true(csp.is_logged_in)
+
         csp.logout()
         Assert.true(csp.is_logged_out)
