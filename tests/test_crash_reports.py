@@ -4,15 +4,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
-import re
 
 from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
 from pages.products_page import ProductsLinksPage
-
-
-xfail = pytest.mark.xfail
 
 
 class TestCrashReports:
@@ -29,7 +25,6 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
-
         csp.header.select_product(product)
         Assert.contains(product, csp.page_title)
 
@@ -41,18 +36,16 @@ class TestCrashReports:
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-
         cstc = csp.header.select_report('Top Crashers')
+
         Assert.equal(product, cstc.page_heading_product)
         Assert.equal(cstc.header.current_version, cstc.page_heading_version)
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
-        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-
         if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
@@ -63,7 +56,6 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_products_page_links_work(self, mozwebqa, product):
         products_page = ProductsLinksPage(mozwebqa)
-        #An extra check that products page is loaded
         Assert.equal(products_page.page_heading, 'Mozilla Products in Crash Reporter')
 
         csp = products_page.click_product(product)
@@ -72,11 +64,9 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
-        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-
         if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
@@ -85,11 +75,9 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
-        # https://bugzilla.mozilla.org/show_bug.cgi?id=678906
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
-
         if cstc.results_found:
             Assert.equal(product, cstc.page_heading_product)
 
@@ -98,12 +86,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
-        """
-        Test for https://bugzilla.mozilla.org/show_bug.cgi?id=679229
-        """
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
-
             csp.header.select_version(str(version))
             cstc = csp.header.select_report('Top Changers')
             Assert.equal(cstc.header.current_report, 'Top Changers')
@@ -111,12 +95,8 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
-
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-        # Because the frontpage is now largely Ajax driven,
-        # we need to add this wait before proceeding with the
-        # next step.
         top_crashers = csp.release_channels
 
         for idx in range(len(top_crashers)):
@@ -129,7 +109,6 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
-
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         top_crashers = csp.release_channels
@@ -157,11 +136,13 @@ class TestCrashReports:
         reports_page = csp.click_last_product_top_crashers_link()
         type, days, os = 'Browser', '7', 'Windows'
         Assert.equal(reports_page.current_filter_type, type)
+
         reports_page.click_filter_days_by(days)
         reports_page.click_filter_os_by(os)
         Assert.equal((type, days, os), (reports_page.current_filter_type,
                                         reports_page.current_days_filter,
                                         reports_page.current_os_filter))
+
         signature_list_items = reports_page.random_signature_items(19)
         Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
@@ -183,6 +164,7 @@ class TestCrashReports:
                                         reports_page.current_days_filter,
                                         reports_page.current_os_filter))
         signature_list_items = reports_page.signature_items
+
         Assert.true(len(signature_list_items) > 0, "Signature list items not found")
 
         for signature_item in signature_list_items[:min(signature_list_items, 24)]:
@@ -193,27 +175,23 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
-        """
-        https://bugzilla.mozilla.org/show_bug.cgi?id=655506
-        """
         csp = CrashStatsHomePage(mozwebqa)
         lowest_version_index = len(csp.header.version_select_text) - 1
         csp.header.select_version_by_index(lowest_version_index)
         cstc = csp.header.select_report('Top Crashers')
         cstc.click_filter_days_by('14')
         Assert.not_equal('Unable to load data System error, please retry in a few minutes', cstc.page_heading)
+
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
     @pytest.mark.xfail(reason='Bug 913549 - Malformed searches should return a no results returned message')
     @pytest.mark.nondestructive
     def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
-        """
-        https://bugzilla.mozilla.org/show_bug.cgi?id=642580
-        """
         csp = CrashStatsHomePage(mozwebqa)
         csas = csp.header.click_advanced_search()
         Assert.true(csas.is_the_current_page)
+
         csas.build_id_field_input('http://www.google.com')
         csas.click_filter_reports()
         Assert.equal('No results were found.', csas.no_results_text)
@@ -222,4 +200,5 @@ class TestCrashReports:
     def test_that_top_changers_data_is_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
+
         Assert.not_equal('Top changers currently unavailable', cstc.page_heading)
