@@ -7,7 +7,6 @@
 import random
 
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
 from pages.base_page import CrashStatsBasePage
@@ -26,8 +25,8 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _multiple_version_select_locator = (By.ID, 'version')
     _multiple_os_select_locator = (By.ID, 'platform')
     _filter_crash_reports_button = (By.ID, 'query_submit')
-    _query_results_text_locator = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(1)')
-    _no_results_text_locator = (By.CSS_SELECTOR, '.body.notitle > p:nth-child(2)')
+    _query_results_text_locator = (By.CSS_SELECTOR, '.body > p:nth-child(1)')
+    _no_results_text_locator = (By.CSS_SELECTOR, '.body > p:nth-child(2)')
     _range_value_locator = (By.ID, 'range_value')
     _range_unit_selector_locator = (By.ID, 'range_unit')
     _build_id_locator = (By.ID, 'build_id')
