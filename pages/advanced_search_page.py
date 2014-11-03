@@ -25,7 +25,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _multiple_version_select_locator = (By.ID, 'version')
     _multiple_os_select_locator = (By.ID, 'platform')
     _filter_crash_reports_button = (By.ID, 'query_submit')
-    _query_results_text_locator = (By.CSS_SELECTOR, '.body > p:nth-child(1)')
+    _query_results_text_locator = (By.CSS_SELECTOR, '.body:nth-child(1) > p:nth-child(1)')
     _no_results_text_locator = (By.CSS_SELECTOR, '.body > p:nth-child(2)')
     _range_value_locator = (By.ID, 'range_value')
     _range_unit_selector_locator = (By.ID, 'range_unit')
