@@ -185,17 +185,6 @@ class TestCrashReports:
         cstc.click_filter_by('Plugin')
         Assert.not_equal(self, 'Unable to load data System error, please retry in a few minutes', cstc.page_heading)
 
-    @pytest.mark.xfail(reason='Bug 913549 - Malformed searches should return a no results returned message')
-    @pytest.mark.nondestructive
-    def test_that_malformed_advanced_searches_should_not_return_an_error_message(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csas = csp.header.click_advanced_search()
-        Assert.true(csas.is_the_current_page)
-
-        csas.build_id_field_input('http://www.google.com')
-        csas.click_filter_reports()
-        Assert.equal('No results were found.', csas.no_results_text)
-
     @pytest.mark.nondestructive
     def test_that_top_changers_data_is_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
