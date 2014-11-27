@@ -52,6 +52,7 @@ class CrashStatsBasePage(Page):
         return self.Header(self.testsetup)
 
     class Header(Page):
+
         _find_crash_id_or_signature = (By.ID, 'q')
         _product_select_locator = (By.ID, 'products_select')
         _report_select_locator = (By.ID, 'report_select')
@@ -59,6 +60,7 @@ class CrashStatsBasePage(Page):
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _other_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(3) option')
         _versions_locator = (By.TAG_NAME, 'option')
+        _loader_locator = (By.CLASS_NAME, 'loader')
 
         _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
         _exploitable_crash_report_locator = (By.CSS_SELECTOR, '#report_select option[value="/report/exploitability/"]')
@@ -172,6 +174,8 @@ class CrashStatsBasePage(Page):
             search_box.clear()
             search_box.send_keys(crash_id_or_signature)
             search_box.send_keys(Keys.RETURN)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loader_locator))
+
             from pages.advanced_search_page import CrashStatsAdvancedSearch
             return CrashStatsAdvancedSearch(self.testsetup)
 
