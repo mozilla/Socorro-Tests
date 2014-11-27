@@ -33,7 +33,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
     _report_type_base_locator = (By.CSS_SELECTOR, '.advanced:nth-of-type(6)')
     _pagination_locator = (By.CSS_SELECTOR, 'div.pagination > a[href]')
     _next_locator = (By.CSS_SELECTOR, 'div.pagination a:last-child')
-    _table_row_locator = (By.CSS_SELECTOR, '#signatureList > tbody > tr')
+    _table_row_locator = (By.CSS_SELECTOR, 'tbody > tr')
 
     def adv_select_product(self, product):
         element = self.selenium.find_element(*self._multiple_product_select_locator)
@@ -147,6 +147,7 @@ class CrashStatsAdvancedSearch(CrashStatsBasePage):
         return self.ResultHeader(self.testsetup)
 
     class Result(Page):
+
         _columns_locator = (By.CSS_SELECTOR, 'td')
         _browser_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.browser')
         _plugin_icon_locator = (By.CSS_SELECTOR, 'div.signature-icons > img.plugin')

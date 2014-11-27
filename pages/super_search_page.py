@@ -23,7 +23,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
     _operator_test_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"]')
-    _input_locator = (By.CSS_SELECTOR, '.select2-input.select2-focused')
+    _input_locator = (By.CSS_SELECTOR, '.select2-search-field .select2-input')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
