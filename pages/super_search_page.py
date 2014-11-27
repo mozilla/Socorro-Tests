@@ -37,6 +37,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _results_facet_locator = (By.CSS_SELECTOR, '#search_results-nav li:nth-child(2) span')
     _column_list_locator = (By.CSS_SELECTOR, '#s2id_autogen3 ul li.select2-search-choice')
     _table_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
+    _loader_locator = (By.CLASS_NAME, 'loader')
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
@@ -73,6 +74,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     def click_search(self):
         self.selenium.find_element(*self._search_button_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loader_locator))
 
     def click_new_line(self):
         self.selenium.find_element(*self._new_line_locator).click()
