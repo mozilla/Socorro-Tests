@@ -147,8 +147,6 @@ class TestSearchForIdOrSignature:
         Assert.equal(cs_super.error, 'Enter a valid date/time.')
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom' in config.getvalue('base_url')",
-        reason="Bug 1086721 - Super Search tests aren't returning results")
     def test_search_change_column(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -177,8 +175,6 @@ class TestSearchForIdOrSignature:
         Assert.true(cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom' in config.getvalue('base_url')",
-        reason="Bug 1086721 - Super Search tests aren't returning results")
     def test_search_change_facet(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -197,8 +193,6 @@ class TestSearchForIdOrSignature:
         Assert.true(cs_super.facet in cs_super.results_facet.lower())
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom' in config.getvalue('base_url')",
-        reason="Bug 1086721 - Super Search tests aren't returning results")
     def test_search_with_one_line(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()
@@ -213,8 +207,6 @@ class TestSearchForIdOrSignature:
         Assert.equal(cs_super.match('0'), 'Firefox')
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom' in config.getvalue('base_url')",
-        reason="Bug 1086721 - Super Search tests aren't returning results")
     def test_search_with_multiple_lines(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cs_super = csp.header.click_super_search()

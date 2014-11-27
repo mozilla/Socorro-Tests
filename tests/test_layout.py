@@ -35,7 +35,6 @@ class TestLayout:
         Assert.is_sorted_descending(csp.header.current_versions)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason='Bug 1068057 - Sort order in product_version_select is incorrect')
     def test_that_product_older_versions_are_ordered_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
 
