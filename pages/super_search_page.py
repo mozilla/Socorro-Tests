@@ -135,7 +135,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
             return [table_column.text.lower() for table_column in self._root_element.find_elements(*self._table_header_name_locator)]
 
     class Column(Page):
-        _column_name_locator = (By.CSS_SELECTOR, '.ui-sortable div')
+        _column_name_locator = (By.CSS_SELECTOR, 'div')
         _column_delete_locator = (By.CSS_SELECTOR, 'a')
 
         def __init__(self, testsetup, column):
