@@ -62,7 +62,6 @@ class CrashStatsBasePage(Page):
         _versions_locator = (By.TAG_NAME, 'option')
         _loader_locator = (By.CLASS_NAME, 'loader')
 
-        _advanced_search_locator = (By.LINK_TEXT, 'Advanced Search')
         _exploitable_crash_report_locator = (By.CSS_SELECTOR, '#report_select option[value="/report/exploitability/"]')
         _super_search_locator = (By.LINK_TEXT, 'Super Search')
 
@@ -176,13 +175,8 @@ class CrashStatsBasePage(Page):
             search_box.send_keys(Keys.RETURN)
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loader_locator))
 
-            from pages.advanced_search_page import CrashStatsAdvancedSearch
-            return CrashStatsAdvancedSearch(self.testsetup)
-
-        def click_advanced_search(self):
-            self.selenium.find_element(*self._advanced_search_locator).click()
-            from pages.advanced_search_page import CrashStatsAdvancedSearch
-            return CrashStatsAdvancedSearch(self.testsetup)
+            from pages.super_search_page import CrashStatsSuperSearch
+            return CrashStatsSuperSearch(self.testsetup)
 
         @property
         def report_list(self):

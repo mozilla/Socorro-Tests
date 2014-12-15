@@ -31,26 +31,6 @@ class TestSmokeTests:
         Assert.true(csstat.is_latest_raw_stats_present, 'Raw stats not found')
 
     @pytest.mark.nondestructive
-    def test_that_options_are_sorted_the_same(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        cssearch = csp.header.click_advanced_search()
-        nav_product_list = csp.header.product_list
-        search_product_list = cssearch.product_list
-        Assert.equal(len(nav_product_list), len(search_product_list))
-
-        for i, prod_item in enumerate(nav_product_list):
-            Assert.equal(prod_item, search_product_list[i])
-
-    @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
-    def test_that_advanced_search_has_product_highlighted_in_multiselect(self, mozwebqa, product):
-        csp = CrashStatsHomePage(mozwebqa)
-        csp.header.select_product(product)
-        cs_advanced = csp.header.click_advanced_search()
-
-        Assert.equal(product, cs_advanced.currently_selected_product)
-
-    @pytest.mark.nondestructive
     def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
         response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
 
