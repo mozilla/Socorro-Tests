@@ -18,12 +18,13 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     # Search parameters section
     _field_text_locator = (By.CSS_SELECTOR, 'fieldset[id = "%s"] > div:nth-child(2) span')
     _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id = "%s"] > div:nth-child(4) span')
-    _match_select_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) input')
-    _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"]> div:nth-child(6) div')
+    _match_select_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-input')
+    _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) div')
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
     _operator_test_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"]')
-    _input_locator = (By.CSS_SELECTOR, '.select2-search-field .select2-input')
+    _input_locator = (By.CSS_SELECTOR, '#s2id_autogen6')
+    _second_input_locator = (By.CSS_SELECTOR, '#s2id_autogen8')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
@@ -38,6 +39,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _column_list_locator = (By.CSS_SELECTOR, '#s2id_autogen3 ul li.select2-search-choice')
     _table_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
     _loader_locator = (By.CLASS_NAME, 'loader')
+    _crash_reports_tab_locator = (By.CSS_SELECTOR, '#search_results-nav [href="#crash-reports"] span')
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
@@ -48,13 +50,13 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.selenium.find_element(*self._operator_test_locator).click()
 
     def select_operator(self, operator):
-        self.selenium.find_element(*self._input_locator).send_keys(operator)
+        self.selenium.find_element(*self._second_input_locator).send_keys(operator)
         self.selenium.find_element(*self._operator_test_locator).click()
 
     def select_match(self, line_id, match):
         _match_locator = (self._match_select_locator[0], self._match_select_locator[1] % line_id)
         self.selenium.find_element(*_match_locator).send_keys(match)
-        self.selenium.find_element(*self._operator_test_locator).click()
+        self.selenium.find_element(*_match_locator).click()
 
     def field(self, line_id):
         return self.selenium.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
@@ -81,6 +83,10 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     def click_more_options(self):
         self.selenium.find_element(*self._more_options_locator).click()
+
+    def click_crash_reports_tab(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.find_element(*self._crash_reports_tab_locator).is_displayed())
+        self.selenium.find_element(*self._crash_reports_tab_locator).click()
 
     @property
     def facet(self):
@@ -135,6 +141,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
             return [table_column.text.lower() for table_column in self._root_element.find_elements(*self._table_header_name_locator)]
 
     class Column(Page):
+
         _column_name_locator = (By.CSS_SELECTOR, 'div')
         _column_delete_locator = (By.CSS_SELECTOR, 'a')
 
@@ -144,12 +151,14 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
         @property
         def column_name(self):
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self._root_element.find_element(*self._column_name_locator).is_displayed())
             return self._root_element.find_element(*self._column_name_locator).text
 
         def delete_column(self):
             self._root_element.find_element(*self._column_delete_locator).click()
 
     class SearchResult(Page):
+
         _columns_locator = (By.CSS_SELECTOR, 'td')
 
         def __init__(self, testsetup, row):

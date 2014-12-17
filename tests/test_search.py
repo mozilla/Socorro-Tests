@@ -81,13 +81,14 @@ class TestSearchForIdOrSignature:
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
-        cs_super.select_match('0', 'Firefox')
+
         cs_super.click_search()
         Assert.true(cs_super.are_search_results_found)
-
         cs_super.click_more_options()
+
         # Delete all columns except the last one
         for column in cs_super.columns[:-1]:
+            cs_super.click_crash_reports_tab()
             current_column = column.column_name
             Assert.true(current_column in cs_super.search_results_table_header.table_column_names)
 
@@ -98,6 +99,7 @@ class TestSearchForIdOrSignature:
 
             cs_super.click_search()
             if len(cs_super.columns) > 1:
+                cs_super.click_crash_reports_tab()
                 Assert.true(cs_super.are_search_results_found)
                 Assert.false(current_column in cs_super.search_results_table_header.table_column_names)
 
@@ -109,7 +111,6 @@ class TestSearchForIdOrSignature:
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
-        cs_super.select_match('0', 'Firefox')
         cs_super.click_search()
         Assert.true(cs_super.facet in cs_super.results_facet.lower())
 
@@ -127,7 +128,6 @@ class TestSearchForIdOrSignature:
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
-        cs_super.select_match('0', 'Firefox')
         cs_super.click_search()
 
         Assert.true(cs_super.are_search_results_found)
@@ -141,10 +141,10 @@ class TestSearchForIdOrSignature:
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
-        cs_super.select_match('0', 'Firefox')
         cs_super.click_new_line()
         cs_super.select_field('release channel')
         cs_super.select_operator('has terms')
+        # select the 2nd line
         cs_super.select_match('1', 'nightly')
         cs_super.click_search()
 
