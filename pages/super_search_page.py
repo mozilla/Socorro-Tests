@@ -129,16 +129,16 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     class SearchResultHeader(Page):
 
-        _root_locator = (By.CSS_SELECTOR, '#reports-list thead')
-        _table_header_name_locator = (By.CSS_SELECTOR, 'th')
-
-        def __init__(self, testsetup):
-            Page.__init__(self, testsetup)
-            self._root_element = self.selenium.find_element(*self._root_locator)
+        _table_header_name_locator = (By.CSS_SELECTOR, '#reports-list thead th')
 
         @property
         def table_column_names(self):
-            return [table_column.text.lower() for table_column in self._root_element.find_elements(*self._table_header_name_locator)]
+            return [table_column.text.lower() for table_column in self.selenium.find_elements(*self._table_header_name_locator)]
+
+        def is_column_not_present(self, column_name):
+            WebDriverWait(self.selenium, self.timeout).until(
+                lambda s: column_name not in self.table_column_names, message='Column %s found in table header.' % column_name)
+            return True
 
     class Column(Page):
 

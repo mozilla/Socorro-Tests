@@ -101,7 +101,7 @@ class TestSearchForIdOrSignature:
             if len(cs_super.columns) > 1:
                 cs_super.click_crash_reports_tab()
                 Assert.true(cs_super.are_search_results_found)
-                Assert.false(current_column in cs_super.search_results_table_header.table_column_names)
+                Assert.true(cs_super.search_results_table_header.is_column_not_present(current_column))
 
         Assert.true(cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names)
 
