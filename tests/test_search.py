@@ -40,7 +40,7 @@ class TestSearchForIdOrSignature:
         csp.header.select_version(version)
         report_list = csp.click_last_product_top_crashers_link()
         crash_report_page = report_list.click_first_signature()
-        crash_report_page.click_reports()
+        crash_report_page.click_reports_tab()
         reports = crash_report_page.reports
 
         Assert.true(len(reports) > 0, "reports not found for signature")

@@ -6,12 +6,13 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-from pages.page import Page
+from pages.base_page import CrashStatsBasePage
 
 
-class CrashReport(Page):
+class CrashReport(CrashStatsBasePage):
 
     _reports_tab_locator = (By.ID, 'reports')
+    _results_count_locator = (By.CSS_SELECTOR, 'span.totalItems')
     _reports_loading_locator = (By.CSS_SELECTOR, '#reports p.loading-placeholder')
     _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
@@ -20,16 +21,22 @@ class CrashReport(Page):
     def reports(self):
         return [self.Report(self.testsetup, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
 
-    def click_reports(self):
+    @property
+    def results_count_total(self):
+        return int(self.selenium.find_element(*self._results_count_locator).text.replace(",", ""))
+
+    def click_reports_tab(self):
         self.selenium.find_element(*self._report_tab_button_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(None, *self._reports_loading_locator))
 
-    class Report(Page):
+    class Report(CrashStatsBasePage):
+
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
         _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
+        _report_date_link_locator = (By.CSS_SELECTOR, '#reportsList .report-date_processed > a')
 
         def __init__(self, testsetup, element):
-            Page.__init__(self, testsetup)
+            CrashStatsBasePage.__init__(self, testsetup)
             self._root_element = element
 
         @property
@@ -39,3 +46,8 @@ class CrashReport(Page):
         @property
         def version(self):
             return self._root_element.find_element(*self._version_locator).text
+
+        def click_report_date(self):
+            self.selenium.find_element(*self._report_date_link_locator).click()
+            from uuid_report import UUIDReport
+            return UUIDReport(self.testsetup)

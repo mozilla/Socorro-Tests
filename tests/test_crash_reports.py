@@ -107,6 +107,42 @@ class TestCrashReports:
             top_crashers = csp.release_channels
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
+                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1122013")
+    # Bug 1122013 - [stage][regression] Signature reports do not load
+    def test_top_crasher_reports_tab_has_uuid_report(self, mozwebqa):
+        csp = CrashStatsHomePage(mozwebqa)
+        top_crashers = csp.click_last_product_top_crashers_link()
+        crash_signature = top_crashers.click_first_signature()
+        crash_signature.click_reports_tab()
+        reports_table_count = len(crash_signature.reports)
+
+        # verify crash reports table is populated
+        Assert.greater(crash_signature.results_count_total, 0)
+        Assert.greater(reports_table_count, 0, "No reports found")
+
+        most_recent_report = crash_signature.reports[0]
+        uuid_report = most_recent_report.click_report_date()
+
+        # verify the uuid report page
+        Assert.not_equal(uuid_report.uuid_in_body, "", "UUID not found in body")
+        Assert.not_equal(uuid_report.uuid_in_table, "", "UUID not found in table")
+        Assert.not_equal(uuid_report.signature_in_body, "", "Signature not found in body")
+        Assert.not_equal(uuid_report.signature_in_table, "", "Signature not found in table")
+
+        Assert.equal(uuid_report.uuid_in_body, uuid_report.uuid_in_table,
+                     'UUID in body did not match the UUID in the table: '
+                     'body "%s", table "%s"'
+                     % (uuid_report.uuid_in_body,
+                        uuid_report.uuid_in_table))
+        Assert.contains(uuid_report.signature_in_body,
+                     uuid_report.signature_in_table,
+                     'Signature in body did not match the signature in the '
+                     'table: body "%s", table "%s"'
+                     % (uuid_report.signature_in_body,
+                        uuid_report.signature_in_table))
+
+    @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
