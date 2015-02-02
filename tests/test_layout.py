@@ -107,4 +107,6 @@ class TestSuperSearchLayout:
         Assert.equal(cs_super.facet, 'address')
 
         cs_super.click_search()
-        Assert.true(cs_super.facet in cs_super.results_facet.lower())
+        # The facet in the results does not update immediately,
+        # so wait for it to be the value we expect
+        cs_super.wait_for_facet_in_results(cs_super.facet)

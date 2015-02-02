@@ -120,6 +120,9 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     def wait_for_column_deleted(self, number_of_expected_columns):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: number_of_expected_columns == len(self.columns))
 
+    def wait_for_facet_in_results(self, facet):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: facet.lower() in self.results_facet.lower())
+
     @property
     def results_facet(self):
         return self.selenium.find_element(*self._results_facet_locator).text
