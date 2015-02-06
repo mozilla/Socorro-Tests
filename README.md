@@ -6,9 +6,9 @@ Mozilla's Crash Reporting System
 
 Thank you for checking out Mozilla's Socorro test suite! Mozilla and the Web
 QA team are grateful for the help and hard work of many contributors like yourself.
-The following contributors have submitted pull requests to mozillians-tests:
+The following contributors have submitted pull requests to Socorro-Tests:
 
-https://github.com/mozilla/Socorro-tests/contributors
+https://github.com/mozilla/Socorro-Tests/contributors
 
 Continuous Integration
 ----------------------
@@ -18,7 +18,7 @@ Getting involved as a contributor
 ---------------------------------
 
 We love working with contributors to improve the Selenium test coverage for
-Socorro-tests but it does require a few skills.  You will need to be familiar
+Socorro-Tests but it does require a few skills.  You will need to be familiar
 with Python, Selenium, and have a working knowledge of GitHub.
 
 If you are comfortable with Python, it's worth having a look at the Selenium
@@ -135,11 +135,11 @@ Output of a test run should look something like this:
 __Note__
 "~" will not resolve to the home directory when used in the py.test command line.
 
-Some options for py.test are pre-specified by the file Socorro-tests/mozwebqa.cfg
+Some options for py.test are pre-specified by the file Socorro-Tests/mozwebqa.cfg
 
 The mozwebqa plugin has advanced command line options for reporting and using
-browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa].
-[pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
+browsers. See the documentation on [pytest mozwebqa github][pymozwebqa].
+[pymozwebqa]: https://github.com/mozilla/pytest-mozwebqa
 
 __Troubleshooting__
 
