@@ -36,4 +36,3 @@ class UUIDReport(CrashStatsBasePage):
     @property
     def signature_in_table(self):
         return self.selenium.find_element(*self._table_signature_locator).text
-

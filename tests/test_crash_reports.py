@@ -136,11 +136,11 @@ class TestCrashReports:
                      % (uuid_report.uuid_in_body,
                         uuid_report.uuid_in_table))
         Assert.contains(uuid_report.signature_in_body,
-                     uuid_report.signature_in_table,
-                     'Signature in body did not match the signature in the '
-                     'table: body "%s", table "%s"'
-                     % (uuid_report.signature_in_body,
-                        uuid_report.signature_in_table))
+                        uuid_report.signature_in_table,
+                        'Signature in body did not match the signature in the '
+                        'table: body "%s", table "%s"'
+                        % (uuid_report.signature_in_body,
+                           uuid_report.signature_in_table))
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
