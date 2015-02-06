@@ -51,14 +51,12 @@ class TestSmokeTests:
         Assert.true('Exploitable Crashes' not in csp.header.report_list)
         Assert.false(csp.header.is_exploitable_crash_report_present)
 
-    @pytest.mark.credentials
-    @pytest.mark.nondestructive
     def test_login_logout(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
-        Assert.true(csp.is_logged_out)
+        Assert.true(csp.footer.is_logged_out)
 
-        csp.login()
-        Assert.true(csp.is_logged_in)
+        csp.footer.login()
+        Assert.true(csp.footer.is_logged_in)
 
-        csp.logout()
-        Assert.true(csp.is_logged_out)
+        csp.footer.logout()
+        Assert.true(csp.footer.is_logged_out)
