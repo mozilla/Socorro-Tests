@@ -60,6 +60,8 @@ class TestSearchForSpecificResults:
         Assert.true(result.are_search_results_found)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
+                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1149187")
     def test_selecting_one_version_doesnt_show_other_versions(self, mozwebqa):
         maximum_checks = 20  # limits the number of reports to check
         csp = CrashStatsHomePage(mozwebqa)
