@@ -28,18 +28,6 @@ class TestLayout:
 
         Assert.equal(product_list, products)
 
-    @pytest.mark.nondestructive
-    def test_that_product_current_versions_are_ordered_correctly(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-
-        Assert.is_sorted_descending(csp.header.current_versions)
-
-    @pytest.mark.nondestructive
-    def test_that_product_older_versions_are_ordered_correctly(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-
-        Assert.is_sorted_descending(csp.header.other_versions)
-
 
 class TestSuperSearchLayout:
 
