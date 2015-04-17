@@ -8,8 +8,8 @@ certifi==0.0.8
 chardet==1.0.1
 py==1.4.8
 pytest==2.2.4
-pytest-xdist==1.8
 pytest-mozwebqa
 requests==2.4.3
 selenium
 -e git+https://github.com/mozilla/bidpom.git@master#egg=browserid
+
