@@ -29,7 +29,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def _signature_table_row_locator(self):
         if self.current_os_filter == "All":
-            return (By.CSS_SELECTOR, '#signatureList tbody tr')
+            return (By.CSS_SELECTOR, '#signature-list tbody tr')
         else:
             return (By.CSS_SELECTOR, '#peros-tbl tbody tr')
 
