@@ -14,7 +14,7 @@ class CrashReport(CrashStatsBasePage):
     _reports_tab_locator = (By.ID, 'reports')
     _results_count_locator = (By.CSS_SELECTOR, 'span.totalItems')
     _reports_loading_locator = (By.CSS_SELECTOR, '#reports p.loading-placeholder')
-    _reports_row_locator = (By.CSS_SELECTOR, '#reportsList tbody tr')
+    _reports_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
 
     @property
