@@ -107,9 +107,6 @@ class TestCrashReports:
             top_crashers = csp.release_channels
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
-                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1122013")
-    # Bug 1122013 - [stage][regression] Signature reports do not load
     def test_top_crasher_reports_tab_has_uuid_report(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         top_crashers = csp.click_last_product_top_crashers_link()
