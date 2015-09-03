@@ -13,7 +13,7 @@ from pages.home_page import CrashStatsHomePage
 class TestLayout:
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'mozilla.org' in config.getvalue('base_url')",
+    @pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')",
                        reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1201622")
     def test_that_products_are_sorted_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
@@ -27,7 +27,8 @@ class TestLayout:
                         'WebappRuntimeMobile']
         products = csp.header.product_list
 
-        Assert.equal(product_list, products)
+        assert product_list == products, \
+            'Failed: Expected to find these products in the dropdown: %s, but found: %s' % (product_list, products)
 
 
 class TestSuperSearchLayout:
