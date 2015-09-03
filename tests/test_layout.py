@@ -13,6 +13,8 @@ from pages.home_page import CrashStatsHomePage
 class TestLayout:
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'mozilla.org' in config.getvalue('base_url')",
+                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1201622")
     def test_that_products_are_sorted_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product_list = ['Firefox',
@@ -22,8 +24,7 @@ class TestLayout:
                         'SeaMonkey',
                         'WebappRuntime',
                         'B2G',
-                        'WebappRuntimeMobile',
-                        'MetroFirefox']
+                        'WebappRuntimeMobile']
         products = csp.header.product_list
 
         Assert.equal(product_list, products)
@@ -64,7 +65,8 @@ class TestSuperSearchLayout:
             cs_super.click_crash_reports_tab()
             current_column = column.column_name
             Assert.true(current_column in
-                        cs_super.search_results_table_header.table_column_names)
+                        cs_super.search_results_table_header.table_column_names
+                        )
 
             number_of_columns = len(cs_super.columns)
             column.delete_column()
@@ -75,7 +77,8 @@ class TestSuperSearchLayout:
             if len(cs_super.columns) > 1:
                 cs_super.click_crash_reports_tab()
                 Assert.true(cs_super.are_search_results_found)
-                Assert.true(cs_super.search_results_table_header.is_column_not_present(current_column))
+                Assert.true(cs_super.search_results_table_header.
+                            is_column_not_present(current_column))
 
         Assert.true(cs_super.columns[0].column_name in
                     cs_super.search_results_table_header.table_column_names)
