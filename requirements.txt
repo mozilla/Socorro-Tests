@@ -2,7 +2,6 @@
 # on Mozilla WebQA projects
 
 PyYAML==3.10
-UnittestZero
 execnet==1.0.9
 certifi==0.0.8
 chardet==1.0.1

@@ -6,7 +6,6 @@
 
 import re
 
-from unittestzero import Assert
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
@@ -33,8 +32,7 @@ class Page(object):
         if self._page_title:
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.title)
 
-        Assert.equal(self.selenium.title, self._page_title,
-                     "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))
+        assert self.selenium.title == self._page_title, 'Title did not match expected'
         return True
 
     def get_url_current_page(self):

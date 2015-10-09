@@ -1,10 +1,8 @@
-#!/usr/bin/env python
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
-from unittestzero import Assert
 
 from pages.home_page import CrashStatsHomePage
 
@@ -17,7 +15,7 @@ class TestSuperSearch:
         cs_super = csp.header.click_super_search()
         cs_super.open_url('/search/?date=>2000:01:01 00-00')
 
-        Assert.equal(cs_super.error, 'Enter a valid date/time.')
+        assert 'Enter a valid date/time.' == cs_super.error
 
     @pytest.mark.nondestructive
     def test_search_with_one_line(self, mozwebqa):
@@ -27,10 +25,10 @@ class TestSuperSearch:
         cs_super.select_operator('has terms')
         cs_super.click_search()
 
-        Assert.true(cs_super.are_search_results_found)
-        Assert.equal(cs_super.field('0'), 'product')
-        Assert.equal(cs_super.operator('0'), 'has terms')
-        Assert.equal(cs_super.match('0'), 'Firefox')
+        assert cs_super.are_search_results_found
+        assert 'product' == cs_super.field('0')
+        assert 'has terms' == cs_super.operator('0')
+        assert 'Firefox' == cs_super.match('0')
 
     @pytest.mark.nondestructive
     def test_search_with_multiple_lines(self, mozwebqa):
@@ -45,7 +43,7 @@ class TestSuperSearch:
         cs_super.select_match('1', 'nightly')
         cs_super.click_search()
 
-        Assert.true(cs_super.are_search_results_found)
+        assert cs_super.are_search_results_found
 
 
 class TestSearchForSpecificResults:
@@ -57,7 +55,7 @@ class TestSearchForSpecificResults:
         signature = report_list.first_signature_title
         result = csp.header.search_for_crash(signature)
 
-        Assert.true(result.are_search_results_found)
+        assert result.are_search_results_found
 
     @pytest.mark.nondestructive
     def test_selecting_one_version_doesnt_show_other_versions(self, mozwebqa):
@@ -72,9 +70,9 @@ class TestSearchForSpecificResults:
         crash_report_page.click_reports_tab()
         reports = crash_report_page.reports
 
-        Assert.true(len(reports) > 0, "reports not found for signature")
+        assert len(reports) > 0, 'reports not found for signature'
 
         random_indexes = csp.get_random_indexes(reports, maximum_checks)
         for index in random_indexes:
             report = reports[index]
-            Assert.equal(report.product, product)
+            assert product == report.product
