@@ -71,7 +71,6 @@ class TestCrashReports:
         assert cstc.results_count > 0
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason='bug 1213247')
     def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product = csp.header.current_product
