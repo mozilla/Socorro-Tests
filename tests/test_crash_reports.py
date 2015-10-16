@@ -90,13 +90,7 @@ class TestCrashReports:
             assert 'Top Changers' == cstc.header.current_report
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), [
-        'Firefox',
-        pytest.mark.xfail(reason='bug 1213200')('Thunderbird'),
-        pytest.mark.xfail(reason='bug 1213200')('SeaMonkey'),
-        'FennecAndroid',
-        'WebappRuntime',
-        'B2G'])
+    @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
@@ -135,13 +129,7 @@ class TestCrashReports:
             'Signature in body did not match the signature in the '
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), [
-        'Firefox',
-        pytest.mark.xfail(reason='bug 1213200')('Thunderbird'),
-        pytest.mark.xfail(reason='bug 1213200')('SeaMonkey'),
-        'FennecAndroid',
-        'WebappRuntime',
-        'B2G'])
+    @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
