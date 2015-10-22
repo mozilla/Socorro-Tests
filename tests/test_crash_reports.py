@@ -82,6 +82,8 @@ class TestCrashReports:
         assert cstc.results_count > 0
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
+                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1185055")
     def test_that_top_changers_is_highlighted_when_chosen(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         for version in csp.header.current_versions:
@@ -210,6 +212,8 @@ class TestCrashReports:
         assert 'error' not in cstc.page_heading
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
+                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1185055")
     def test_that_top_changers_data_is_available(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         cstc = csp.header.select_report('Top Changers')
