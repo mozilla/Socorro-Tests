@@ -157,9 +157,6 @@ class CrashStatsBasePage(Page):
             elif 'Nightly Builds' == report_name:
                 from pages.crash_stats_nightly_builds_page import CrashStatsNightlyBuilds
                 return CrashStatsNightlyBuilds(self.testsetup)
-            elif 'Top Changers' == report_name:
-                from pages.crash_stats_top_changers_page import CrashStatsTopChangers
-                return CrashStatsTopChangers(self.testsetup)
 
         def search_for_crash(self, crash_id_or_signature):
             '''
