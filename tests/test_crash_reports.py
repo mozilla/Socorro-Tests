@@ -86,14 +86,13 @@ class TestCrashReports:
     def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-        top_crashers = csp.release_channels
 
-        for idx in range(len(top_crashers)):
-            top_crasher_name = top_crashers[idx].product_version_label
-            top_crasher_page = top_crashers[idx].click_top_crasher()
+        for i in range(len(csp.release_channels)):
+            top_crasher_name = csp.release_channels[i].product_version_label
+            top_crasher_page = csp.release_channels[i].click_top_crasher()
             assert top_crasher_name in top_crasher_page.page_heading
             top_crasher_page.return_to_previous_page()
-            top_crashers = csp.release_channels
+            csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
     def test_top_crasher_reports_tab_has_uuid_report(self, mozwebqa):
@@ -125,17 +124,15 @@ class TestCrashReports:
     def test_the_product_releases_return_results(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
-        top_crashers = csp.release_channels
 
-        for idx in range(len(top_crashers)):
-            top_crasher_page = top_crashers[idx].click_top_crasher()
+        for i in range(len(csp.release_channels)):
+            top_crasher_page = csp.release_channels[i].click_top_crasher()
             if top_crasher_page.no_results_text is not False:
                 assert 'No crashing signatures found for the period' in top_crasher_page.no_results_text
             else:
                 assert top_crasher_page.results_found, 'No results found'
-
             top_crasher_page.return_to_previous_page()
-            top_crashers = csp.release_channels
+            csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
     def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):

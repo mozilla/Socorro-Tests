@@ -4,6 +4,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait as Wait
 
 from pages.base_page import CrashStatsBasePage
 
@@ -13,6 +14,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     """
+    _graph_locator = (By.ID, 'homepage-graph')
     _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
     _last_release_channel_locator = (By.CSS_SELECTOR, '#release_channels .release_channel:last-child')
 
@@ -24,6 +26,13 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
         if product is None:
             self.selenium.get(self.base_url)
+        self.wait_for_page_to_load()
+
+    def wait_for_page_to_load(self):
+        Wait(self.selenium, self.timeout).until(
+            lambda s: 'loading' not in s.find_element(
+                *self._graph_locator).get_attribute('class'))
+        return self
 
     def click_last_product_top_crashers_link(self):
         return self.ReleaseChannels(
