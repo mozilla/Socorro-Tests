@@ -14,7 +14,8 @@ class CrashStatsHomePage(CrashStatsBasePage):
         Page Object for Socorro
         https://crash-stats.allizom.org/
     """
-    _graph_locator = (By.ID, 'homepage-graph')
+
+    _graph_loading_locator = (By.CSS_SELECTOR, '#homepage-graph .loading')
     _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
     _last_release_channel_locator = (By.CSS_SELECTOR, '#release_channels .release_channel:last-child')
 
@@ -30,8 +31,7 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def wait_for_page_to_load(self):
         Wait(self.selenium, self.timeout).until(
-            lambda s: 'loading' not in s.find_element(
-                *self._graph_locator).get_attribute('class'))
+            lambda s: not self.is_element_present(*self._graph_loading_locator))
         return self
 
     def click_last_product_top_crashers_link(self):
