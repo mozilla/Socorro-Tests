@@ -10,8 +10,6 @@ from pages.home_page import CrashStatsHomePage
 class TestLayout:
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')",
-                       reason="https://bugzilla.mozilla.org/show_bug.cgi?id=1201622")
     def test_that_products_are_sorted_correctly(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         product_list = ['Firefox',

@@ -5,7 +5,6 @@
 import pytest
 
 from pages.home_page import CrashStatsHomePage
-from pages.products_page import ProductsLinksPage
 
 
 class TestCrashReports:
@@ -19,7 +18,13 @@ class TestCrashReports:
         'B2G']
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.parametrize(('product'), [
+        'Firefox',
+        'Thunderbird',
+        'SeaMonkey',
+        'FennecAndroid',
+        'WebappRuntime',
+        pytest.mark.xfail(reason='bug 1232440')('B2G')])
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
@@ -29,7 +34,13 @@ class TestCrashReports:
         assert crash_adu.header.current_product == crash_adu.product_select
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.parametrize(('product'), [
+        'Firefox',
+        pytest.mark.xfail(reason='bug 1233518')('Thunderbird'),
+        pytest.mark.xfail(reason='bug 1233518')('SeaMonkey'),
+        'FennecAndroid',
+        'WebappRuntime',
+        'B2G'])
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
@@ -48,16 +59,6 @@ class TestCrashReports:
 
         cstc.click_filter_by('All')
         assert cstc.results_count > 0
-
-    @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
-    def test_that_products_page_links_work(self, mozwebqa, product):
-        products_page = ProductsLinksPage(mozwebqa)
-        assert 'Mozilla Products in Crash Reporter' == products_page.page_heading
-
-        csp = products_page.click_product(product)
-        assert csp.get_url_current_page().endswith(product)
-        assert product in csp.page_heading
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
@@ -95,6 +96,8 @@ class TestCrashReports:
             csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
+                       reason="S3 bucket is populating with crash data")
     def test_top_crasher_reports_tab_has_uuid_report(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         top_crashers = csp.click_last_product_top_crashers_link()

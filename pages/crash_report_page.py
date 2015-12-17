@@ -15,7 +15,7 @@ class CrashReport(CrashStatsBasePage):
     _results_count_locator = (By.CSS_SELECTOR, 'span.totalItems')
     _reports_loading_locator = (By.CSS_SELECTOR, '#reports p.loading-placeholder')
     _reports_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
-    _report_tab_button_locator = (By.CSS_SELECTOR, '#report-list-nav li:nth-of-type(4) > a')
+    _report_tab_button_locator = (By.CSS_SELECTOR, '#panels-nav .reports')
 
     @property
     def reports(self):
@@ -33,7 +33,7 @@ class CrashReport(CrashStatsBasePage):
 
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
         _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
-        _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list .report-date_processed > a')
+        _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list tbody td:nth-of-type(1) > a')
 
         def __init__(self, testsetup, element):
             CrashStatsBasePage.__init__(self, testsetup)

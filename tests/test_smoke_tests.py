@@ -27,12 +27,6 @@ class TestSmokeTests:
         assert csstat.is_latest_raw_stats_present, 'Raw stats not found'
 
     @pytest.mark.nondestructive
-    def test_that_simple_querystring_doesnt_return_500(self, mozwebqa):
-        response = urllib.urlopen(mozwebqa.base_url + '/query/simple')
-
-        assert 404 == response.getcode()
-
-    @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
