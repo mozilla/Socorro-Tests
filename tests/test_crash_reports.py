@@ -45,6 +45,7 @@ class TestCrashReports:
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         cstc = csp.header.select_report('Top Crashers')
+        cstc.header.select_version('Current Versions')
 
         assert product == cstc.page_heading_product
         assert cstc.page_heading_version == cstc.header.current_version
