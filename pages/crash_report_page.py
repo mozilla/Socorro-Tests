@@ -33,7 +33,7 @@ class CrashReport(CrashStatsBasePage):
 
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
         _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
-        _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list tbody td:nth-of-type(1) > a')
+        _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list a.external-link')
 
         def __init__(self, testsetup, element):
             CrashStatsBasePage.__init__(self, testsetup)
