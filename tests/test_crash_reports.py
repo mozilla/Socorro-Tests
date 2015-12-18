@@ -21,7 +21,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         'Thunderbird',
-        'SeaMonkey',
+        pytest.mark.xfail(reason='bug 1232440')('SeaMonkey'),
         'FennecAndroid',
         'WebappRuntime',
         pytest.mark.xfail(reason='bug 1232440')('B2G')])
