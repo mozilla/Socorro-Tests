@@ -13,7 +13,6 @@ class CrashReport(CrashStatsBasePage):
 
     _reports_tab_locator = (By.ID, 'reports')
     _results_count_locator = (By.CSS_SELECTOR, 'span.totalItems')
-    _reports_loading_locator = (By.CSS_SELECTOR, '#reports p.loading-placeholder')
     _reports_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#panels-nav .reports')
 
@@ -27,7 +26,7 @@ class CrashReport(CrashStatsBasePage):
 
     def click_reports_tab(self):
         self.selenium.find_element(*self._report_tab_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(None, *self._reports_loading_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.reports))
 
     class Report(CrashStatsBasePage):
 
