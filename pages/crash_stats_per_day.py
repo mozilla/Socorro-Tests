@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 from pages.base_page import CrashStatsBasePage
 
 
-class CrashStatsPerActiveDailyUser(CrashStatsBasePage):
+class CrashStatsPerDay(CrashStatsBasePage):
 
     _page_title = 'Crashes per Active Daily User for Firefox'
 
