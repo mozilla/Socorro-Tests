@@ -151,9 +151,9 @@ class CrashStatsBasePage(Page):
             elif 'Top Crashers by TopSite' == report_name:
                 from pages.crash_stats_top_crashers_by_site_page import CrashStatsTopCrashersBySite
                 return CrashStatsTopCrashersBySite(self.testsetup)
-            elif 'Crashes per User' == report_name:
-                from pages.crash_stats_per_active_daily_user_page import CrashStatsPerActiveDailyUser
-                return CrashStatsPerActiveDailyUser(self.testsetup)
+            elif 'Crashes per Day' == report_name:
+                from pages.crash_stats_per_day import CrashStatsPerDay
+                return CrashStatsPerDay(self.testsetup)
             elif 'Nightly Builds' == report_name:
                 from pages.crash_stats_nightly_builds_page import CrashStatsNightlyBuilds
                 return CrashStatsNightlyBuilds(self.testsetup)

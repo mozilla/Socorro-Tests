@@ -24,13 +24,14 @@ class TestCrashReports:
         'SeaMonkey',
         'FennecAndroid',
         'WebappRuntime',
-        pytest.mark.xfail(reason='bug 1232440')('B2G')])
+        pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')",
+                          reason='bug 1232440')('B2G')])
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
         csp.header.select_product(product)
         assert product in csp.page_title
 
-        crash_adu = csp.header.select_report('Crashes per User')
+        crash_adu = csp.header.select_report('Crashes per Day')
         assert crash_adu.header.current_product == crash_adu.product_select
 
     @pytest.mark.nondestructive
