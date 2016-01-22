@@ -37,8 +37,8 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), [
         'Firefox',
-        pytest.mark.xfail(reason='bug 1233518')('Thunderbird'),
-        pytest.mark.xfail(reason='bug 1233518')('SeaMonkey'),
+        'Thunderbird',
+        'SeaMonkey',
         'FennecAndroid',
         'WebappRuntime',
         'B2G'])
