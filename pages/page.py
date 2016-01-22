@@ -32,7 +32,7 @@ class Page(object):
         if self._page_title:
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.title)
 
-        assert self.selenium.title == self._page_title, 'Title did not match expected'
+        assert self.selenium.title == self._page_title
         return True
 
     def get_url_current_page(self):
