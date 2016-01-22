@@ -13,14 +13,17 @@ from pages.base_page import CrashStatsBasePage
 
 class CrashStatsPerDay(CrashStatsBasePage):
 
-    _page_title = 'Crashes per Active Daily User for Firefox'
-
+    _page_heading_locator = (By.CSS_SELECTOR, '#mainbody h2:nth-child(2)')
     _product_select_locator = (By.ID, 'daily_search_version_form_products')
     _date_start_locator = (By.CSS_SELECTOR, '.daily_search_body .date[name="date_start"]')
     _generate_button_locator = (By.ID, 'daily_search_version_form_submit')
     _table_locator = (By.ID, 'crash_data')
     _row_table_locator = (By.CSS_SELECTOR, '#crash_data > tbody > tr')
     _last_row_date_locator = (By.CSS_SELECTOR, '#crash_data > tbody > tr > td:nth-child(1):not(:last):last')
+
+    @property
+    def _page_title(self):
+        return self.page_heading
 
     @property
     def product_select(self):

@@ -31,8 +31,9 @@ class TestCrashReports:
         csp.header.select_product(product)
         assert product in csp.page_title
 
-        crash_adu = csp.header.select_report('Crashes per Day')
-        assert crash_adu.header.current_product == crash_adu.product_select
+        crash_per_day = csp.header.select_report('Crashes per Day')
+        crash_per_day.is_the_current_page
+        assert crash_per_day.header.current_product == crash_per_day.product_select
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), [
