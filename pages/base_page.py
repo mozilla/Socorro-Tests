@@ -17,7 +17,6 @@ from pages.page import Page
 class CrashStatsBasePage(Page):
 
     _page_heading_locator = (By.CSS_SELECTOR, 'div.page-heading > h2')
-    _server_status_locator = (By.LINK_TEXT, 'Server Status')
     _link_to_bugzilla_locator = (By.CSS_SELECTOR, '.panel a')
 
     @property
@@ -28,11 +27,6 @@ class CrashStatsBasePage(Page):
     @property
     def page_heading(self):
         return self.selenium.find_element(*self._page_heading_locator).text
-
-    def click_server_status(self):
-        self.selenium.find_element(*self._server_status_locator).click()
-        from pages.status_page import CrashStatsStatus
-        return CrashStatsStatus(self.testsetup)
 
     def get_random_indexes(self, item_list, max_indexes, start=0, end=-1):
         """
