@@ -18,15 +18,6 @@ class TestSmokeTests:
                           'B2G']
 
     @pytest.mark.nondestructive
-    def test_that_server_status_page_loads(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
-        csstat = csp.click_server_status()
-
-        assert csstat.is_at_a_glance_present, 'Server summary not found'
-        assert csstat.are_graphs_present, '4 graphs not found'
-        assert csstat.is_latest_raw_stats_present, 'Raw stats not found'
-
-    @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
         csp = CrashStatsHomePage(mozwebqa)
         path = '/invalidpath'
