@@ -40,7 +40,8 @@ class TestCrashReports:
         'Thunderbird',
         'SeaMonkey',
         'FennecAndroid',
-        'WebappRuntime',
+        pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')",
+                          reason='bug 1248776')('WebappRuntime'),
         'B2G'])
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
