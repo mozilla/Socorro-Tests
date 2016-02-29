@@ -22,7 +22,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) div')
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
-    _operator_test_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"]')
+    _operator_test_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"] > div')
     _input_locator = (By.CSS_SELECTOR, '#s2id_autogen6')
     _second_input_locator = (By.CSS_SELECTOR, '#s2id_autogen8')
 
@@ -56,7 +56,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     def select_match(self, line_id, match):
         _match_locator = (self._match_select_locator[0], self._match_select_locator[1] % line_id)
         self.selenium.find_element(*_match_locator).send_keys(match)
-        self.selenium.find_element(*_match_locator).click()
+        self.selenium.find_element(*self._operator_test_locator).click()
 
     def field(self, line_id):
         return self.selenium.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
