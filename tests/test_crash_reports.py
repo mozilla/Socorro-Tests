@@ -38,7 +38,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         'Thunderbird',
-        'SeaMonkey',
+        pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')", reason='bug 1253531')('SeaMonkey'),
         'FennecAndroid',
         'WebappRuntime',
         'B2G'])
