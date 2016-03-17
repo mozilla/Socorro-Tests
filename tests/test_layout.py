@@ -17,9 +17,7 @@ class TestLayout:
                         'Fennec',
                         'FennecAndroid',
                         'SeaMonkey',
-                        'WebappRuntime',
-                        'B2G',
-                        'WebappRuntimeMobile']
+                        'B2G']
         products = csp.header.product_list
 
         assert product_list == products, 'Expected products not in the product dropdown'

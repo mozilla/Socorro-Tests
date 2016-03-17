@@ -14,7 +14,6 @@ class TestSmokeTests:
                           'Thunderbird',
                           'SeaMonkey',
                           'FennecAndroid',
-                          'WebappRuntime',
                           'B2G']
 
     @pytest.mark.nondestructive
