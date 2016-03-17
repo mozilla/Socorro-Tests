@@ -14,7 +14,6 @@ class TestCrashReports:
         'Thunderbird',
         'SeaMonkey',
         'FennecAndroid',
-        'WebappRuntime',
         'B2G']
 
     @pytest.mark.nondestructive
@@ -23,7 +22,6 @@ class TestCrashReports:
         'Thunderbird',
         'SeaMonkey',
         'FennecAndroid',
-        'WebappRuntime',
         pytest.mark.xfail(reason='bug 1232440')('B2G')])
     def test_that_reports_form_has_same_product(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
@@ -40,7 +38,6 @@ class TestCrashReports:
         'Thunderbird',
         pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')", reason='bug 1253531')('SeaMonkey'),
         'FennecAndroid',
-        'WebappRuntime',
         'B2G'])
     def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
         csp = CrashStatsHomePage(mozwebqa)
