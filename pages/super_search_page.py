@@ -41,8 +41,8 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _loader_locator = (By.CLASS_NAME, 'loader')
     _crash_reports_tab_locator = (By.CSS_SELECTOR, '#search_results-nav [href="#crash-reports"] span')
 
-    def __init__(self, testsetup):
-        Page.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Page.__init__(self, base_url, selenium)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(None, *self._input_locator))
 
     def select_field(self, field):
@@ -103,15 +103,15 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     @property
     def search_results_table_header(self):
-        return self.SearchResultHeader(self.testsetup)
+        return self.SearchResultHeader(self.base_url, self.selenium)
 
     @property
     def columns(self):
-        return[self.Column(self.testsetup, column) for column in self.selenium.find_elements(*self._column_list_locator)]
+        return[self.Column(self.base_url, self.selenium, column) for column in self.selenium.find_elements(*self._column_list_locator)]
 
     @property
     def search_results(self):
-        return [self.SearchResult(self.testsetup, row) for row in self.selenium.find_elements(*self._table_row_locator)]
+        return [self.SearchResult(self.base_url, self.selenium, row) for row in self.selenium.find_elements(*self._table_row_locator)]
 
     @property
     def are_search_results_found(self):
@@ -148,8 +148,8 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         _column_name_locator = (By.CSS_SELECTOR, 'div')
         _column_delete_locator = (By.CSS_SELECTOR, 'a')
 
-        def __init__(self, testsetup, column):
-            Page.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, column):
+            Page.__init__(self, base_url, selenium)
             self._root_element = column
 
         @property
@@ -164,8 +164,8 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
         _columns_locator = (By.CSS_SELECTOR, 'td')
 
-        def __init__(self, testsetup, row):
-            Page.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, row):
+            Page.__init__(self, base_url, selenium)
             self._root_element = row
 
         @property

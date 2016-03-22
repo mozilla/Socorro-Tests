@@ -22,7 +22,7 @@ Socorro-Tests but it does require a few skills.  You will need to be familiar
 with Python, Selenium, and have a working knowledge of GitHub.
 
 If you are comfortable with Python, it's worth having a look at the Selenium
-framework to understand the basic concepts of browser-based testing and the 
+framework to understand the basic concepts of browser-based testing and the
 page objects pattern.
 
 If you need to brush up on programming but are eager to start contributing
@@ -34,7 +34,7 @@ thrilled to have your help!
 To brush up on Python skills before engaging with us, [Dive Into Python][dive]
 is an excellent resource.  MIT also has [lecture notes on Python][mit] available
 through their open courseware.  The programming concepts you will need to know
-include functions, working with classes, and the basics of object-oriented 
+include functions, working with classes, and the basics of object-oriented
 programming.
 
 Questions are always welcome
@@ -75,12 +75,12 @@ Before you will be able to run these tests you will need to have
 [Python]: http://www.python.org/download/releases/2.6.8/
 
 ####Virtualenv and Virtualenvwrapper (Optional/Intermediate level)
-While most of us have had some experience using virtual machines, 
+While most of us have had some experience using virtual machines,
 [virtualenv][venv] is something else entirely.  It's used to keep libraries
 that you install from clashing and messing up your local environment.  After
 installing virtualenv, installing [virtualenvwrapper][wrapper] will give you
 some nice commands to use with virtualenvwrapper. [virtualenv][venv] will allow
-you to install Python modules and run your tests in a sandboxed environment. 
+you to install Python modules and run your tests in a sandboxed environment.
 
 __note__
 
@@ -105,17 +105,12 @@ to install the required Python libraries.
 
 #### Running tests locally
 Before each test run, clean up the repo:
-    find . \( -name 'results*' -or -name '*.pyc' \) -print0 | xargs -0 rm -Rf
+    find . \( -name 'results*' -or -name '\*.pyc' \) -print0 | xargs -0 rm -Rf
 
 To run tests locally it is as simple as calling <code>py.test</code> with
 several flags. To run testcases that do not modify or delete data:
 
-    py.test --driver=firefox --baseurl=http://crash-stats.allizom.org 
-
-To run testcases that are known to change or delete data use the
-<code>--destructive</code> flag:
-
-    py.test --driver=firefox --baseurl=http://crash-stats.allizom.org --destructive
+    py.test --driver Firefox --base-url http://crash-stats.allizom.org
 
 __Output__
 
@@ -123,7 +118,7 @@ Output of a test run should look something like this:
 
     ============================= test session starts ==============================
     platform linux2 -- Python 2.7.3 -- pytest-2.2.4
-    collected 73 items 
+    collected 73 items
 
     tests/test_crash_reports.py .........................xx..........x.xx....x.
     tests/test_layout.py xx
@@ -135,11 +130,10 @@ Output of a test run should look something like this:
 __Note__
 "~" will not resolve to the home directory when used in the py.test command line.
 
-Some options for py.test are pre-specified by the file Socorro-Tests/mozwebqa.cfg
-
-The mozwebqa plugin has advanced command line options for reporting and using
-browsers. See the documentation on [pytest mozwebqa github][pymozwebqa].
-[pymozwebqa]: https://github.com/mozilla/pytest-mozwebqa
+The pytest plugin that we use for running tests has a number of advanced
+command line options available. To see the options available, run
+`py.test --help`. The full documentation for the plugin can be found
+[here][pytest-selenium].
 
 __Troubleshooting__
 
@@ -183,3 +177,4 @@ This software is licensed under the [MPL] 2.0:
 [GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates
 [Style Guide]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Docs/Automation/StyleGuide
 [MPL]: http://www.mozilla.org/MPL/2.0/
+[pytest-selenium]: http://pytest-selenium.readthedocs.org/

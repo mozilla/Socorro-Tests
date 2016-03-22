@@ -23,8 +23,8 @@ class TestCrashReports:
         'SeaMonkey',
         'FennecAndroid',
         pytest.mark.xfail(reason='bug 1232440')('B2G')])
-    def test_that_reports_form_has_same_product(self, mozwebqa, product):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_reports_form_has_same_product(self, base_url, selenium, product):
+        csp = CrashStatsHomePage(base_url, selenium)
         csp.header.select_product(product)
         assert product in csp.page_title
 
@@ -39,8 +39,8 @@ class TestCrashReports:
         pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')", reason='bug 1253531')('SeaMonkey'),
         'FennecAndroid',
         'B2G'])
-    def test_that_current_version_selected_in_top_crashers_header(self, mozwebqa, product):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_current_version_selected_in_top_crashers_header(self, base_url, selenium, product):
+        csp = CrashStatsHomePage(base_url, selenium)
         csp.header.select_product(product)
         cstc = csp.header.select_report('Top Crashers')
         cstc.header.select_version('Current Versions')
@@ -49,8 +49,8 @@ class TestCrashReports:
         assert cstc.page_heading_version == cstc.header.current_version
 
     @pytest.mark.nondestructive
-    def test_that_top_crasher_filter_all_return_results(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_top_crasher_filter_all_return_results(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -60,8 +60,8 @@ class TestCrashReports:
         assert cstc.results_count > 0
 
     @pytest.mark.nondestructive
-    def test_that_top_crasher_filter_browser_return_results(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_top_crasher_filter_browser_return_results(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -71,8 +71,8 @@ class TestCrashReports:
         assert cstc.results_count > 0
 
     @pytest.mark.nondestructive
-    def test_that_top_crasher_filter_plugin_return_results(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_top_crasher_filter_plugin_return_results(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -83,8 +83,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
-    def test_that_top_crashers_reports_links_work(self, mozwebqa, product):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_top_crashers_reports_links_work(self, base_url, selenium, product):
+        csp = CrashStatsHomePage(base_url, selenium)
         csp.header.select_product(product)
 
         for i in range(len(csp.release_channels)):
@@ -97,8 +97,8 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
                        reason="S3 bucket is populating with crash data")
-    def test_top_crasher_reports_tab_has_uuid_report(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_top_crasher_reports_tab_has_uuid_report(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         top_crashers = csp.click_last_product_top_crashers_link()
         crash_signature = top_crashers.click_first_signature()
         crash_signature.click_reports_tab()
@@ -123,8 +123,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
-    def test_the_product_releases_return_results(self, mozwebqa, product):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_the_product_releases_return_results(self, base_url, selenium, product):
+        csp = CrashStatsHomePage(base_url, selenium)
         csp.header.select_product(product)
 
         for i in range(len(csp.release_channels)):
@@ -137,16 +137,16 @@ class TestCrashReports:
             csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
-    def test_that_7_days_is_selected_default_for_nightlies(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_7_days_is_selected_default_for_nightlies(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         top_crashers = csp.release_channels
         tc_page = top_crashers[1].click_top_crasher()
 
         assert '7' == tc_page.current_days_filter
 
     @pytest.mark.nondestructive
-    def test_that_only_browser_reports_have_browser_icon(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_only_browser_reports_have_browser_icon(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         reports_page = csp.click_last_product_top_crashers_link()
         product_type, days, os = 'Browser', '7', 'Windows'
         assert product_type == reports_page.current_filter_type
@@ -167,8 +167,8 @@ class TestCrashReports:
                 "Signature %s unexpectedly had a plugin icon" % signature_item.title
 
     @pytest.mark.nondestructive
-    def test_that_only_plugin_reports_have_plugin_icon(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_only_plugin_reports_have_plugin_icon(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         reports_page = csp.click_last_product_top_crashers_link()
         product_type, days, os = 'Plugin', '28', 'Windows'
         reports_page.click_filter_by(product_type)
@@ -189,8 +189,8 @@ class TestCrashReports:
                 "Signature %s unexpectedly had a browser icon" % signature_item.title
 
     @pytest.mark.nondestructive
-    def test_that_lowest_version_topcrashers_do_not_return_errors(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_lowest_version_topcrashers_do_not_return_errors(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         lowest_version_index = len(csp.header.version_select_text) - 1
         csp.header.select_version_by_index(lowest_version_index)
         cstc = csp.header.select_report('Top Crashers')

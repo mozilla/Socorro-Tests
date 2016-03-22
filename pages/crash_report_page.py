@@ -18,7 +18,7 @@ class CrashReport(CrashStatsBasePage):
 
     @property
     def reports(self):
-        return [self.Report(self.testsetup, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
+        return [self.Report(self.base_url, self.selenium, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
 
     @property
     def results_count_total(self):
@@ -34,8 +34,8 @@ class CrashReport(CrashStatsBasePage):
         _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
         _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list a.external-link')
 
-        def __init__(self, testsetup, element):
-            CrashStatsBasePage.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, element):
+            CrashStatsBasePage.__init__(self, base_url, selenium)
             self._root_element = element
 
         @property
@@ -49,4 +49,4 @@ class CrashReport(CrashStatsBasePage):
         def click_report_date(self):
             self.selenium.find_element(*self._report_date_link_locator).click()
             from uuid_report import UUIDReport
-            return UUIDReport(self.testsetup)
+            return UUIDReport(self.base_url, self.selenium)

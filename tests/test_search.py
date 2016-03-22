@@ -10,16 +10,16 @@ from pages.home_page import CrashStatsHomePage
 class TestSuperSearch:
 
     @pytest.mark.nondestructive
-    def test_search_for_unrealistic_data(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_for_unrealistic_data(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.open_url('/search/?date=>2000:01:01 00-00')
 
         assert 'Enter a valid date/time.' == cs_super.error
 
     @pytest.mark.nondestructive
-    def test_search_with_one_line(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_with_one_line(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
@@ -31,8 +31,8 @@ class TestSuperSearch:
         assert 'Firefox' == cs_super.match('0')
 
     @pytest.mark.nondestructive
-    def test_search_with_multiple_lines(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_with_multiple_lines(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
@@ -49,8 +49,8 @@ class TestSuperSearch:
 class TestSearchForSpecificResults:
 
     @pytest.mark.nondestructive
-    def test_search_for_valid_signature(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_for_valid_signature(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         report_list = csp.click_last_product_top_crashers_link()
         signature = report_list.first_signature_title
         result = csp.header.search_for_crash(signature)
@@ -58,9 +58,9 @@ class TestSearchForSpecificResults:
         assert result.are_search_results_found
 
     @pytest.mark.nondestructive
-    def test_selecting_one_version_doesnt_show_other_versions(self, mozwebqa):
+    def test_selecting_one_version_doesnt_show_other_versions(self, base_url, selenium):
         maximum_checks = 20  # limits the number of reports to check
-        csp = CrashStatsHomePage(mozwebqa)
+        csp = CrashStatsHomePage(base_url, selenium)
         product = csp.header.current_product
         versions = csp.header.current_versions
         version = str(versions[1])

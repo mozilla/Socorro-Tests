@@ -63,7 +63,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         for element in self.selenium.find_elements(*self._filter_by_locator):
             if element.text == option:
                 element.click()
-                return CrashStatsTopCrashers(self.testsetup)
+                return CrashStatsTopCrashers(self.base_url, self.selenium)
 
     def click_filter_days_by(self, days):
         '''
@@ -72,7 +72,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         for element in self.selenium.find_elements(*self._filter_days_by_locator):
             if element.text == days:
                 element.click()
-                return CrashStatsTopCrashers(self.testsetup)
+                return CrashStatsTopCrashers(self.base_url, self.selenium)
 
     def click_filter_os_by(self, os):
         '''
@@ -81,7 +81,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         for element in self.selenium.find_elements(*self._filter_os_by_locator):
             if element.text == os:
                 element.click()
-                return CrashStatsTopCrashers(self.testsetup)
+                return CrashStatsTopCrashers(self.base_url, self.selenium)
 
     @property
     def current_filter_type(self):
@@ -97,7 +97,7 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     @property
     def signature_items(self):
-        return [self.SignatureItem(self.testsetup, i)
+        return [self.SignatureItem(self.base_url, self.selenium, i)
                 for i in self.selenium.find_elements(*self._signature_table_row_locator)]
 
     def random_signature_items(self, count):
@@ -119,14 +119,14 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
         _browser_icon_locator = (By.CSS_SELECTOR, 'div img.browser')
         _plugin_icon_locator = (By.CSS_SELECTOR, 'div img.plugin')
 
-        def __init__(self, testsetup, element):
-                Page.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, element):
+                Page.__init__(self, base_url, selenium)
                 self._root_element = element
 
         def click(self):
             self._root_element.find_element(*self._signature_link_locator).click()
             from pages.crash_report_page import CrashReport
-            return CrashReport(self.testsetup)
+            return CrashReport(self.base_url, self.selenium)
 
         @property
         def title(self):

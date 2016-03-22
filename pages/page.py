@@ -18,14 +18,10 @@ class Page(object):
     Base class for all Pages
     '''
 
-    def __init__(self, testsetup):
-        '''
-        Constructor
-        '''
-        self.testsetup = testsetup
-        self.selenium = testsetup.selenium
-        self.base_url = testsetup.base_url
-        self.timeout = testsetup.timeout
+    def __init__(self, base_url, selenium):
+        self.base_url = base_url
+        self.selenium = selenium
+        self.timeout = 10
 
     @property
     def is_the_current_page(self):
@@ -48,7 +44,7 @@ class Page(object):
             return False
         finally:
             # set back to where you once belonged
-            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+            self.selenium.implicitly_wait(10)
 
     def is_element_visible(self, parent_element, *locator):
         self.selenium.implicitly_wait(0)
@@ -63,7 +59,7 @@ class Page(object):
             return False
         finally:
             # set back to where you once belonged
-            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+            self.selenium.implicitly_wait(10)
 
     def return_to_previous_page(self):
         self.selenium.back()

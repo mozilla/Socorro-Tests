@@ -19,11 +19,11 @@ class CrashStatsHomePage(CrashStatsBasePage):
     _release_channels_locator = (By.CSS_SELECTOR, '.release_channel')
     _last_release_channel_locator = (By.CSS_SELECTOR, '#release_channels .release_channel:last-child')
 
-    def __init__(self, testsetup, product=None):
+    def __init__(self, base_url, selenium, product=None):
         '''
             Creates a new instance of the class and gets the page ready for testing
         '''
-        CrashStatsBasePage.__init__(self, testsetup)
+        CrashStatsBasePage.__init__(self, base_url, selenium)
 
         if product is None:
             self.selenium.get(self.base_url)
@@ -36,20 +36,20 @@ class CrashStatsHomePage(CrashStatsBasePage):
 
     def click_last_product_top_crashers_link(self):
         return self.ReleaseChannels(
-            self.testsetup, self.selenium.find_element(*self._last_release_channel_locator)
+            self.base_url, self.selenium, self.selenium.find_element(*self._last_release_channel_locator)
         ).click_top_crasher()
 
     @property
     def release_channels(self):
-        return [self.ReleaseChannels(self.testsetup, element) for element in self.selenium.find_elements(*self._release_channels_locator)]
+        return [self.ReleaseChannels(self.base_url, self.selenium, element) for element in self.selenium.find_elements(*self._release_channels_locator)]
 
     class ReleaseChannels(CrashStatsBasePage):
 
         _release_channel_header_locator = (By.TAG_NAME, 'h4')
         _top_crashers_link_locator = (By.LINK_TEXT, 'Top Crashers')
 
-        def __init__(self, testsetup, element):
-            CrashStatsBasePage.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, element):
+            CrashStatsBasePage.__init__(self, base_url, selenium)
             self._root_element = element
 
         @property
@@ -59,4 +59,4 @@ class CrashStatsHomePage(CrashStatsBasePage):
         def click_top_crasher(self):
             self._root_element.find_element(*self._top_crashers_link_locator).click()
             from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
-            return CrashStatsTopCrashers(self.testsetup)
+            return CrashStatsTopCrashers(self.base_url, self.selenium)

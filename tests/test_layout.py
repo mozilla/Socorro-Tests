@@ -10,8 +10,8 @@ from pages.home_page import CrashStatsHomePage
 class TestLayout:
 
     @pytest.mark.nondestructive
-    def test_that_products_are_sorted_correctly(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_products_are_sorted_correctly(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         product_list = ['Firefox',
                         'Thunderbird',
                         'Fennec',
@@ -26,15 +26,15 @@ class TestLayout:
 class TestSuperSearchLayout:
 
     @pytest.mark.nondestructive
-    def test_super_search_page_is_loaded(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_super_search_page_is_loaded(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
 
         assert cs_super.is_the_current_page
 
     @pytest.mark.nondestructive
-    def test_default_fields_for_firefox(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_default_fields_for_firefox(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.open_url('/search/?product=Firefox')
 
@@ -43,8 +43,8 @@ class TestSuperSearchLayout:
         assert 'Firefox' == cs_super.match('0')
 
     @pytest.mark.nondestructive
-    def test_search_change_column(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_change_column(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')
@@ -73,8 +73,8 @@ class TestSuperSearchLayout:
         assert cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names
 
     @pytest.mark.nondestructive
-    def test_search_change_facet(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_search_change_facet(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         cs_super = csp.header.click_super_search()
         cs_super.select_field('product')
         cs_super.select_operator('has terms')

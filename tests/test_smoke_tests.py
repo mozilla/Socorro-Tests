@@ -17,22 +17,22 @@ class TestSmokeTests:
                           'B2G']
 
     @pytest.mark.nondestructive
-    def test_that_bugzilla_link_contain_current_site(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_bugzilla_link_contain_current_site(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         path = '/invalidpath'
-        csp.selenium.get(mozwebqa.base_url + path)
+        csp.selenium.get(base_url + path)
 
-        assert 'bug_file_loc=%s%s' % (mozwebqa.base_url, path) in urllib.unquote(csp.link_to_bugzilla)
+        assert 'bug_file_loc=%s%s' % (base_url, path) in urllib.unquote(csp.link_to_bugzilla)
 
     @pytest.mark.nondestructive
-    def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
 
         assert 'Exploitable Crashes' not in csp.header.report_list
         assert csp.header.is_exploitable_crash_report_present is not True
 
-    def test_login_logout(self, mozwebqa):
-        csp = CrashStatsHomePage(mozwebqa)
+    def test_login_logout(self, base_url, selenium):
+        csp = CrashStatsHomePage(base_url, selenium)
         assert csp.footer.is_logged_out
 
         csp.footer.login()

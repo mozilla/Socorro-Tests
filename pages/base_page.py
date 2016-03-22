@@ -46,11 +46,11 @@ class CrashStatsBasePage(Page):
 
     @property
     def header(self):
-        return self.Header(self.testsetup)
+        return self.Header(self.base_url, self.selenium)
 
     @property
     def footer(self):
-        return self.Footer(self.testsetup)
+        return self.Footer(self.base_url, self.selenium)
 
     class Header(Page):
 
@@ -141,16 +141,16 @@ class CrashStatsBasePage(Page):
 
             if 'Top Crashers' == report_name:
                 from pages.crash_stats_top_crashers_page import CrashStatsTopCrashers
-                return CrashStatsTopCrashers(self.testsetup)
+                return CrashStatsTopCrashers(self.base_url, self.selenium)
             elif 'Top Crashers by TopSite' == report_name:
                 from pages.crash_stats_top_crashers_by_site_page import CrashStatsTopCrashersBySite
-                return CrashStatsTopCrashersBySite(self.testsetup)
+                return CrashStatsTopCrashersBySite(self.base_url, self.selenium)
             elif 'Crashes per Day' == report_name:
                 from pages.crash_stats_per_day import CrashStatsPerDay
-                return CrashStatsPerDay(self.testsetup)
+                return CrashStatsPerDay(self.base_url, self.selenium)
             elif 'Nightly Builds' == report_name:
                 from pages.crash_stats_nightly_builds_page import CrashStatsNightlyBuilds
-                return CrashStatsNightlyBuilds(self.testsetup)
+                return CrashStatsNightlyBuilds(self.base_url, self.selenium)
 
         def search_for_crash(self, crash_id_or_signature):
             '''
@@ -165,7 +165,7 @@ class CrashStatsBasePage(Page):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loader_locator))
 
             from pages.super_search_page import CrashStatsSuperSearch
-            return CrashStatsSuperSearch(self.testsetup)
+            return CrashStatsSuperSearch(self.base_url, self.selenium)
 
         @property
         def report_list(self):
@@ -180,7 +180,7 @@ class CrashStatsBasePage(Page):
         def click_super_search(self):
             self.selenium.find_element(*self._super_search_locator).click()
             from pages.super_search_page import CrashStatsSuperSearch
-            return CrashStatsSuperSearch(self.testsetup)
+            return CrashStatsSuperSearch(self.base_url, self.selenium)
 
     class Footer(Page):
 

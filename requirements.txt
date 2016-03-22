@@ -1,6 +1,5 @@
 browserid
 pytest==2.9.1
-pytest-mozwebqa
+pytest-selenium
 pytest-xdist==1.14
 requests==2.9.1
-selenium
