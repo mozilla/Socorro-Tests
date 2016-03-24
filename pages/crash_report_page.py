@@ -15,6 +15,11 @@ class CrashReport(CrashStatsBasePage):
     _results_count_locator = (By.CSS_SELECTOR, 'span.totalItems')
     _reports_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
     _report_tab_button_locator = (By.CSS_SELECTOR, '#panels-nav .reports')
+    _summary_table_locator = (By.CSS_SELECTOR, '.content')
+
+    def __init__(self, base_url, selenium):
+        CrashStatsBasePage.__init__(self, base_url, selenium)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._summary_table_locator).is_displayed())
 
     @property
     def reports(self):
