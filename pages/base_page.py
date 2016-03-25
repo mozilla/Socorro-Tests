@@ -204,8 +204,8 @@ class CrashStatsBasePage(Page):
 
             self.selenium.find_element(*self._browserid_login_locator).click()
 
-            from browserid import BrowserID
-            pop_up = BrowserID(self.selenium, self.timeout)
+            from bidpom import BIDPOM
+            pop_up = BIDPOM(self.selenium, self.timeout)
             pop_up.sign_in(email, password)
             WebDriverWait(self.selenium, self.timeout).until(
                 lambda s: self.is_logged_in, message='Could not log in within %s seconds.' % self.timeout)
