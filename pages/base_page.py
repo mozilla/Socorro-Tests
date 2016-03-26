@@ -61,8 +61,6 @@ class CrashStatsBasePage(Page):
         _current_versions_locator = (By.CSS_SELECTOR, 'optgroup:nth-of-type(2) option')
         _versions_locator = (By.TAG_NAME, 'option')
         _loader_locator = (By.CLASS_NAME, 'loader')
-
-        _exploitable_crash_report_locator = (By.CSS_SELECTOR, '#report_select option[value="/report/exploitability/"]')
         _super_search_locator = (By.LINK_TEXT, 'Super Search')
 
         @property
@@ -172,10 +170,6 @@ class CrashStatsBasePage(Page):
             report_dropdown = self.selenium.find_element(*self._report_select_locator)
             select = Select(report_dropdown)
             return [opt.text for opt in select.options]
-
-        @property
-        def is_exploitable_crash_report_present(self):
-            return self.is_element_present(*self._exploitable_crash_report_locator)
 
         def click_super_search(self):
             self.selenium.find_element(*self._super_search_locator).click()

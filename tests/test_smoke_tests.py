@@ -15,6 +15,7 @@ class TestSmokeTests:
                           'SeaMonkey',
                           'FennecAndroid',
                           'B2G']
+    _exploitability_url = '/exploitability/?product=Firefox'
 
     @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, base_url, selenium):
@@ -27,16 +28,16 @@ class TestSmokeTests:
     @pytest.mark.nondestructive
     def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, base_url, selenium):
         csp = CrashStatsHomePage(base_url, selenium)
-
         assert 'Exploitable Crashes' not in csp.header.report_list
-        assert csp.header.is_exploitable_crash_report_present is not True
+        csp.selenium.get(base_url + self._exploitability_url)
+        assert 'Login Required' in csp.page_heading
 
-    def test_login_logout(self, base_url, selenium):
+    def test_non_privileged__accounts_cannot_view_exploitable_crash_reports(self, base_url, selenium):
         csp = CrashStatsHomePage(base_url, selenium)
-        assert csp.footer.is_logged_out
-
         csp.footer.login()
         assert csp.footer.is_logged_in
-
+        assert 'Exploitable Crashes' not in csp.header.report_list
+        csp.selenium.get(base_url + self._exploitability_url)
+        assert 'Insufficient Privileges' in csp.page_heading
         csp.footer.logout()
         assert csp.footer.is_logged_out
