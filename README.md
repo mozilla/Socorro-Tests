@@ -174,7 +174,7 @@ This software is licensed under the [MPL] 2.0:
 [breakpad]:http://02.chat.mibbit.com/?server=irc.mozilla.org&channel=#breakpad
 [venv]: http://pypi.python.org/pypi/virtualenv
 [wrapper]: http://www.doughellmann.com/projects/virtualenvwrapper/
-[GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates
+[GitHub Templates]: https://github.com/mozilla/mozwebqa-examples
 [Style Guide]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Docs/Automation/StyleGuide
 [MPL]: http://www.mozilla.org/MPL/2.0/
 [pytest-selenium]: http://pytest-selenium.readthedocs.org/
