@@ -20,7 +20,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         'Thunderbird',
-        'SeaMonkey',
+        pytest.mark.xfail(reason='bug 1273175')('SeaMonkey'),
         'FennecAndroid',
         pytest.mark.xfail(reason='bug 1232440')('B2G')])
     def test_that_reports_form_has_same_product(self, base_url, selenium, product):
@@ -36,7 +36,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         'Thunderbird',
-        pytest.mark.xfail("'mozilla.com' in config.getvalue('base_url')", reason='bug 1253531')('SeaMonkey'),
+        pytest.mark.xfail(reason='bug 1273182')('SeaMonkey'),
         'FennecAndroid',
         'B2G'])
     def test_that_current_version_selected_in_top_crashers_header(self, base_url, selenium, product):
