@@ -32,7 +32,7 @@ class TestSmokeTests:
         csp.selenium.get(base_url + self._exploitability_url)
         assert 'Login Required' in csp.page_heading
 
-    def test_non_privileged__accounts_cannot_view_exploitable_crash_reports(self, base_url, selenium):
+    def test_non_privileged_accounts_cannot_view_exploitable_crash_reports(self, base_url, selenium):
         csp = CrashStatsHomePage(base_url, selenium)
         csp.footer.login()
         assert csp.footer.is_logged_in
