@@ -13,8 +13,7 @@ class TestSmokeTests:
     _expected_products = ['Firefox',
                           'Thunderbird',
                           'SeaMonkey',
-                          'FennecAndroid',
-                          'B2G']
+                          'FennecAndroid']
     _exploitability_url = '/exploitability/?product=Firefox'
 
     @pytest.mark.nondestructive
