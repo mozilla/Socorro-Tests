@@ -22,12 +22,12 @@ class TestCrashReports:
         pytest.mark.xfail(reason='bug 1273175')('SeaMonkey'),
         'FennecAndroid'])
     def test_that_reports_form_has_same_product(self, base_url, selenium, product):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         csp.header.select_product(product)
-        assert product in csp.page_title
+        assert product in selenium.title
 
         crash_per_day = csp.header.select_report('Crashes per Day')
-        crash_per_day.is_the_current_page
+        assert crash_per_day.page_heading == selenium.title
         assert crash_per_day.header.current_product == crash_per_day.product_select
 
     @pytest.mark.nondestructive
@@ -37,7 +37,7 @@ class TestCrashReports:
         pytest.mark.xfail(reason='bug 1273182')('SeaMonkey'),
         'FennecAndroid'])
     def test_that_current_version_selected_in_top_crashers_header(self, base_url, selenium, product):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         csp.header.select_product(product)
         cstc = csp.header.select_report('Top Crashers')
         cstc.header.select_version('Current Versions')
@@ -47,7 +47,7 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_all_return_results(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -58,7 +58,7 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_browser_return_results(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -69,7 +69,7 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_top_crasher_filter_plugin_return_results(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         product = csp.header.current_product
         cstc = csp.header.select_report('Top Crashers')
         if cstc.results_found:
@@ -81,22 +81,22 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_that_top_crashers_reports_links_work(self, base_url, selenium, product):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         csp.header.select_product(product)
 
         for i in range(len(csp.release_channels)):
             top_crasher_name = csp.release_channels[i].product_version_label
             top_crasher_page = csp.release_channels[i].click_top_crasher()
             assert top_crasher_name in top_crasher_page.page_heading
-            top_crasher_page.return_to_previous_page()
+            selenium.back()
             csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
     @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
                        reason="S3 bucket is populating with crash data")
     def test_top_crasher_reports_tab_has_uuid_report(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
-        top_crashers = csp.click_last_product_top_crashers_link()
+        csp = CrashStatsHomePage(selenium, base_url).open()
+        top_crashers = csp.release_channels[-1].click_top_crasher()
         crash_signature = top_crashers.click_first_signature()
         crash_signature.click_reports_tab()
         reports_table_count = len(crash_signature.reports)
@@ -121,7 +121,7 @@ class TestCrashReports:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('product'), _expected_products)
     def test_the_product_releases_return_results(self, base_url, selenium, product):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         csp.header.select_product(product)
 
         for i in range(len(csp.release_channels)):
@@ -130,12 +130,12 @@ class TestCrashReports:
                 assert 'No crashing signatures found for the period' in top_crasher_page.no_results_text
             else:
                 assert top_crasher_page.results_found, 'No results found'
-            top_crasher_page.return_to_previous_page()
+            selenium.back()
             csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
     def test_that_7_days_is_selected_default_for_nightlies(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         top_crashers = csp.release_channels
         tc_page = top_crashers[1].click_top_crasher()
 
@@ -143,8 +143,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_only_browser_reports_have_browser_icon(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
-        reports_page = csp.click_last_product_top_crashers_link()
+        csp = CrashStatsHomePage(selenium, base_url).open()
+        reports_page = csp.release_channels[-1].click_top_crasher()
         product_type, days, os = 'Browser', '7', 'Windows'
         assert product_type == reports_page.current_filter_type
 
@@ -165,8 +165,8 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_only_plugin_reports_have_plugin_icon(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
-        reports_page = csp.click_last_product_top_crashers_link()
+        csp = CrashStatsHomePage(selenium, base_url).open()
+        reports_page = csp.release_channels[-1].click_top_crasher()
         product_type, days, os = 'Plugin', '28', 'Windows'
         reports_page.click_filter_by(product_type)
         reports_page.click_filter_days_by(days)
@@ -187,7 +187,7 @@ class TestCrashReports:
 
     @pytest.mark.nondestructive
     def test_that_lowest_version_topcrashers_do_not_return_errors(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         lowest_version_index = len(csp.header.version_select_text) - 1
         csp.header.select_version_by_index(lowest_version_index)
         cstc = csp.header.select_report('Top Crashers')

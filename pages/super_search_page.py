@@ -5,10 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
+from pypom import Region
 from pages.base_page import CrashStatsBasePage
-from pages.page import Page
 
 
 class CrashStatsSuperSearch(CrashStatsBasePage):
@@ -41,133 +40,123 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _loader_locator = (By.CLASS_NAME, 'loader')
     _crash_reports_tab_locator = (By.CSS_SELECTOR, '#search_results-nav [href="#crash-reports"] span')
 
-    def __init__(self, base_url, selenium):
-        Page.__init__(self, base_url, selenium)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(None, *self._input_locator))
+    def wait_for_page_to_load(self):
+        super(CrashStatsSuperSearch, self).wait_for_page_to_load()
+        self.wait.until(lambda s: self.is_element_displayed(*self._input_locator))
+        return self
 
     def select_field(self, field):
-        self.selenium.find_element(*self._input_locator).send_keys(field)
-        self.selenium.find_element(*self._operator_test_locator).click()
+        self.find_element(*self._input_locator).send_keys(field)
+        self.find_element(*self._operator_test_locator).click()
 
     def select_operator(self, operator):
-        self.selenium.find_element(*self._second_input_locator).send_keys(operator)
-        self.selenium.find_element(*self._operator_test_locator).click()
+        self.find_element(*self._second_input_locator).send_keys(operator)
+        self.find_element(*self._operator_test_locator).click()
 
     def select_match(self, line_id, match):
         _match_locator = (self._match_select_locator[0], self._match_select_locator[1] % line_id)
-        self.selenium.find_element(*_match_locator).send_keys(match)
-        self.selenium.find_element(*self._operator_test_locator).click()
+        self.find_element(*_match_locator).send_keys(match)
+        self.find_element(*self._operator_test_locator).click()
 
     def field(self, line_id):
-        return self.selenium.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
+        return self.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
 
     def operator(self, line_id):
-        return self.selenium.find_element(self._operator_text_locator[0], self._operator_text_locator[1] % line_id).text
+        return self.find_element(self._operator_text_locator[0], self._operator_text_locator[1] % line_id).text
 
     def match(self, line_id):
-        return self.selenium.find_element(self._match_text_locator[0], self._match_text_locator[1] % line_id).text
-
-    def open_url(self, url):
-        self.selenium.get(self.base_url + url)
+        return self.find_element(self._match_text_locator[0], self._match_text_locator[1] % line_id).text
 
     @property
     def error(self):
-        return self.selenium.find_element(*self._error_text_locator).text
+        return self.find_element(*self._error_text_locator).text
 
     def click_search(self):
-        self.selenium.find_element(*self._search_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loader_locator))
+        self.find_element(*self._search_button_locator).click()
+        self.wait.until(lambda s: not self.is_element_present(*self._loader_locator))
 
     def click_new_line(self):
-        self.selenium.find_element(*self._new_line_locator).click()
+        self.find_element(*self._new_line_locator).click()
 
     def click_more_options(self):
-        self.selenium.find_element(*self._more_options_locator).click()
+        self.find_element(*self._more_options_locator).click()
 
     def click_crash_reports_tab(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.find_element(*self._crash_reports_tab_locator).is_displayed())
-        self.selenium.find_element(*self._crash_reports_tab_locator).click()
+        self.wait.until(lambda s: self.is_element_displayed(*self._crash_reports_tab_locator))
+        self.find_element(*self._crash_reports_tab_locator).click()
 
     @property
     def facet(self):
         return self.selenium.find_element(*self._facet_text_locator).text
 
     def type_facet(self, facet):
-        self.selenium.find_element(*self._input_facet_locator).click()
-        self.selenium.find_element(*self._input_facet_locator).send_keys(facet)
-        self.selenium.find_element(*self._facet_name_suggestion_locator).click()
+        self.find_element(*self._input_facet_locator).click()
+        self.find_element(*self._input_facet_locator).send_keys(facet)
+        self.find_element(*self._facet_name_suggestion_locator).click()
 
     def delete_facet(self):
-        self.selenium.find_element(*self._delete_facet_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._delete_facet_locator))
+        self.find_element(*self._delete_facet_locator).click()
+        self.wait.until(lambda s: not self.is_element_present(*self._delete_facet_locator))
 
     @property
     def search_results_table_header(self):
-        return self.SearchResultHeader(self.base_url, self.selenium)
+        return self.SearchResultHeader(self)
 
     @property
     def columns(self):
-        return[self.Column(self.base_url, self.selenium, column) for column in self.selenium.find_elements(*self._column_list_locator)]
+        return[self.Column(self, el) for el in self.find_elements(*self._column_list_locator)]
 
     @property
     def search_results(self):
-        return [self.SearchResult(self.base_url, self.selenium, row) for row in self.selenium.find_elements(*self._table_row_locator)]
+        return [self.SearchResult(self, el) for el in self.find_elements(*self._table_row_locator)]
 
     @property
     def are_search_results_found(self):
         return len(self.search_results) > 0
 
     def wait_for_column_deleted(self, number_of_expected_columns):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: number_of_expected_columns == len(self.columns))
+        self.wait.until(lambda s: number_of_expected_columns == len(self.columns))
 
     def wait_for_facet_in_results(self, facet):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: facet.lower() in self.results_facet.lower())
+        self.wait.until(lambda s: facet.lower() in self.results_facet.lower())
 
     @property
     def results_facet(self):
-        return self.selenium.find_element(*self._results_facet_locator).text
+        return self.find_element(*self._results_facet_locator).text
 
     def is_column_in_list(self, column_name):
         return column_name in [column.column_name for column in self.columns]
 
-    class SearchResultHeader(Page):
+    class SearchResultHeader(Region):
 
         _table_header_name_locator = (By.CSS_SELECTOR, '#reports-list thead th')
 
         @property
         def table_column_names(self):
-            return [table_column.text.lower() for table_column in self.selenium.find_elements(*self._table_header_name_locator)]
+            return [el.text.lower() for el in self.find_elements(*self._table_header_name_locator)]
 
         def is_column_not_present(self, column_name):
-            WebDriverWait(self.selenium, self.timeout).until(
+            self.wait.until(
                 lambda s: column_name not in self.table_column_names, message='Column %s found in table header.' % column_name)
             return True
 
-    class Column(Page):
+    class Column(Region):
 
         _column_name_locator = (By.CSS_SELECTOR, 'div')
         _column_delete_locator = (By.CSS_SELECTOR, 'a')
 
-        def __init__(self, base_url, selenium, column):
-            Page.__init__(self, base_url, selenium)
-            self._root_element = column
-
         @property
         def column_name(self):
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self._root_element.find_element(*self._column_name_locator).is_displayed())
-            return self._root_element.find_element(*self._column_name_locator).text
+            self.wait.until(lambda s: self.is_element_displayed(*self._column_name_locator))
+            return self.find_element(*self._column_name_locator).text
 
         def delete_column(self):
-            self._root_element.find_element(*self._column_delete_locator).click()
+            self.find_element(*self._column_delete_locator).click()
 
-    class SearchResult(Page):
+    class SearchResult(Region):
 
         _columns_locator = (By.CSS_SELECTOR, 'td')
 
-        def __init__(self, base_url, selenium, row):
-            Page.__init__(self, base_url, selenium)
-            self._root_element = row
-
         @property
         def _columns(self):
-            return self._root_element.find_elements(*self._columns_locator)
+            return self.find_elements(*self._columns_locator)

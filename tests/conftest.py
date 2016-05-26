@@ -9,9 +9,3 @@ import pytest
 def session_capabilities(session_capabilities):
     session_capabilities.setdefault('tags', []).append('socorro')
     return session_capabilities
-
-
-@pytest.fixture
-def selenium(selenium):
-    selenium.implicitly_wait(10)
-    return selenium

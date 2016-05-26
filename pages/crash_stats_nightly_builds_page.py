@@ -15,7 +15,7 @@ class CrashStatsNightlyBuilds(CrashStatsBasePage):
 
     @property
     def link_to_ftp(self):
-        return self.selenium.find_element(*self._link_to_ftp_locator).get_attribute('href')
+        return self.find_element(*self._link_to_ftp_locator).get_attribute('href')
 
     def click_link_to_ftp(self):
-        self.selenium.find_element(*self._link_to_ftp_locator).click()
+        self.find_element(*self._link_to_ftp_locator).click()

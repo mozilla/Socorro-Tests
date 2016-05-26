@@ -3,8 +3,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from pypom import Region
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.base_page import CrashStatsBasePage
 
@@ -17,41 +17,38 @@ class CrashReport(CrashStatsBasePage):
     _report_tab_button_locator = (By.CSS_SELECTOR, '#panels-nav .reports')
     _summary_table_locator = (By.CSS_SELECTOR, '.content')
 
-    def __init__(self, base_url, selenium):
-        CrashStatsBasePage.__init__(self, base_url, selenium)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._summary_table_locator).is_displayed())
+    def wait_for_page_to_load(self):
+        super(CrashReport, self).wait_for_page_to_load()
+        self.wait.until(lambda s: self.is_element_displayed(*self._summary_table_locator))
+        return self
 
     @property
     def reports(self):
-        return [self.Report(self.base_url, self.selenium, element) for element in self.selenium.find_elements(*self._reports_row_locator)]
+        return [self.Report(self, el) for el in self.find_elements(*self._reports_row_locator)]
 
     @property
     def results_count_total(self):
-        return int(self.selenium.find_element(*self._results_count_locator).text.replace(",", ""))
+        return int(self.find_element(*self._results_count_locator).text.replace(",", ""))
 
     def click_reports_tab(self):
-        self.selenium.find_element(*self._report_tab_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.reports))
+        self.find_element(*self._report_tab_button_locator).click()
+        self.wait.until(lambda s: len(self.reports))
 
-    class Report(CrashStatsBasePage):
+    class Report(Region):
 
         _product_locator = (By.CSS_SELECTOR, 'td:nth-of-type(3)')
         _version_locator = (By.CSS_SELECTOR, 'td:nth-of-type(4)')
         _report_date_link_locator = (By.CSS_SELECTOR, '#reports-list a.external-link')
 
-        def __init__(self, base_url, selenium, element):
-            CrashStatsBasePage.__init__(self, base_url, selenium)
-            self._root_element = element
-
         @property
         def product(self):
-            return self._root_element.find_element(*self._product_locator).text
+            return self.find_element(*self._product_locator).text
 
         @property
         def version(self):
-            return self._root_element.find_element(*self._version_locator).text
+            return self.find_element(*self._version_locator).text
 
         def click_report_date(self):
-            self.selenium.find_element(*self._report_date_link_locator).click()
+            self.find_element(*self._report_date_link_locator).click()
             from uuid_report import UUIDReport
-            return UUIDReport(self.base_url, self.selenium)
+            return UUIDReport(self.selenium, self.page.base_url).wait_for_page_to_load()
