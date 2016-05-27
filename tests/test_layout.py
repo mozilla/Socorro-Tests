@@ -15,7 +15,6 @@ class TestLayout:
         csp = CrashStatsHomePage(selenium, base_url).open()
         product_list = ['Firefox',
                         'Thunderbird',
-                        'Fennec',
                         'FennecAndroid',
                         'SeaMonkey']
         products = csp.header.product_list
