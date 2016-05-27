@@ -16,8 +16,8 @@ class CrashStatsTopCrashersBySite(CrashStatsBasePage):
 
     @property
     def product_header(self):
-        return self.selenium.find_element(*self._product_header_locator).text
+        return self.find_element(*self._product_header_locator).text
 
     @property
     def product_version_header(self):
-        return self.selenium.find_element(self._product_version_header_locator).text
+        return self.find_element(self._product_version_header_locator).text

@@ -6,11 +6,11 @@
 
 import random
 
+from pypom import Region
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
 from pages.base_page import CrashStatsBasePage
-from pages.page import Page
 
 
 class CrashStatsTopCrashers(CrashStatsBasePage):
@@ -35,15 +35,15 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
 
     @property
     def page_heading_product(self):
-        return self.selenium.find_element(*self._page_heading_product_locator).text
+        return self.find_element(*self._page_heading_product_locator).text
 
     @property
     def page_heading_version(self):
-        return self.selenium.find_element(*self._page_heading_version_locator).text
+        return self.find_element(*self._page_heading_version_locator).text
 
     @property
     def results_count(self):
-        return len(self.selenium.find_elements(*self._signature_table_row_locator))
+        return len(self.find_elements(*self._signature_table_row_locator))
 
     @property
     def results_found(self):
@@ -55,50 +55,49 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     @property
     def no_results_text(self):
         if self.is_element_present(*self._no_results_locator):
-            return self.selenium.find_element(*self._no_results_locator).text
+            return self.find_element(*self._no_results_locator).text
         else:
             return False
 
     def click_filter_by(self, option):
-        for element in self.selenium.find_elements(*self._filter_by_locator):
+        for element in self.find_elements(*self._filter_by_locator):
             if element.text == option:
                 element.click()
-                return CrashStatsTopCrashers(self.base_url, self.selenium)
+                return CrashStatsTopCrashers(self.selenium, self.base_url).wait_for_page_to_load()
 
     def click_filter_days_by(self, days):
         '''
             Click on the link with the amount of days you want to filter by
         '''
-        for element in self.selenium.find_elements(*self._filter_days_by_locator):
+        for element in self.find_elements(*self._filter_days_by_locator):
             if element.text == days:
                 element.click()
-                return CrashStatsTopCrashers(self.base_url, self.selenium)
+                return CrashStatsTopCrashers(self.selenium, self.base_url).wait_for_page_to_load()
 
     def click_filter_os_by(self, os):
         '''
             Click on the link with the OS you want to filter by
         '''
-        for element in self.selenium.find_elements(*self._filter_os_by_locator):
+        for element in self.find_elements(*self._filter_os_by_locator):
             if element.text == os:
                 element.click()
-                return CrashStatsTopCrashers(self.base_url, self.selenium)
+                return CrashStatsTopCrashers(self.selenium, self.base_url).wait_for_page_to_load()
 
     @property
     def current_filter_type(self):
-        return self.selenium.find_element(*self._current_filter_type_locator).text
+        return self.find_element(*self._current_filter_type_locator).text
 
     @property
     def current_days_filter(self):
-        return self.selenium.find_element(*self._current_days_filter_locator).text
+        return self.find_element(*self._current_days_filter_locator).text
 
     @property
     def current_os_filter(self):
-        return self.selenium.find_element(*self._current_os_filter_locator).text
+        return self.find_element(*self._current_os_filter_locator).text
 
     @property
     def signature_items(self):
-        return [self.SignatureItem(self.base_url, self.selenium, i)
-                for i in self.selenium.find_elements(*self._signature_table_row_locator)]
+        return [self.SignatureItem(self, el) for el in self.find_elements(*self._signature_table_row_locator)]
 
     def random_signature_items(self, count):
         signature_items = self.signature_items
@@ -114,28 +113,24 @@ class CrashStatsTopCrashers(CrashStatsBasePage):
     def first_signature_title(self):
         return self.signature_items[0].title
 
-    class SignatureItem(Page):
+    class SignatureItem(Region):
         _signature_link_locator = (By.CSS_SELECTOR, 'a.signature')
         _browser_icon_locator = (By.CSS_SELECTOR, 'div img.browser')
         _plugin_icon_locator = (By.CSS_SELECTOR, 'div img.plugin')
 
-        def __init__(self, base_url, selenium, element):
-                Page.__init__(self, base_url, selenium)
-                self._root_element = element
-
         def click(self):
-            self._root_element.find_element(*self._signature_link_locator).click()
+            self.find_element(*self._signature_link_locator).click()
             from pages.crash_report_page import CrashReport
-            return CrashReport(self.base_url, self.selenium)
+            return CrashReport(self.selenium, self.page.base_url).wait_for_page_to_load()
 
         @property
         def title(self):
-            return self._root_element.find_element(*self._signature_link_locator).get_attribute('title')
+            return self.find_element(*self._signature_link_locator).get_attribute('title')
 
         @property
         def is_plugin_icon_visible(self):
-            return self.is_element_visible(self._root_element, *self._plugin_icon_locator)
+            return self.is_element_displayed(*self._plugin_icon_locator)
 
         @property
         def is_browser_icon_visible(self):
-            return self.is_element_visible(self._root_element, *self._browser_icon_locator)
+            return self.is_element_displayed(*self._browser_icon_locator)

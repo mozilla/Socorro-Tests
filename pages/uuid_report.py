@@ -18,21 +18,18 @@ class UUIDReport(CrashStatsBasePage):
     _table_uuid_locator = (By.CSS_SELECTOR, '#report-index tbody tr:nth-of-type(2) td')
     _table_signature_locator = (By.CSS_SELECTOR, '#report-index tbody tr:nth-of-type(1) td')
 
-    def __init__(self, base_url, selenium):
-        CrashStatsBasePage.__init__(self, base_url, selenium)
-
     @property
     def uuid_in_body(self):
-        return self.selenium.find_element(*self._body_uuid_locator).text
+        return self.find_element(*self._body_uuid_locator).text
 
     @property
     def uuid_in_table(self):
-        return self.selenium.find_element(*self._table_uuid_locator).text
+        return self.find_element(*self._table_uuid_locator).text
 
     @property
     def signature_in_body(self):
-        return self.selenium.find_element(*self._body_signature_locator).text
+        return self.find_element(*self._body_signature_locator).text
 
     @property
     def signature_in_table(self):
-        return self.selenium.find_element(*self._table_signature_locator).text
+        return self.find_element(*self._table_signature_locator).text

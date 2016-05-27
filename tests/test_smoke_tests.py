@@ -18,7 +18,7 @@ class TestSmokeTests:
 
     @pytest.mark.nondestructive
     def test_that_bugzilla_link_contain_current_site(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         path = '/invalidpath'
         csp.selenium.get(base_url + path)
 
@@ -26,13 +26,13 @@ class TestSmokeTests:
 
     @pytest.mark.nondestructive
     def test_that_exploitable_crash_report_not_displayed_for_not_logged_in_users(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         assert 'Exploitable Crashes' not in csp.header.report_list
         csp.selenium.get(base_url + self._exploitability_url)
         assert 'Login Required' in csp.page_heading
 
     def test_non_privileged_accounts_cannot_view_exploitable_crash_reports(self, base_url, selenium):
-        csp = CrashStatsHomePage(base_url, selenium)
+        csp = CrashStatsHomePage(selenium, base_url).open()
         csp.footer.login()
         assert csp.footer.is_logged_in
         assert 'Exploitable Crashes' not in csp.header.report_list
