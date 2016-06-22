@@ -5,23 +5,24 @@
 import pytest
 
 from pages.home_page import CrashStatsHomePage
-from pages.super_search_page import CrashStatsSuperSearch
 
 
 class TestSuperSearch:
 
     @pytest.mark.nondestructive
     def test_search_for_unrealistic_data(self, base_url, selenium):
-        selenium.get('{base_url}/search/?date=>2000:01:01 00-00'.format(base_url=base_url))
-        cs_super = CrashStatsSuperSearch(selenium, base_url).wait_for_page_to_load()
+        csp = CrashStatsHomePage(selenium, base_url).open()
+        cs_super = csp.header.click_super_search()
+        cs_super.select_field('date')
+        cs_super.select_operator('0', '>')
+        cs_super.select_match('0', '2000:01:01 00-00')
+        cs_super.click_search()
         assert 'Enter a valid date/time.' == cs_super.error
 
     @pytest.mark.nondestructive
     def test_search_with_one_line(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
-        cs_super.select_field('product')
-        cs_super.select_operator('has terms')
         cs_super.click_search()
 
         assert cs_super.are_search_results_found
@@ -33,16 +34,24 @@ class TestSuperSearch:
     def test_search_with_multiple_lines(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
-        cs_super.select_field('product')
-        cs_super.select_operator('has terms')
         cs_super.click_new_line()
-        cs_super.select_field('release channel')
-        cs_super.select_operator('has terms')
         # select the 2nd line
+        cs_super.select_field('release channel')
+        cs_super.select_operator('1', 'has terms')
         cs_super.select_match('1', 'nightly')
         cs_super.click_search()
 
         assert cs_super.are_search_results_found
+        # advanced search defaults to the terms below, verify that these have
+        # persisted
+        assert 'product' == cs_super.field('0')
+        assert 'has terms' == cs_super.operator('0')
+        assert 'Firefox' == cs_super.match('0')
+
+        # verify the 2nd line of search terms
+        assert 'release channel' == cs_super.field('1')
+        assert 'has terms' == cs_super.operator('1')
+        assert 'nightly' == cs_super.match('1')
 
 
 class TestSearchForSpecificResults:

@@ -5,7 +5,6 @@
 import pytest
 
 from pages.home_page import CrashStatsHomePage
-from pages.super_search_page import CrashStatsSuperSearch
 
 
 class TestLayout:
@@ -32,8 +31,10 @@ class TestSuperSearchLayout:
 
     @pytest.mark.nondestructive
     def test_default_fields_for_firefox(self, base_url, selenium):
-        selenium.get('{base_url}/search/?product=Firefox'.format(base_url=base_url))
-        cs_super = CrashStatsSuperSearch(selenium, base_url).wait_for_page_to_load()
+        csp = CrashStatsHomePage(selenium, base_url).open()
+        cs_super = csp.header.click_super_search()
+        # advanced search defaults to the terms below, verify that these are
+        # present
         assert 'product' == cs_super.field('0')
         assert 'has terms' == cs_super.operator('0')
         assert 'Firefox' == cs_super.match('0')
@@ -42,11 +43,9 @@ class TestSuperSearchLayout:
     def test_search_change_column(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
-        cs_super.select_field('product')
-        cs_super.select_operator('has terms')
-
         cs_super.click_search()
         assert cs_super.are_search_results_found
+
         cs_super.click_more_options()
 
         # Delete all columns except the last one
@@ -66,15 +65,19 @@ class TestSuperSearchLayout:
                 assert cs_super.are_search_results_found
                 assert cs_super.search_results_table_header.is_column_not_present(current_column)
 
+        # advanced search defaults to the terms below, verify that these have
+        # persisted
+        assert 'product' == cs_super.field('0')
+        assert 'has terms' == cs_super.operator('0')
+        assert 'Firefox' == cs_super.match('0')
         assert cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names
 
     @pytest.mark.nondestructive
     def test_search_change_facet(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
-        cs_super.select_field('product')
-        cs_super.select_operator('has terms')
         cs_super.click_search()
+
         assert cs_super.facet in cs_super.results_facet.lower()
 
         cs_super.click_more_options()

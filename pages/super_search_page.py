@@ -15,15 +15,15 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _page_title = 'Search - Mozilla Crash Reports'
 
     # Search parameters section
-    _field_text_locator = (By.CSS_SELECTOR, 'fieldset[id = "%s"] > div:nth-child(2) span')
-    _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id = "%s"] > div:nth-child(4) span')
+    _field_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(2) span')
+    _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(4) span')
+    _operator_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.operator')
     _match_select_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-input')
     _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) div')
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
-    _operator_test_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"] > div')
+    _highlighted_text_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"] > div')
     _input_locator = (By.CSS_SELECTOR, '#s2id_autogen6')
-    _second_input_locator = (By.CSS_SELECTOR, '#s2id_autogen8')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
@@ -47,16 +47,17 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     def select_field(self, field):
         self.find_element(*self._input_locator).send_keys(field)
-        self.find_element(*self._operator_test_locator).click()
+        self.find_element(*self._highlighted_text_locator).click()
 
-    def select_operator(self, operator):
-        self.find_element(*self._second_input_locator).send_keys(operator)
-        self.find_element(*self._operator_test_locator).click()
+    def select_operator(self, line_id, operator):
+        input_locator = (self._operator_field_locator[0], self._operator_field_locator[1] % line_id)
+        self.find_element(*input_locator).send_keys(operator)
+        self.find_element(*self._highlighted_text_locator).click()
 
     def select_match(self, line_id, match):
         _match_locator = (self._match_select_locator[0], self._match_select_locator[1] % line_id)
         self.find_element(*_match_locator).send_keys(match)
-        self.find_element(*self._operator_test_locator).click()
+        self.find_element(*self._highlighted_text_locator).click()
 
     def field(self, line_id):
         return self.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
