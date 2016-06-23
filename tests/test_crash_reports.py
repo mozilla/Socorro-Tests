@@ -92,8 +92,6 @@ class TestCrashReports:
             csp.wait_for_page_to_load()
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')",
-                       reason="S3 bucket is populating with crash data")
     def test_top_crasher_reports_tab_has_uuid_report(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         top_crashers = csp.release_channels[-1].click_top_crasher()
