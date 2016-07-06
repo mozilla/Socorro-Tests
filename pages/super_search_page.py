@@ -15,27 +15,28 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _page_title = 'Search - Mozilla Crash Reports'
 
     # Search parameters section
-    _field_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(2) span')
+    _facet_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(2) span:first-child')
+    _facet_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.field input')
     _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(4) span')
     _operator_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.operator')
-    _match_select_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-input')
+    _match_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-search-field input')
     _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) div')
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
-    _highlighted_text_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"] > div')
-    _input_locator = (By.CSS_SELECTOR, '#s2id_autogen6')
+    _highlighted_text_locator = (By.CSS_SELECTOR, '.select2-results li[class*="highlighted"]')
+    _input_locator = (By.CSS_SELECTOR, '#search-params-fieldset')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
-    _facet_text_locator = (By.CSS_SELECTOR, '#s2id_autogen1 ul div')
-    _delete_facet_locator = (By.CSS_SELECTOR, '#s2id_autogen1 ul a')
-    _input_facet_locator = (By.CSS_SELECTOR, '#s2id_autogen1 ul input')
+    _facet_text_locator = (By.CSS_SELECTOR, '#s2id__facets ul li div')
+    _delete_facet_locator = (By.CSS_SELECTOR, '#s2id__facets a.select2-search-choice-close')
+    _input_facet_locator = (By.CSS_SELECTOR, '#s2id__facets ul input')
     _facet_name_suggestion_locator = (By.CSS_SELECTOR, '.select2-result-label')
 
     # Search results section
     _error_text_locator = (By.CSS_SELECTOR, '.errorlist li li')
     _results_facet_locator = (By.CSS_SELECTOR, '#search_results-nav li:nth-child(2) span')
-    _column_list_locator = (By.CSS_SELECTOR, '#s2id_autogen3 ul li.select2-search-choice')
+    _column_list_locator = (By.CSS_SELECTOR, '#s2id__columns_fake ul li.select2-search-choice')
     _table_row_locator = (By.CSS_SELECTOR, '#reports-list tbody tr')
     _loader_locator = (By.CLASS_NAME, 'loader')
     _crash_reports_tab_locator = (By.CSS_SELECTOR, '#search_results-nav [href="#crash-reports"] span')
@@ -45,8 +46,9 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.wait.until(lambda s: self.is_element_displayed(*self._input_locator))
         return self
 
-    def select_field(self, field):
-        self.find_element(*self._input_locator).send_keys(field)
+    def select_field(self, line_id, field):
+        input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
+        self.find_element(*input_locator).send_keys(field)
         self.find_element(*self._highlighted_text_locator).click()
 
     def select_operator(self, line_id, operator):
@@ -55,12 +57,12 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.find_element(*self._highlighted_text_locator).click()
 
     def select_match(self, line_id, match):
-        _match_locator = (self._match_select_locator[0], self._match_select_locator[1] % line_id)
+        _match_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
         self.find_element(*_match_locator).send_keys(match)
         self.find_element(*self._highlighted_text_locator).click()
 
     def field(self, line_id):
-        return self.find_element(self._field_text_locator[0], self._field_text_locator[1] % line_id).text
+        return self.find_element(self._facet_text_locator[0], self._facet_text_locator[1] % line_id).text
 
     def operator(self, line_id):
         return self.find_element(self._operator_text_locator[0], self._operator_text_locator[1] % line_id).text
