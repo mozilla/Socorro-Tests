@@ -28,7 +28,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
-    _facet_text_locator = (By.CSS_SELECTOR, '#s2id__facets ul li div')
+    _more_options_facet_text_locator = (By.CSS_SELECTOR, '#s2id__facets ul li div')
     _delete_facet_locator = (By.CSS_SELECTOR, '#s2id__facets a.select2-search-choice-close')
     _input_facet_locator = (By.CSS_SELECTOR, '#s2id__facets ul input')
     _facet_name_suggestion_locator = (By.CSS_SELECTOR, '.select2-result-label')
@@ -46,7 +46,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.wait.until(lambda s: self.is_element_displayed(*self._input_locator))
         return self
 
-    def select_field(self, line_id, field):
+    def select_facet(self, line_id, field):
         input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
         self.find_element(*input_locator).send_keys(field)
         self.find_element(*self._highlighted_text_locator).click()
@@ -88,19 +88,21 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.wait.until(lambda s: self.is_element_displayed(*self._crash_reports_tab_locator))
         self.find_element(*self._crash_reports_tab_locator).click()
 
+    # More options section
     @property
-    def facet(self):
-        return self.selenium.find_element(*self._facet_text_locator).text
+    def more_options_facet(self):
+        return self.selenium.find_element(*self._more_options_facet_text_locator).text
 
-    def type_facet(self, facet):
+    def more_options_select_facet(self, facet):
         self.find_element(*self._input_facet_locator).click()
         self.find_element(*self._input_facet_locator).send_keys(facet)
         self.find_element(*self._facet_name_suggestion_locator).click()
 
-    def delete_facet(self):
+    def more_options_delete_facet(self):
         self.find_element(*self._delete_facet_locator).click()
         self.wait.until(lambda s: not self.is_element_present(*self._delete_facet_locator))
 
+    # Search results section
     @property
     def search_results_table_header(self):
         return self.SearchResultHeader(self)

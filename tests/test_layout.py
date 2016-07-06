@@ -78,14 +78,14 @@ class TestSuperSearchLayout:
         cs_super = csp.header.click_super_search()
         cs_super.click_search()
 
-        assert cs_super.facet in cs_super.results_facet.lower()
+        assert cs_super.more_options_facet in cs_super.results_facet.lower()
 
         cs_super.click_more_options()
-        cs_super.delete_facet()
-        cs_super.type_facet('address')
-        assert 'address' == cs_super.facet
+        cs_super.more_options_delete_facet()
+        cs_super.more_options_select_facet('address')
+        assert 'address' == cs_super.more_options_facet
 
         cs_super.click_search()
         # The facet in the results does not update immediately,
         # so wait for it to be the value we expect
-        cs_super.wait_for_facet_in_results(cs_super.facet)
+        cs_super.wait_for_facet_in_results(cs_super.more_options_facet)
