@@ -13,7 +13,7 @@ class TestSuperSearch:
     def test_search_for_unrealistic_data(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
-        cs_super.select_field('date')
+        cs_super.select_facet('0', 'date')
         cs_super.select_operator('0', '>')
         cs_super.select_match('0', '2000:01:01 00-00')
         cs_super.click_search()
@@ -36,7 +36,7 @@ class TestSuperSearch:
         cs_super = csp.header.click_super_search()
         cs_super.click_new_line()
         # select the 2nd line
-        cs_super.select_field('release channel')
+        cs_super.select_facet('1', 'release channel')
         cs_super.select_operator('1', 'has terms')
         cs_super.select_match('1', 'nightly')
         cs_super.click_search()
