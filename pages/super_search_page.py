@@ -16,7 +16,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     # Search parameters section
     _facet_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(2) span:first-child')
-    _facet_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.field input')
+    _facet_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.field')
     _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(4) span')
     _operator_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.operator')
     _match_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-search-field input')
@@ -47,8 +47,16 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         return self
 
     def select_facet(self, line_id, field):
-        input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
-        self.find_element(*input_locator).send_keys(field)
+        input_locator = ()
+        if line_id is '0':
+            # facet search field does not have focus
+            input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % (line_id))
+            self.find_element(*input_locator).find_element(By.CSS_SELECTOR, 'input').send_keys(field)
+        else:
+            # when a new line of search terms is added, the facet field has focus
+            input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % (line_id))
+            self.find_element(*input_locator).send_keys(field)
+
         self.find_element(*self._highlighted_text_locator).click()
 
     def select_operator(self, line_id, operator):
