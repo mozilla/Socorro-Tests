@@ -24,7 +24,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     _search_button_locator = (By.ID, 'search-button')
     _new_line_locator = (By.CSS_SELECTOR, '.new-line')
     _highlighted_text_locator = (By.CSS_SELECTOR, '.select2-results li[class*="highlighted"]')
-    _input_locator = (By.CSS_SELECTOR, '#search-params-fieldset')
+    _page_loaded_locator = (By.CSS_SELECTOR, '.select2-container.field input')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
@@ -43,7 +43,7 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
 
     def wait_for_page_to_load(self):
         super(CrashStatsSuperSearch, self).wait_for_page_to_load()
-        self.wait.until(lambda s: self.is_element_displayed(*self._input_locator))
+        self.wait.until(lambda s: self.is_element_displayed(*self._page_loaded_locator))
         return self
 
     def select_facet(self, line_id, field):
