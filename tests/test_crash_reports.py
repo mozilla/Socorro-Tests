@@ -87,6 +87,7 @@ class TestCrashReports:
         for i in range(len(csp.release_channels)):
             top_crasher_name = csp.release_channels[i].product_version_label
             top_crasher_page = csp.release_channels[i].click_top_crasher()
+            top_crasher_page.wait_for_page_to_load()
             assert top_crasher_name in top_crasher_page.page_heading
             selenium.back()
             csp.wait_for_page_to_load()
