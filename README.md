@@ -12,7 +12,11 @@ https://github.com/mozilla/Socorro-Tests/contributors
 
 Continuous Integration
 ----------------------
-[![Build Status](https://secure.travis-ci.org/mozilla/Socorro-Tests.png?branch=master)](http://travis-ci.org/mozilla/Socorro-Tests/)
+[![license](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/mozilla/Socorro-Tests/tree/master#license)
+[![travis](https://img.shields.io/travis/mozilla/Socorro-Tests.svg?label=travis)](http://travis-ci.org/mozilla/Socorro-Tests/)
+[![stage](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.stage.svg?label=stage)](https://webqa-ci.mozilla.com/job/socorro.stage/)
+[![prod](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.prod.svg?label=prod)](https://webqa-ci.mozilla.com/job/socorro.prod/)
+[![requirements](https://img.shields.io/requires/github/mozilla/Socorro-Tests.svg)](https://requires.io/github/mozilla/Socorro-Tests/requirements/?branch=master)
 
 Getting involved as a contributor
 ---------------------------------
