@@ -19,7 +19,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         pytest.mark.xfail(reason='bug 1293296')('Thunderbird'),
-        pytest.mark.xfail(reason='bug 1273175')('SeaMonkey'),
+        'SeaMonkey',
         'FennecAndroid'])
     def test_that_reports_form_has_same_product(self, base_url, selenium, product):
         csp = CrashStatsHomePage(selenium, base_url).open()
@@ -34,7 +34,7 @@ class TestCrashReports:
     @pytest.mark.parametrize(('product'), [
         'Firefox',
         pytest.mark.xfail(reason='bug 1293296')('Thunderbird'),
-        pytest.mark.xfail(reason='bug 1273182')('SeaMonkey'),
+        'SeaMonkey',
         'FennecAndroid'])
     def test_that_current_version_selected_in_top_crashers_header(self, base_url, selenium, product):
         csp = CrashStatsHomePage(selenium, base_url).open()
