@@ -1,6 +1,6 @@
 bidpom
 PyPOM
-pytest==2.9.2
+pytest==3.0.0
 pytest-selenium
-pytest-xdist==1.14
+pytest-xdist==1.15.0
 requests==2.11.0
