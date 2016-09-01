@@ -118,7 +118,11 @@ class TestCrashReports:
             'Signature in body did not match the signature in the '
 
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('product'), _expected_products)
+    @pytest.mark.parametrize(('product'), [
+        'Firefox',
+        pytest.mark.xfail("'allizom.org' in config.getvalue('base_url')", reason='bug 1299916')('Thunderbird'),
+        'SeaMonkey',
+        'FennecAndroid'])
     def test_the_product_releases_return_results(self, base_url, selenium, product):
         csp = CrashStatsHomePage(selenium, base_url).open()
         csp.header.select_product(product)
