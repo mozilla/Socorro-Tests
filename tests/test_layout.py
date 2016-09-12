@@ -31,16 +31,6 @@ class TestSuperSearchLayout:
         assert cs_super._page_title == selenium.title
 
     @pytest.mark.nondestructive
-    def test_default_fields_for_firefox(self, base_url, selenium):
-        csp = CrashStatsHomePage(selenium, base_url).open()
-        cs_super = csp.header.click_super_search()
-        # advanced search defaults to the terms below, verify that these are
-        # present
-        assert 'product' == cs_super.field('0')
-        assert 'has terms' == cs_super.operator('0')
-        assert 'Firefox' == cs_super.match('0')
-
-    @pytest.mark.nondestructive
     def test_search_change_column(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
