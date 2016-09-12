@@ -66,11 +66,8 @@ class TestSuperSearchLayout:
                 assert cs_super.are_search_results_found
                 assert cs_super.search_results_table_header.is_column_not_present(current_column)
 
-        # advanced search defaults to the terms below, verify that these have
-        # persisted
-        assert 'product' == cs_super.field('0')
-        assert 'has terms' == cs_super.operator('0')
-        assert 'Firefox' == cs_super.match('0')
+        # verify simple search terms have persisted
+        assert 'Firefox' == cs_super.selected_products
         assert cs_super.columns[0].column_name in cs_super.search_results_table_header.table_column_names
 
     @pytest.mark.nondestructive
