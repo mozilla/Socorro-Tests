@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from pypom import Region
 from pages.base_page import CrashStatsBasePage
@@ -13,18 +14,25 @@ from pages.base_page import CrashStatsBasePage
 class CrashStatsSuperSearch(CrashStatsBasePage):
 
     _page_title = 'Search - Mozilla Crash Reports'
-
-    # Search parameters section
-    _facet_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(2) span:first-child')
-    _facet_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.field')
-    _operator_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(4) span')
-    _operator_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-container.operator')
-    _match_field_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] .select2-search-field input')
-    _match_text_locator = (By.CSS_SELECTOR, 'fieldset[id="%s"] > div:nth-child(6) div')
+    _page_loaded_locator = (By.CSS_SELECTOR, '#s2id_simple-product input')
+    _advanced_search_loaded_locator = (By.CSS_SELECTOR, '#advanced-search .select2-container-active')
     _search_button_locator = (By.ID, 'search-button')
-    _new_line_locator = (By.CSS_SELECTOR, '.new-line')
-    _highlighted_text_locator = (By.CSS_SELECTOR, '.select2-results li[class*="highlighted"]')
-    _page_loaded_locator = (By.CSS_SELECTOR, '.select2-container.field input')
+
+    # Simple Search
+    _simple_search_product_field_locator = (By.CSS_SELECTOR, '#s2id_simple-product input')
+    _simple_search_version_field_locator = (By.CSS_SELECTOR, '#s2id_simple-version input')
+    _simple_search_platform_field_locator = (By.CSS_SELECTOR, '#s2id_simple-platform input')
+    _simple_search_platform_text_locator = (By.CSS_SELECTOR, '#s2id_simple-product .select2-choices li div')
+
+    # Advanced Search
+    _new_line_button_locator = (By.CSS_SELECTOR, 'button.new-line')
+    _highlighted_text_locator = (By.CSS_SELECTOR, 'li[class*="highlighted"]')
+    _facet_text_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] > div:nth-child(2) span:first-child')
+    _facet_field_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] .field')
+    _operator_text_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] > div:nth-child(4) span')
+    _operator_field_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] .operator')
+    _match_field_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] .select2-search-field input')
+    _match_text_locator = (By.CSS_SELECTOR, '#advanced-search fieldset[id="%s"] > div:nth-child(6) div')
 
     # More options section
     _more_options_locator = (By.CSS_SELECTOR, '.options h4')
@@ -46,27 +54,46 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
         self.wait.until(lambda s: self.is_element_displayed(*self._page_loaded_locator))
         return self
 
-    def select_facet(self, line_id, field):
-        input_locator = ()
-        if line_id is '0':
-            # facet search field does not have focus
-            input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % (line_id))
-            self.find_element(*input_locator).find_element(By.CSS_SELECTOR, 'input').send_keys(field)
-        else:
-            # when a new line of search terms is added, the facet field has focus
-            input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % (line_id))
-            self.find_element(*input_locator).send_keys(field)
+    # Simple Search form fields
 
-        self.find_element(*self._highlighted_text_locator).click()
+    def select_product(self, product):
+        self.find_element(*self._simple_search_product_field_locator).send_keys(product)
+
+    def select_version(self, version):
+        self.find_element(*self._simple_search_version_field_locator).send_keys(version)
+
+    def select_platform(self, platform):
+        el = self.find_element(*self._simple_search_platform_field_locator)
+        el.send_keys(platform)
+        el.send_keys(Keys.RETURN)
+
+    @property
+    def selected_products(self):
+        return self.find_element(*self._simple_search_platform_text_locator).text
+
+    # Advanced Search form fields
+
+    def click_new_line(self):
+        ''' Opens up the advanced search field options '''
+        self.find_element(*self._new_line_button_locator).click()
+        self.wait.until(lambda s: self.is_element_present(*self._advanced_search_loaded_locator))
+
+    def select_facet(self, line_id, field):
+        input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
+        self.find_element(*input_locator).send_keys(field)
+        self.find_element(*input_locator).send_keys(Keys.RETURN)
 
     def select_operator(self, line_id, operator):
         input_locator = (self._operator_field_locator[0], self._operator_field_locator[1] % line_id)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
         self.find_element(*input_locator).send_keys(operator)
         self.find_element(*self._highlighted_text_locator).click()
 
     def select_match(self, line_id, match):
-        _match_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
-        self.find_element(*_match_locator).send_keys(match)
+        input_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
+        self.find_element(*input_locator).send_keys(match)
         self.find_element(*self._highlighted_text_locator).click()
 
     def field(self, line_id):
@@ -85,9 +112,6 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     def click_search(self):
         self.find_element(*self._search_button_locator).click()
         self.wait.until(lambda s: not self.is_element_present(*self._loader_locator))
-
-    def click_new_line(self):
-        self.find_element(*self._new_line_locator).click()
 
     def click_more_options(self):
         self.find_element(*self._more_options_locator).click()

@@ -13,6 +13,9 @@ class TestSuperSearch:
     def test_search_for_unrealistic_data(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
+        cs_super.select_platform('Windows')
+        # Do an advanced search
+        cs_super.click_new_line()
         cs_super.select_facet('0', 'date')
         cs_super.select_operator('0', '>')
         cs_super.select_match('0', '2000:01:01 00-00')
@@ -24,34 +27,26 @@ class TestSuperSearch:
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
         cs_super.click_search()
-
         assert cs_super.are_search_results_found
-        assert 'product' == cs_super.field('0')
-        assert 'has terms' == cs_super.operator('0')
-        assert 'Firefox' == cs_super.match('0')
+        assert 'Firefox' == cs_super.selected_products
 
     @pytest.mark.nondestructive
     def test_search_with_multiple_lines(self, base_url, selenium):
         csp = CrashStatsHomePage(selenium, base_url).open()
         cs_super = csp.header.click_super_search()
+        # Do an advanced search
         cs_super.click_new_line()
-        # select the 2nd line
-        cs_super.select_facet('1', 'release channel')
-        cs_super.select_operator('1', 'has terms')
-        cs_super.select_match('1', 'nightly')
+        cs_super.select_facet('0', 'release channel')
+        cs_super.select_operator('0', 'has terms')
+        cs_super.select_match('0', 'nightly')
         cs_super.click_search()
-
         assert cs_super.are_search_results_found
-        # advanced search defaults to the terms below, verify that these have
-        # persisted
-        assert 'product' == cs_super.field('0')
+        # verify simple search terms have persisted
+        assert 'Firefox' == cs_super.selected_products
+        # verify advanced search terms have persisted
+        assert 'release channel' == cs_super.field('0')
         assert 'has terms' == cs_super.operator('0')
-        assert 'Firefox' == cs_super.match('0')
-
-        # verify the 2nd line of search terms
-        assert 'release channel' == cs_super.field('1')
-        assert 'has terms' == cs_super.operator('1')
-        assert 'nightly' == cs_super.match('1')
+        assert 'nightly' == cs_super.match('0')
 
 
 class TestSearchForSpecificResults:
