@@ -14,7 +14,8 @@ from pages.base_page import CrashStatsBasePage
 class CrashStatsSuperSearch(CrashStatsBasePage):
 
     _page_title = 'Search - Mozilla Crash Reports'
-    _page_loaded_locator = (By.CSS_SELECTOR, '.select2-container input')
+    _page_loaded_locator = (By.CSS_SELECTOR, '#s2id_simple-product input')
+    _advanced_search_loaded_locator = (By.CSS_SELECTOR, '#advanced-search .select2-container-active')
     _search_button_locator = (By.ID, 'search-button')
 
     # Simple Search
@@ -75,21 +76,24 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     def click_new_line(self):
         ''' Opens up the advanced search field options '''
         self.find_element(*self._new_line_button_locator).click()
+        self.wait.until(lambda s: self.is_element_present(*self._advanced_search_loaded_locator))
 
     def select_facet(self, line_id, field):
         input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
-        el = self.find_element(*input_locator)
-        el.send_keys(field)
-        el.send_keys(Keys.RETURN)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
+        self.find_element(*input_locator).send_keys(field)
+        self.find_element(*input_locator).send_keys(Keys.RETURN)
 
     def select_operator(self, line_id, operator):
         input_locator = (self._operator_field_locator[0], self._operator_field_locator[1] % line_id)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
         self.find_element(*input_locator).send_keys(operator)
         self.find_element(*self._highlighted_text_locator).click()
 
     def select_match(self, line_id, match):
-        _match_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
-        self.find_element(*_match_locator).send_keys(match)
+        input_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
+        self.wait.until(lambda s: self.is_element_present(*input_locator))
+        self.find_element(*input_locator).send_keys(match)
         self.find_element(*self._highlighted_text_locator).click()
 
     def field(self, line_id):
