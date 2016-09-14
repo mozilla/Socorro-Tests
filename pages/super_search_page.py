@@ -81,19 +81,24 @@ class CrashStatsSuperSearch(CrashStatsBasePage):
     def select_facet(self, line_id, field):
         input_locator = (self._facet_field_locator[0], self._facet_field_locator[1] % line_id)
         self.wait.until(lambda s: self.is_element_present(*input_locator))
-        self.find_element(*input_locator).send_keys(field)
-        self.find_element(*input_locator).send_keys(Keys.RETURN)
+        facet_field = self.find_element(*input_locator)
+        facet_field.send_keys(field)
+        self.wait.until(lambda s: self.is_element_present(*self._highlighted_text_locator))
+        facet_field.send_keys(Keys.RETURN)
 
     def select_operator(self, line_id, operator):
         input_locator = (self._operator_field_locator[0], self._operator_field_locator[1] % line_id)
         self.wait.until(lambda s: self.is_element_present(*input_locator))
-        self.find_element(*input_locator).send_keys(operator)
-        self.find_element(*self._highlighted_text_locator).click()
+        operator_field = self.find_element(*input_locator)
+        operator_field.send_keys(operator)
+        self.wait.until(lambda s: self.is_element_present(*self._highlighted_text_locator))
+        operator_field.send_keys(Keys.RETURN)
 
     def select_match(self, line_id, match):
         input_locator = (self._match_field_locator[0], self._match_field_locator[1] % line_id)
         self.wait.until(lambda s: self.is_element_present(*input_locator))
         self.find_element(*input_locator).send_keys(match)
+        self.wait.until(lambda s: self.is_element_present(*self._highlighted_text_locator))
         self.find_element(*self._highlighted_text_locator).click()
 
     def field(self, line_id):
