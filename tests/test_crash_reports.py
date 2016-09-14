@@ -130,7 +130,7 @@ class TestCrashReports:
         for i in range(len(csp.release_channels)):
             top_crasher_page = csp.release_channels[i].click_top_crasher()
             if top_crasher_page.no_results_text is not False:
-                assert 'No crashing signatures found for the period' in top_crasher_page.no_results_text
+                assert 'Range by Report Date instead?' in top_crasher_page.no_results_text
             else:
                 assert top_crasher_page.results_found, 'No results found'
             selenium.back()
