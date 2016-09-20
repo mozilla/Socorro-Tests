@@ -1,120 +1,54 @@
-Web QA Tests for crash-stats.mozilla.com
-===============================
-
-Mozilla's Crash Reporting System
--------------------------------------------
-
-Thank you for checking out Mozilla's Socorro test suite! Mozilla and the Web
-QA team are grateful for the help and hard work of many contributors like yourself.
-The following contributors have submitted pull requests to Socorro-Tests:
-
-https://github.com/mozilla/Socorro-Tests/contributors
+End-to-End Tests for Socorro
+=============================
 
 Continuous Integration
 ----------------------
-[![license](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/mozilla/Socorro-Tests/tree/master#license)
 [![travis](https://img.shields.io/travis/mozilla/Socorro-Tests.svg?label=travis)](http://travis-ci.org/mozilla/Socorro-Tests/)
-[![stage](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.stage.svg?label=stage)](https://webqa-ci.mozilla.com/job/socorro.stage/)
-[![prod](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.prod.svg?label=prod)](https://webqa-ci.mozilla.com/job/socorro.prod/)
-[![requirements](https://img.shields.io/requires/github/mozilla/Socorro-Tests.svg)](https://requires.io/github/mozilla/Socorro-Tests/requirements/?branch=master)
+[![stage](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.stage.saucelabs.svg?label=stage)](https://webqa-ci.mozilla.com/job/socorro.stage.saucelabs/)
+[![prod](https://img.shields.io/jenkins/s/https/webqa-ci.mozilla.com/socorro.prod.saucelabs.svg?label=prod)](https://webqa-ci.mozilla.com/job/socorro.prod.saucelabs/)
 
-Getting involved as a contributor
----------------------------------
 
-We love working with contributors to improve the Selenium test coverage for
-Socorro-Tests but it does require a few skills.  You will need to be familiar
-with Python, Selenium, and have a working knowledge of GitHub.
+This directory holds Socorro client-based end-to-end tests which is why they're different than the rest of the code in this repository.
 
-If you are comfortable with Python, it's worth having a look at the Selenium
-framework to understand the basic concepts of browser-based testing and the
-page objects pattern.
+* PyPOM
+* pytest
+* pytest-selenium
+* pytest-xdist
+* requests
 
-If you need to brush up on programming but are eager to start contributing
-immediately, please consider helping out by doing manual testing.  You can
-help find bugs in Mozilla [Firefox][firefox] or find bugs in the Mozilla web
-sites tested by the [Web QA][webqa] team.  We have many projects that would be
-thrilled to have your help!
-
-To brush up on Python skills before engaging with us, [Dive Into Python][dive]
-is an excellent resource.  MIT also has [lecture notes on Python][mit] available
-through their open courseware.  The programming concepts you will need to know
-include functions, working with classes, and the basics of object-oriented
-programming.
-
-Questions are always welcome
+Setup and run Socorro tests
 ----------------------------
-While we take great pains to keep our documentation updated, the best source of
-information is those of us who work on the project.  Don't be afraid to join us
-in irc.mozilla.org #mozwebqa to ask questions about our Selenium tests.  Mozilla
-also hosts the #breakpad chat room to answer your general questions about
-the Socorro project and about contributing to Mozilla.
 
-How to setup and run Socorro tests locally
----------------------------------------------
-This repository contains Selenium tests for the following environments:
+We suggest using a different virtual environment for these tests than the
+rest of Socorro so you're not mixing requirements:
 
-* development: https://crash-stats-dev.allizom.org
-* staging: https://crash-stats.allizom.org
-* production: https://crash-stats.mozilla.com
-
-Mozilla maintains a guide to running Automated tests on our QMO website:
-
-https://quality.mozilla.org/docs/webqa/running-webqa-automated-tests/
-
-This wiki page has some advanced instructions specific to Windows:
-
-https://wiki.mozilla.org/QA_SoftVision_Team/WebQA_Automation
+	$ mkvirtualenv socorro-tests
+	$ pip install -r requirements.txt
 
 
-###You will need to install the following:
+___Running tests against localhost___
 
-#### Git
-If you have cloned this project already then you can skip this!
-GitHub has excellent guides for [Windows][GitWin], [MacOSX][GitMacOSX], and
-[Linux][GitLinux].
+	# run tests against localhost
+	$ py.test --driver Firefox --base-url http://localhost:8000 tests/
 
-#### Python
-Before you will be able to run these tests you will need to have
-[Python 2.6.8+][Python] installed.
-[Python]: http://www.python.org/download/releases/2.6.8/
+___Running the tests on stage___
 
-####Virtualenv and Virtualenvwrapper (Optional/Intermediate level)
-While most of us have had some experience using virtual machines,
-[virtualenv][venv] is something else entirely.  It's used to keep libraries
-that you install from clashing and messing up your local environment.  After
-installing virtualenv, installing [virtualenvwrapper][wrapper] will give you
-some nice commands to use with virtualenvwrapper. [virtualenv][venv] will allow
-you to install Python modules and run your tests in a sandboxed environment.
+	# run tests against our staging environment
+	$ py.test --driver Firefox tests/
 
-__note__
+___Running specific tests___
 
-This is not necessary but is really helpful if you are working on multiple
-Python projects that use different versions of modules.
+You can run tests in a given file::
 
-Run
+    $ py.test --driver Firefox tests/desktop/test_search.py
 
-    easy_install pip
+You can run tests that match a specific name:
 
-followed by
+    $ py.test --driver Firefox -k test_search_for_unrealistic_data
+ 
+You can run tests whose names match a specific pattern:
 
-    sudo pip install -r requirements.txt
-
-__note__
-
-If you are running on Ubuntu/Debian you will need to do following first
-
-    sudo apt-get install python-setuptools
-
-to install the required Python libraries.
-
-#### Running tests locally
-Before each test run, clean up the repo:
-    find . \( -name 'results*' -or -name '\*.pyc' \) -print0 | xargs -0 rm -Rf
-
-To run tests locally it is as simple as calling <code>py.test</code> with
-several flags. To run testcases that do not modify or delete data:
-
-    py.test --driver Firefox --base-url http://crash-stats.allizom.org
+    $ py.test --driver Firefox -k test_search
 
 __Output__
 
@@ -142,8 +76,75 @@ command line options available. To see the options available, run
 __Troubleshooting__
 
 If the test run hangs with Firefox open but no URL gets entered in the address
-box, some combination of the Firefox version, and the python Selenium bindings
-version may not be compatible. Upgrading each of them to latest should fix it.
+box, some combinations of the Firefox version, and the python Selenium bindings
+version may not be compatible. Upgrading each of them to latest often fixes it.
+ 
+Tips and tricks
+---------------
+
+Because Selenium opens real browser windows, it will steal focus and switch
+workspaces. Firefox doesn't have a headless mode of operation, so we can't 
+simply turn off the UI.
+
+__Use a differnet driver__
+
+[pytest-selenium][pytest-selenium] provides the ability to run tests against other 
+driver executables as well as external providers -- execuatables and providers include PhantomJS, SauceLabs, BrowserStack, etc.
+
+__xvfb__
+
+XCFB provides a fairly easily work around on Linux.
+
+
+On Linux:
+
+    Install Xvfb and run the tests with it's xvfb-run binary. For
+    example, if you run tests like::
+
+        $ py.test ...
+
+
+    You can switch to this to run with Xvfb::
+
+        $ xvfb-run py.test ...
+
+
+    This creates a virtual X session for Firefox to run in, and sets
+    up all the fiddly environment variables to get this working
+    well. The tests will run as normal, and no windows will open, if
+    all is working right.
+
+
+Getting involved as a contributor
+---------------------------------
+
+We love working with contributors to improve the Selenium test coverage on
+Socorro but it does require a few skills.  You will need to be familiar
+with Python, Selenium, and have a working knowledge of GitHub.
+
+If you are comfortable with Python, it's worth having a look at the Selenium
+framework to understand the basic concepts of browser-based testing and the
+page objects pattern.
+
+If you need to brush up on programming but are eager to start contributing
+immediately, please consider helping out by doing manual testing.  You can
+help find bugs in Mozilla [Firefox][firefox] or find bugs in the Mozilla web
+sites tested by the [Firefox Test Engineering][firefoxtesteng] team.  We have many projects that would be
+thrilled to have your help!
+
+To brush up on Python skills before engaging with us, [Dive Into Python][dive]
+is an excellent resource.  MIT also has [lecture notes on Python][mit] available
+through their open courseware.  The programming concepts you will need to know
+include functions, working with classes, and the basics of object-oriented
+programming.
+
+Questions are always welcome
+----------------------------
+While we take great pains to keep our documentation updated, the best source of
+information is those of us who work on the project.  Don't be afraid to join us
+in irc.mozilla.org #fx-test to ask questions about our Selenium tests.  Mozilla
+also hosts the #breakpad chat room to answer your general questions about
+the Socorro project.
 
 Writing Tests
 -------------
@@ -168,7 +169,7 @@ This software is licensed under the [MPL] 2.0:
 
 [mit]: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-189-a-gentle-introduction-to-programming-using-python-january-iap-2011/
 [dive]: http://www.diveintopython.net/toc/index.html
-[webqa]: http://quality.mozilla.org/teams/web-qa/
+[firefoxtesteng]: https://quality.mozilla.org/teams/test-engineering/
 [firefox]: http://quality.mozilla.org/teams/desktop-firefox/
 [webdriver]: http://seleniumhq.org/docs/03_webdriver.html
 [mozwebqa]:http://02.chat.mibbit.com/?server=irc.mozilla.org&channel=#mozwebqa
