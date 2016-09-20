@@ -10,30 +10,27 @@ Continuous Integration
 
 This directory holds Socorro client-based end-to-end tests which is why they're different than the rest of the code in this repository.
 
-* PyPOM
-* pytest
-* pytest-selenium
-* pytest-xdist
-* requests
+To review the specific Python packages the tests utilize, please review `e2e-test/requirements.txt`.
 
-Setup and run Socorro tests
-----------------------------
+Set up and run Socorro tests
+-----------------------------
+
+Review the documentation for [pytest-selenium][pytest-selenium] and decide which browser
+environment you wish to target.
 
 We suggest using a different virtual environment for these tests than the
 rest of Socorro so you're not mixing requirements:
 
 	$ mkvirtualenv socorro-tests
-	$ pip install -r requirements.txt
+	$ pip install -r e2e-tests/requirements.txt
 
 
 ___Running tests against localhost___
 
-	# run tests against localhost
 	$ py.test --driver Firefox --base-url http://localhost:8000 tests/
 
 ___Running the tests on stage___
 
-	# run tests against our staging environment
 	$ py.test --driver Firefox tests/
 
 ___Running specific tests___
@@ -86,14 +83,13 @@ Because Selenium opens real browser windows, it will steal focus and switch
 workspaces. Firefox doesn't have a headless mode of operation, so we can't 
 simply turn off the UI.
 
-__Use a differnet driver__
+__Use a different driver__
 
-[pytest-selenium][pytest-selenium] provides the ability to run tests against other 
-driver executables as well as external providers -- execuatables and providers include PhantomJS, SauceLabs, BrowserStack, etc.
+[pytest-selenium] provides the ability to run tests against [many other][test envs] browser environments -- consider using a different driver executable or external provider.
 
 __xvfb__
 
-XCFB provides a fairly easily work around on Linux.
+Xvfb provides a fairly easily work around on Linux.
 
 
 On Linux:
@@ -183,3 +179,4 @@ This software is licensed under the [MPL] 2.0:
 [Style Guide]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Docs/Automation/StyleGuide
 [MPL]: http://www.mozilla.org/MPL/2.0/
 [pytest-selenium]: http://pytest-selenium.readthedocs.org/
+[test envs]: http://pytest-selenium.readthedocs.io/en/latest/user_guide.html#specifying-a-browser
