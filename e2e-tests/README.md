@@ -10,7 +10,7 @@ Continuous Integration
 
 This directory holds Socorro client-based end-to-end tests which is why they're different than the rest of the code in this repository.
 
-To review the specific Python packages the tests utilize, please review `e2e-test/requirements.txt`.
+To review the specific Python packages the tests utilize, please review `e2e-tests/requirements.txt`.
 
 Set up and run Socorro tests
 -----------------------------
@@ -42,7 +42,7 @@ You can run tests in a given file::
 You can run tests that match a specific name:
 
     $ py.test --driver Firefox -k test_search_for_unrealistic_data
- 
+
 You can run tests whose names match a specific pattern:
 
     $ py.test --driver Firefox -k test_search
@@ -75,12 +75,12 @@ __Troubleshooting__
 If the test run hangs with Firefox open but no URL gets entered in the address
 box, some combinations of the Firefox version, and the python Selenium bindings
 version may not be compatible. Upgrading each of them to latest often fixes it.
- 
+
 Tips and tricks
 ---------------
 
 Because Selenium opens real browser windows, it will steal focus and switch
-workspaces. Firefox doesn't have a headless mode of operation, so we can't 
+workspaces. Firefox doesn't have a headless mode of operation, so we can't
 simply turn off the UI.
 
 __Use a different driver__
