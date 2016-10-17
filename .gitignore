@@ -1,8 +1,0 @@
-.cache
-*.swp
-*.pyc
-*.tmproj
-*.komodoproject
-*.idea
-*.ini
-results/*
